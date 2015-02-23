@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/action_setwp_fit" android:title="@string/set_wp_fit"/>
-    <item android:id="@+id/action_setwp_crop" android:title="@string/set_wp_crop"/>
 </menu>

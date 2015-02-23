@@ -52,8 +52,9 @@ public class DetailViewActivity extends ActionBarActivity {
             WallpaperManager wallpaperManager = WallpaperManager.getInstance(this);
             int screenWidth = wallpaperManager.getDesiredMinimumWidth();
             int screenHeight = wallpaperManager.getDesiredMinimumHeight();
+            Bitmap target;
             float scale = screenHeight * 1f / source.getHeight();
-            Bitmap target = Bitmap.createScaledBitmap(source, (int)(source.getWidth()*scale), screenHeight, true);
+            target = Bitmap.createScaledBitmap(source, (int) (source.getWidth() * scale), (int)(source.getHeight() * scale), true);
             wallpaperManager.setBitmap(target);
             DetailViewActivity.this.runOnUiThread(new Runnable()
             {
@@ -65,29 +66,6 @@ public class DetailViewActivity extends ActionBarActivity {
         } catch (final Exception ex) {
             DetailViewActivity.this.runOnUiThread(new Runnable() {
                 public void run() {
-                    Toast.makeText(DetailViewActivity.this, "Error setting the wallpaper: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
-        } finally {
-            progressDialog.dismiss();
-        }
-    }
-
-    void setCropWallpaper(Bitmap source) {
-        try {
-            WallpaperManager.getInstance(DetailViewActivity.this).setBitmap(source);
-            DetailViewActivity.this.runOnUiThread(new Runnable()
-            {
-                public void run()
-                {
-                    Toast.makeText(DetailViewActivity.this, "Wallpaper is set", Toast.LENGTH_SHORT).show();
-                }
-            });
-        } catch(final Exception ex) {
-            DetailViewActivity.this.runOnUiThread(new Runnable()
-            {
-                public void run()
-                {
                     Toast.makeText(DetailViewActivity.this, "Error setting the wallpaper: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
@@ -113,28 +91,6 @@ public class DetailViewActivity extends ActionBarActivity {
                 @Override
                 public void run() {
                     setFitWallpaper(bitmap);
-                }
-            }).start();
-        }
-    };
-
-    Target targetCrop = new Target() {
-        @Override
-        public void onBitmapFailed(Drawable errorDrawable) {
-            System.err.println("fail");
-        }
-
-        @Override
-        public void onPrepareLoad(Drawable placeHolderDrawable) {
-            System.err.println("prepare");
-        }
-
-        @Override
-        public void onBitmapLoaded (final Bitmap bitmap, Picasso.LoadedFrom from){
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    setCropWallpaper(bitmap);
                 }
             }).start();
         }
@@ -169,12 +125,6 @@ public class DetailViewActivity extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_setwp_crop) {
-            progressDialog.show();
-            SDOImage img = (SDOImage) getIntent().getExtras().getSerializable("IMAGE");
-            Picasso.with(this).load(Util.getURL(img, 2048)).into(targetCrop);
-            return true;
-        }
         if (id == R.id.action_setwp_fit) {
             progressDialog.show();
             SDOImage img = (SDOImage) getIntent().getExtras().getSerializable("IMAGE");

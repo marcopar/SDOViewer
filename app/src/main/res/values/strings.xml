@@ -5,6 +5,5 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="sdo_viewer">SDO Viewer</string>
-    <string name="set_wp_crop">Set wallpaper (crop)</string>
-    <string name="set_wp_fit">Set wallpaper (fit)</string>
+    <string name="set_wp_fit">Set wallpaper</string>
 </resources>
