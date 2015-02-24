@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -37,8 +38,6 @@ public class DetailViewActivity extends ActionBarActivity {
                 mAttacher.update();
             }else{
                 mAttacher = new PhotoViewAttacher(mImageView);
-                mAttacher.setMaximumScale(2f);
-                mAttacher.setMediumScale(1f);
             }
         }
 
@@ -112,7 +111,7 @@ public class DetailViewActivity extends ActionBarActivity {
         super.onResume();
         mImageView = (ImageView) findViewById(R.id.imageView);
         SDOImage img = (SDOImage) getIntent().getExtras().getSerializable("IMAGE");
-        Picasso.with(this).load(Util.getURL(img, 2048)).into(mImageView, imageLoadedCallback);
+        Picasso.with(this).load(Util.getURL(img, 2048)).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(mImageView, imageLoadedCallback);
         getSupportActionBar().setTitle(img.toString());
     }
 
