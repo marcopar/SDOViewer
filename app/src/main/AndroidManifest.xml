@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="eu.flatworld.android.sdoviewer" >
+    package="eu.flatworld.android.sdoviewer">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
@@ -10,21 +10,22 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".DetailViewActivity"
-            android:label="@string/detailed_view" >
-
-        </activity>
+            android:label="@string/detailed_view"></activity>
         <activity
             android:name=".GridActivity"
-            android:label="@string/sdo_viewer" >
+            android:label="@string/sdo_viewer">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".AboutActivity"
+            android:label="@string/title_activity_about"></activity>
     </application>
 
 </manifest>
