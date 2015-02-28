@@ -8,13 +8,26 @@ android {
         applicationId "eu.flatworld.android.sdoviewer"
         minSdkVersion 15
         targetSdkVersion 21
-        versionCode 1
-        versionName "1.0"
+        versionCode 10100
+        versionName "1.0.0"
     }
+
+    signingConfigs {
+        release {
+            storeFile file('/home/marcopar/Dropbox/keystore/androidkeystore')
+            storePassword System.getenv("KEYSTORE_PASSWORD")
+            keyAlias System.getenv("KEY_ALIAS")
+            keyPassword System.getenv("KEY_PASSWORD")
+        }
+    }
+
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            debuggable true
+            signingConfig signingConfigs.release
         }
     }
 }

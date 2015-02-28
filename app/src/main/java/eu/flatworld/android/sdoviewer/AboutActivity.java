@@ -1,39 +1,51 @@
 package eu.flatworld.android.sdoviewer;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.TextView;
 
-
-public class AboutActivity extends ActionBarActivity {
-
+public class AboutActivity extends Activity implements OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_about);
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_about, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        String version;
+        try {
+            version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+        } catch (Exception ex) {
+            version = "-";
+            ex.printStackTrace();
         }
 
-        return super.onOptionsItemSelected(item);
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.about);
+        TextView tv = (TextView) findViewById(R.id.aboutTVName);
+        try {
+            tv.setText(getResources().getString(R.string.app_name) + " " + version + "\n\nwww.flatworld.eu");
+        } catch (Exception e) {
+            tv.setText(getResources().getString(R.string.app_name) + "\n\nwww.flatworld.eu");
+        }
+
+        tv = (TextView) findViewById(R.id.aboutTVName);
+        tv.setOnClickListener(this);
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.aboutTVName) {
+            Uri webpage = Uri.parse("http://www.flatworld.eu");
+            Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
+            startActivity(intent);
+        }
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 }

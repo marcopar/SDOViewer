@@ -1,8 +1,8 @@
 package eu.flatworld.android.sdoviewer;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,14 +36,16 @@ public class GridActivity extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //getMenuInflater().inflate(R.menu.menu_grid, menu);
+        getMenuInflater().inflate(R.menu.menu_grid, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_about) {
+            Intent i = new Intent(this, AboutActivity.class);
+            this.startActivity(i);
             return true;
         }
         return super.onOptionsItemSelected(item);
