@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SDOViewer</string>
+    <string name="app_name">SDO Viewer</string>
     <string name="detailed_view">Detailed view</string>
     <string name="hello_world">Hello world!</string>
     <string name="sdo_viewer">SDO Viewer</string>
