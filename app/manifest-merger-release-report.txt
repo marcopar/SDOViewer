@@ -60,15 +60,15 @@ ADDED from AndroidManifest.xml:21:17
 	android:name
 		ADDED from AndroidManifest.xml:21:25
 category#android.intent.category.LAUNCHER
-ADDED from AndroidManifest.xml:23:17
+ADDED from AndroidManifest.xml:22:17
 	android:name
-		ADDED from AndroidManifest.xml:23:27
+		ADDED from AndroidManifest.xml:22:27
 activity#eu.flatworld.android.sdoviewer.AboutActivity
-ADDED from AndroidManifest.xml:26:9
+ADDED from AndroidManifest.xml:25:9
 	android:label
-		ADDED from AndroidManifest.xml:28:13
-	android:name
 		ADDED from AndroidManifest.xml:27:13
+	android:name
+		ADDED from AndroidManifest.xml:26:13
 uses-sdk
 INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
 MERGED from com.android.support:appcompat-v7:21.0.3:15:5

@@ -1,18 +1,16 @@
 package eu.flatworld.android.sdoviewer;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.app.WallpaperManager;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
+import android.support.v7.app.ActionBarActivity;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -20,16 +18,12 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import java.io.IOException;
-
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 
 public class DetailViewActivity extends ActionBarActivity {
     ImageView mImageView;
     PhotoViewAttacher mAttacher;
-    ProgressDialog progressDialog;
-
     Callback imageLoadedCallback = new Callback() {
 
         @Override
@@ -45,6 +39,28 @@ public class DetailViewActivity extends ActionBarActivity {
         public void onError() {
         }
     };
+    ProgressDialog progressDialog;
+    Target targetFit = new Target() {
+        @Override
+        public void onBitmapFailed(Drawable errorDrawable) {
+            System.err.println("fail");
+        }
+
+        @Override
+        public void onPrepareLoad(Drawable placeHolderDrawable) {
+            System.err.println("prepare");
+        }
+
+        @Override
+        public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    setFitWallpaper(bitmap);
+                }
+            }).start();
+        }
+    };
 
     void setFitWallpaper(Bitmap source) {
         try {
@@ -53,12 +69,10 @@ public class DetailViewActivity extends ActionBarActivity {
             int screenHeight = wallpaperManager.getDesiredMinimumHeight();
             Bitmap target;
             float scale = screenHeight * 1f / source.getHeight();
-            target = Bitmap.createScaledBitmap(source, (int) (source.getWidth() * scale), (int)(source.getHeight() * scale), true);
+            target = Bitmap.createScaledBitmap(source, (int) (source.getWidth() * scale), (int) (source.getHeight() * scale), true);
             wallpaperManager.setBitmap(target);
-            DetailViewActivity.this.runOnUiThread(new Runnable()
-            {
-                public void run()
-                {
+            DetailViewActivity.this.runOnUiThread(new Runnable() {
+                public void run() {
                     Toast.makeText(DetailViewActivity.this, "Wallpaper is set", Toast.LENGTH_SHORT).show();
                 }
             });
@@ -72,28 +86,6 @@ public class DetailViewActivity extends ActionBarActivity {
             progressDialog.dismiss();
         }
     }
-
-    Target targetFit = new Target() {
-        @Override
-        public void onBitmapFailed(Drawable errorDrawable) {
-            System.err.println("fail");
-        }
-
-        @Override
-        public void onPrepareLoad(Drawable placeHolderDrawable) {
-            System.err.println("prepare");
-        }
-
-        @Override
-        public void onBitmapLoaded (final Bitmap bitmap, Picasso.LoadedFrom from){
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    setFitWallpaper(bitmap);
-                }
-            }).start();
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,12 +114,36 @@ public class DetailViewActivity extends ActionBarActivity {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        SDOImage img = (SDOImage) getIntent().getExtras().getSerializable("IMAGE");
+        if (Util.getDescription(img) == null) {
+            MenuItem item = menu.findItem(R.id.action_about_this_image);
+            item.setVisible(false);
+        }
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_setwp_fit) {
+        if (id == R.id.action_set_wallpaper) {
             progressDialog.show();
             SDOImage img = (SDOImage) getIntent().getExtras().getSerializable("IMAGE");
             Picasso.with(this).load(Util.getURL(img, 2048)).into(targetFit);
+            return true;
+        }
+        if (id == R.id.action_about_this_image) {
+            SDOImage img = (SDOImage) getIntent().getExtras().getSerializable("IMAGE");
+            new AlertDialog.Builder(this)
+                    .setTitle(img.toString())
+                    .setMessage(Html.fromHtml(Util.getDescription(img)))
+                    .setCancelable(true)
+                    .setPositiveButton("Close", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }).create().show();
             return true;
         }
         return super.onOptionsItemSelected(item);

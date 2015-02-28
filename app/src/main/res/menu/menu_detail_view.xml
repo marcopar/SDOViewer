@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/action_setwp_fit"
+        android:id="@+id/action_set_wallpaper"
         android:title="@string/set_wallpaper" />
+    <item
+        android:id="@+id/action_about_this_image"
+        android:title="@string/about_this_image" />
 </menu>
