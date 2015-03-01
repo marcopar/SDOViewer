@@ -14,4 +14,5 @@
 	    Picasso Image Library (Square)\n
 	    PhotoView (chrisbanes)</string>
     <string name="about_this_image">About this image</string>
+    <string name="sdo_website">SDO website:\nsdo.gsfc.nasa.gov</string>
 </resources>

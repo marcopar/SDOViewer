@@ -24,12 +24,14 @@ public class AboutActivity extends Activity implements OnClickListener {
         setContentView(R.layout.about);
         TextView tv = (TextView) findViewById(R.id.aboutTVName);
         try {
-            tv.setText(getResources().getString(R.string.app_name) + " " + version + "\n\nwww.flatworld.eu");
+            tv.setText(getResources().getString(R.string.app_name) + " " + version + "\nwww.flatworld.eu");
         } catch (Exception e) {
-            tv.setText(getResources().getString(R.string.app_name) + "\n\nwww.flatworld.eu");
+            tv.setText(getResources().getString(R.string.app_name) + "\nwww.flatworld.eu");
         }
 
         tv = (TextView) findViewById(R.id.aboutTVName);
+        tv.setOnClickListener(this);
+        tv = (TextView) findViewById(R.id.aboutTVSDO);
         tv.setOnClickListener(this);
     }
 
@@ -39,8 +41,18 @@ public class AboutActivity extends Activity implements OnClickListener {
         if (v.getId() == R.id.aboutTVName) {
             Uri webpage = Uri.parse("http://www.flatworld.eu");
             Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
-            startActivity(intent);
+            if (intent != null) {
+                startActivity(intent);
+            }
         }
+        if (v.getId() == R.id.aboutTVSDO) {
+            Uri webpage = Uri.parse("http://sdo.gsfc.nasa.gov/");
+            Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
+            if (intent != null) {
+                startActivity(intent);
+            }
+        }
+
     }
 
 

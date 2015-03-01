@@ -10,7 +10,7 @@
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
         android:layout_margin="50dp"
-        android:layout_weight="2"
+        android:layout_weight="3"
         android:contentDescription="Big icon"
         android:maxHeight="512dp"
         android:maxWidth="512dp"
@@ -23,9 +23,21 @@
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:gravity="center"
         android:text="@string/app_name"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/clickableextviewstates" />
+
+    <TextView
+        android:id="@+id/aboutTVSDO"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/sdo_website"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/clickableextviewstates" />
 

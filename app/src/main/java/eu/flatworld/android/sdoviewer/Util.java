@@ -76,19 +76,19 @@ public class Util {
             case AIA_094_335_193:
                 return "<p>This image combines three images with different temperatures. Each image is assigned a color, and they are not the same used in the single images. Here AIA 094 is red, AIA 335 is green, and AIA 193 is blue.  Each highlights a different part of the corona.</p>";
             case AIA_171_HMIB:
-                return null;
+                return "<p>No description is available for this image</p>";
             case HMI_Magnetogram:
                 return "<p>This image comes from HMI, another instrument on SDO. It shows the magnetic field directions near the surface of the Sun. White and black areas indicate opposite magnetic polarities, with white showing north (outward) polarity and black showing south (inward) polarity.</p><p><strong>Where:</strong> Photosphere<br><strong>Wavelength:</strong> 6173 angstroms (0.0000006173 m) = Visible (orange)<br><strong>Primary ions seen:</strong> Neutral iron (Fe I)<br><strong>Characteristic temperature:</strong> 6,000 K (11,000 F)</p>";
             case HMI_Colorized_Magnetogram:
                 return "<p>This image comes from HMI, another instrument on SDO. It shows the magnetic field directions near the surface of the Sun. White and black areas indicate opposite magnetic polarities, with white showing north (outward) polarity and black showing south (inward) polarity.</p><p><strong>Where:</strong> Photosphere<br><strong>Wavelength:</strong> 6173 angstroms (0.0000006173 m) = Visible (orange)<br><strong>Primary ions seen:</strong> Neutral iron (Fe I)<br><strong>Characteristic temperature:</strong> 6,000 K (11,000 F)</p>";
             case HMI_Intensitygram_Colored:
-                return null;
+                return "<p>No description is available for this image</p>";
             case HMI_Intensitygram_Flattened:
-                return null;
+                return "<p>No description is available for this image</p>";
             case HMI_Intensitygram:
-                return null;
+                return "<p>No description is available for this image</p>";
             case HMI_Dopplergram:
-                return null;
+                return "<p>No description is available for this image</p>";
         }
         return null;
     }

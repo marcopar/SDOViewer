@@ -93,6 +93,7 @@ public class DetailViewActivity extends ActionBarActivity {
         setContentView(R.layout.activity_detail_view);
         mImageView = (ImageView) findViewById(R.id.imageView);
         mAttacher = new PhotoViewAttacher(mImageView);
+        mAttacher.setMaximumScale(10);
         mAttacher.update();
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Setting wallpaper...");
