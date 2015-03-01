@@ -128,9 +128,17 @@ public class DetailViewActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_set_wallpaper) {
-            progressDialog.show();
-            SDOImage img = (SDOImage) getIntent().getExtras().getSerializable("IMAGE");
-            Picasso.with(this).load(Util.getURL(img, 2048)).into(targetFit);
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.set_wallpaper)
+                    .setMessage(getString(R.string.do_you_want_to_set))
+                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            progressDialog.show();
+                            SDOImage img = (SDOImage) getIntent().getExtras().getSerializable("IMAGE");
+                            Picasso.with(DetailViewActivity.this).load(Util.getURL(img, 2048)).into(targetFit);
+                        }
+                    })
+                    .setNegativeButton(R.string.no, null).show();
             return true;
         }
         if (id == R.id.action_about_this_image) {
@@ -139,7 +147,7 @@ public class DetailViewActivity extends ActionBarActivity {
                     .setTitle(img.toString())
                     .setMessage(Html.fromHtml(Util.getDescription(img)))
                     .setCancelable(true)
-                    .setPositiveButton("Close", new DialogInterface.OnClickListener() {
+                    .setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 

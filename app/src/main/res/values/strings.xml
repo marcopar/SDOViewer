@@ -15,4 +15,8 @@
 	    PhotoView (chrisbanes)</string>
     <string name="about_this_image">About this image</string>
     <string name="sdo_website">SDO website:\nsdo.gsfc.nasa.gov</string>
+    <string name="do_you_want_to_set">Do you want to set the wallapper to the current image?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="close">Close</string>
 </resources>
