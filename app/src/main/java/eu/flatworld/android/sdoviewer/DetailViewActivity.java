@@ -4,13 +4,16 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.app.WallpaperManager;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -92,6 +95,11 @@ public class DetailViewActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_view);
         mImageView = (ImageView) findViewById(R.id.imageView);
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        int res = Integer.parseInt(pref.getString("resolution", "2048"));
+        if (res > 2048) {
+            mImageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        }
         mAttacher = new PhotoViewAttacher(mImageView);
         mAttacher.setMaximumScale(10);
         mAttacher.update();
@@ -104,7 +112,9 @@ public class DetailViewActivity extends ActionBarActivity {
         super.onResume();
         mImageView = (ImageView) findViewById(R.id.imageView);
         SDOImage img = (SDOImage) getIntent().getExtras().getSerializable("IMAGE");
-        Picasso.with(this).load(Util.getURL(img, 2048)).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(mImageView, imageLoadedCallback);
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        int res = Integer.parseInt(pref.getString("resolution", "2048"));
+        Picasso.with(this).load(Util.getURL(img, res)).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(mImageView, imageLoadedCallback);
         getSupportActionBar().setTitle(img.toString());
     }
 
@@ -135,7 +145,9 @@ public class DetailViewActivity extends ActionBarActivity {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             progressDialog.show();
                             SDOImage img = (SDOImage) getIntent().getExtras().getSerializable("IMAGE");
-                            Picasso.with(DetailViewActivity.this).load(Util.getURL(img, 2048)).into(targetFit);
+                            SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(DetailViewActivity.this);
+                            int res = Integer.parseInt(pref.getString("resolution", "2048"));
+                            Picasso.with(DetailViewActivity.this).load(Util.getURL(img, res)).into(targetFit);
                         }
                     })
                     .setNegativeButton(R.string.no, null).show();

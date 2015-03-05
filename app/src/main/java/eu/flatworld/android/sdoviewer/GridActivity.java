@@ -1,7 +1,9 @@
 package eu.flatworld.android.sdoviewer;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +17,10 @@ public class GridActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, true);
+
         setContentView(R.layout.activity_grid);
 
         final GridView gridview = (GridView) findViewById(R.id.gridView);
@@ -45,6 +51,11 @@ public class GridActivity extends ActionBarActivity {
         int id = item.getItemId();
         if (id == R.id.action_about) {
             Intent i = new Intent(this, AboutActivity.class);
+            this.startActivity(i);
+            return true;
+        }
+        if (id == R.id.action_settings) {
+            Intent i = new Intent(this, SettingsActivity.class);
             this.startActivity(i);
             return true;
         }

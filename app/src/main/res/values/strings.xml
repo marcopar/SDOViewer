@@ -7,6 +7,7 @@
     <string name="force_reload">Force reload</string>
     <string name="about">About</string>
     <string name="title_activity_about">AboutActivity</string>
+    <string name="title_activity_settings">SettingsActivity</string>
     <string name="action_settings">Settings</string>
     <string name="aboutCredits">
         Images and descriptions are courtesy of NASA/SDO and the AIA, EVE, and HMI science teams.\n
@@ -19,4 +20,7 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="close">Close</string>
+    <string name="general">General</string>
+    <string name="preferences_resolution_title">Full size image resolution</string>
+    <string name="settings">Settings</string>
 </resources>

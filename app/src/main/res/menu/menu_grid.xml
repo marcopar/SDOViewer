@@ -3,6 +3,9 @@
     tools:context="eu.flatworld.android.sdoviewer.GridActivity">
     <!--item android:id="@+id/action_force_reload" android:title="@string/force_reload"/-->
     <item
+        android:id="@+id/action_settings"
+        android:title="@string/settings" />
+    <item
         android:id="@+id/action_about"
         android:title="@string/about" />
 </menu>
