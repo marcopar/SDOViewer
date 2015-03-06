@@ -33,6 +33,7 @@ public class DetailViewActivity extends ActionBarActivity implements SwipeRefres
 
         @Override
         public void onSuccess() {
+            swipeLayout.setRefreshing(false);
             if(mAttacher!=null){
                 mAttacher.update();
             }else{
@@ -42,18 +43,19 @@ public class DetailViewActivity extends ActionBarActivity implements SwipeRefres
 
         @Override
         public void onError() {
+            swipeLayout.setRefreshing(false);
         }
     };
     ProgressDialog progressDialog;
     Target targetFit = new Target() {
         @Override
         public void onBitmapFailed(Drawable errorDrawable) {
-            System.err.println("fail");
+
         }
 
         @Override
         public void onPrepareLoad(Drawable placeHolderDrawable) {
-            System.err.println("prepare");
+
         }
 
         @Override
