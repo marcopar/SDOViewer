@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<android.support.v4.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/swipe_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -8,10 +9,10 @@
         android:id="@+id/gridView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:verticalSpacing="0dp"
+        android:background="#000000"
         android:horizontalSpacing="0dp"
-        android:stretchMode="columnWidth"
         android:numColumns="2"
-        android:background="#000000"/>
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="0dp" />
 
-</FrameLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

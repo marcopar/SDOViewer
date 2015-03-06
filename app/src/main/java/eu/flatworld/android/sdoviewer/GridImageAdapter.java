@@ -31,6 +31,12 @@ public class GridImageAdapter extends BaseAdapter {
         }
     }
 
+    public void invalidateCache() {
+        for (SDOImage i : mItems) {
+            Picasso.with(mContext).invalidate(Util.getURL(i, 512));
+        }
+    }
+
     @Override
     public int getCount() {
         return mItems.size();

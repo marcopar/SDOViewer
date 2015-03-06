@@ -8,7 +8,9 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
 import android.view.Menu;
@@ -24,7 +26,7 @@ import com.squareup.picasso.Target;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 
-public class DetailViewActivity extends ActionBarActivity {
+public class DetailViewActivity extends ActionBarActivity implements SwipeRefreshLayout.OnRefreshListener {
     ImageView mImageView;
     PhotoViewAttacher mAttacher;
     Callback imageLoadedCallback = new Callback() {
@@ -64,6 +66,7 @@ public class DetailViewActivity extends ActionBarActivity {
             }).start();
         }
     };
+    private SwipeRefreshLayout swipeLayout;
 
     void setFitWallpaper(Bitmap source) {
         try {
@@ -105,6 +108,24 @@ public class DetailViewActivity extends ActionBarActivity {
         mAttacher.update();
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Setting wallpaper...");
+
+        swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        swipeLayout.setOnRefreshListener(this);
+    }
+
+    @Override
+    public void onRefresh() {
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        int res = Integer.parseInt(pref.getString("resolution", "2048"));
+        SDOImage img = (SDOImage) getIntent().getExtras().getSerializable("IMAGE");
+        Picasso.with(this).invalidate(Util.getURL(img, res));
+        Picasso.with(this).load(Util.getURL(img, res)).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(mImageView, imageLoadedCallback);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                swipeLayout.setRefreshing(false);
+            }
+        }, 1000);
     }
 
     @Override

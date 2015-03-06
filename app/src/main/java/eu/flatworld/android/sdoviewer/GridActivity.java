@@ -3,7 +3,9 @@ package eu.flatworld.android.sdoviewer;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,8 +14,10 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 
-public class GridActivity extends ActionBarActivity {
+public class GridActivity extends ActionBarActivity implements SwipeRefreshLayout.OnRefreshListener {
 
+    private SwipeRefreshLayout swipeLayout;
+    private GridImageAdapter gridAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,7 +28,8 @@ public class GridActivity extends ActionBarActivity {
         setContentView(R.layout.activity_grid);
 
         final GridView gridview = (GridView) findViewById(R.id.gridView);
-        gridview.setAdapter(new GridImageAdapter(this));
+        gridAdapter = new GridImageAdapter(this);
+        gridview.setAdapter(gridAdapter);
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
@@ -37,8 +42,23 @@ public class GridActivity extends ActionBarActivity {
             }
         });
 
+        swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        swipeLayout.setOnRefreshListener(this);
     }
 
+
+    @Override
+    public void onRefresh() {
+
+        gridAdapter.invalidateCache();
+        gridAdapter.notifyDataSetChanged();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                swipeLayout.setRefreshing(false);
+            }
+        }, 1000);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
