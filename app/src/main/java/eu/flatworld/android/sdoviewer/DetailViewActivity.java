@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -27,18 +26,13 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 
 
 public class DetailViewActivity extends ActionBarActivity implements SwipeRefreshLayout.OnRefreshListener {
-    ImageView mImageView;
-    PhotoViewAttacher mAttacher;
+    private static final int WALLPAPER_RESOLUTION = 2048;
     Callback imageLoadedCallback = new Callback() {
 
         @Override
         public void onSuccess() {
             swipeLayout.setRefreshing(false);
-            if(mAttacher!=null){
-                mAttacher.update();
-            }else{
-                mAttacher = new PhotoViewAttacher(mImageView);
-            }
+            mAttacher.update();
         }
 
         @Override
@@ -46,8 +40,7 @@ public class DetailViewActivity extends ActionBarActivity implements SwipeRefres
             swipeLayout.setRefreshing(false);
         }
     };
-    ProgressDialog progressDialog;
-    Target targetFit = new Target() {
+    Target targetSetWallpaper = new Target() {
         @Override
         public void onBitmapFailed(Drawable errorDrawable) {
 
@@ -68,7 +61,11 @@ public class DetailViewActivity extends ActionBarActivity implements SwipeRefres
             }).start();
         }
     };
+    private ImageView mImageView;
+    private PhotoViewAttacher mAttacher;
+    private ProgressDialog progressDialog;
     private SwipeRefreshLayout swipeLayout;
+    private int resolution;
 
     void setFitWallpaper(Bitmap source) {
         try {
@@ -101,8 +98,8 @@ public class DetailViewActivity extends ActionBarActivity implements SwipeRefres
         setContentView(R.layout.activity_detail_view);
         mImageView = (ImageView) findViewById(R.id.imageView);
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        int res = Integer.parseInt(pref.getString("resolution", "2048"));
-        if (res > 2048) {
+        resolution = Integer.parseInt(pref.getString("resolution", "2048"));
+        if (resolution > 2048) {
             mImageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
         mAttacher = new PhotoViewAttacher(mImageView);
@@ -113,32 +110,33 @@ public class DetailViewActivity extends ActionBarActivity implements SwipeRefres
 
         swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
         swipeLayout.setOnRefreshListener(this);
+
+        SDOImage img = (SDOImage) getIntent().getExtras().getSerializable("IMAGE");
+        getSupportActionBar().setTitle(img.toString());
+    }
+
+    void loadImage(boolean invalidateCache) {
+        //if we do not do this hack, when picasso sets the placeholder, photoview
+        //is not updated and shows the placeholder with the wrong size
+        mImageView.setImageResource(R.drawable.ic_sun);
+        mAttacher.update();
+        //
+        SDOImage img = (SDOImage) getIntent().getExtras().getSerializable("IMAGE");
+        if (invalidateCache) {
+            Picasso.with(this).invalidate(Util.getURL(img, resolution));
+        }
+        Picasso.with(this).load(Util.getURL(img, resolution)).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(mImageView, imageLoadedCallback);
     }
 
     @Override
     public void onRefresh() {
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        int res = Integer.parseInt(pref.getString("resolution", "2048"));
-        SDOImage img = (SDOImage) getIntent().getExtras().getSerializable("IMAGE");
-        Picasso.with(this).invalidate(Util.getURL(img, res));
-        Picasso.with(this).load(Util.getURL(img, res)).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(mImageView, imageLoadedCallback);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                swipeLayout.setRefreshing(false);
-            }
-        }, 1000);
+        loadImage(true);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mImageView = (ImageView) findViewById(R.id.imageView);
-        SDOImage img = (SDOImage) getIntent().getExtras().getSerializable("IMAGE");
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        int res = Integer.parseInt(pref.getString("resolution", "2048"));
-        Picasso.with(this).load(Util.getURL(img, res)).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(mImageView, imageLoadedCallback);
-        getSupportActionBar().setTitle(img.toString());
+        loadImage(false);
     }
 
     @Override
@@ -168,9 +166,7 @@ public class DetailViewActivity extends ActionBarActivity implements SwipeRefres
                         public void onClick(DialogInterface dialog, int whichButton) {
                             progressDialog.show();
                             SDOImage img = (SDOImage) getIntent().getExtras().getSerializable("IMAGE");
-                            SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(DetailViewActivity.this);
-                            int res = Integer.parseInt(pref.getString("resolution", "2048"));
-                            Picasso.with(DetailViewActivity.this).load(Util.getURL(img, res)).into(targetFit);
+                            Picasso.with(DetailViewActivity.this).load(Util.getURL(img, WALLPAPER_RESOLUTION)).into(targetSetWallpaper);
                         }
                     })
                     .setNegativeButton(R.string.no, null).show();
