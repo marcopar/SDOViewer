@@ -9,7 +9,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
 import android.view.Menu;
@@ -25,19 +24,18 @@ import com.squareup.picasso.Target;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 
-public class DetailViewActivity extends ActionBarActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class DetailViewActivity extends ActionBarActivity {
     private static final int WALLPAPER_RESOLUTION = 2048;
     Callback imageLoadedCallback = new Callback() {
 
         @Override
         public void onSuccess() {
-            swipeLayout.setRefreshing(false);
             mAttacher.update();
         }
 
         @Override
         public void onError() {
-            swipeLayout.setRefreshing(false);
+
         }
     };
     Target targetSetWallpaper = new Target() {
@@ -64,7 +62,6 @@ public class DetailViewActivity extends ActionBarActivity implements SwipeRefres
     private ImageView mImageView;
     private PhotoViewAttacher mAttacher;
     private ProgressDialog progressDialog;
-    private SwipeRefreshLayout swipeLayout;
     private int resolution;
 
     void setFitWallpaper(Bitmap source) {
@@ -108,9 +105,6 @@ public class DetailViewActivity extends ActionBarActivity implements SwipeRefres
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Setting wallpaper...");
 
-        swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
-        swipeLayout.setOnRefreshListener(this);
-
         SDOImage img = (SDOImage) getIntent().getExtras().getSerializable("IMAGE");
         getSupportActionBar().setTitle(img.toString());
     }
@@ -126,11 +120,6 @@ public class DetailViewActivity extends ActionBarActivity implements SwipeRefres
             Picasso.with(this).invalidate(Util.getURL(img, resolution));
         }
         Picasso.with(this).load(Util.getURL(img, resolution)).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(mImageView, imageLoadedCallback);
-    }
-
-    @Override
-    public void onRefresh() {
-        loadImage(true);
     }
 
     @Override
@@ -184,6 +173,10 @@ public class DetailViewActivity extends ActionBarActivity implements SwipeRefres
 
                         }
                     }).create().show();
+            return true;
+        }
+        if (id == R.id.action_reload) {
+            loadImage(true);
             return true;
         }
         return super.onOptionsItemSelected(item);

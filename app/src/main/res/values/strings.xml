@@ -23,4 +23,5 @@
     <string name="general">General</string>
     <string name="preferences_resolution_title">Full size image resolution</string>
     <string name="settings">Settings</string>
+    <string name="reload">Reload</string>
 </resources>

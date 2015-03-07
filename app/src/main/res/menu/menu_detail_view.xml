@@ -3,11 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_about_this_image"
-        android:icon="@drawable/ic_info"
+        android:icon="@drawable/ic_action_action_info_outline"
         android:title="@string/about_this_image"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_set_wallpaper"
         android:title="@string/set_wallpaper"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_reload"
+        android:icon="@drawable/ic_action_navigation_refresh"
+        android:title="@string/reload"
+        app:showAsAction="always" />
 </menu>
