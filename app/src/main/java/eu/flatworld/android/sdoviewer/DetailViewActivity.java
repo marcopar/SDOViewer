@@ -6,9 +6,12 @@ import android.app.WallpaperManager;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.view.WindowCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
 import android.view.Menu;
@@ -26,6 +29,8 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 
 public class DetailViewActivity extends ActionBarActivity {
     private static final int WALLPAPER_RESOLUTION = 2048;
+
+
     Callback imageLoadedCallback = new Callback() {
 
         @Override
@@ -63,6 +68,8 @@ public class DetailViewActivity extends ActionBarActivity {
     private PhotoViewAttacher mAttacher;
     private ProgressDialog progressDialog;
     private int resolution;
+    private boolean pfssAvailable = false;
+    private boolean pfssVisible = false;
 
     void setFitWallpaper(Bitmap source) {
         try {
@@ -91,12 +98,15 @@ public class DetailViewActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //for transparent actionbar
+        supportRequestWindowFeature(WindowCompat.FEATURE_ACTION_BAR_OVERLAY);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_view);
         mImageView = (ImageView) findViewById(R.id.imageView);
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         resolution = Integer.parseInt(pref.getString("resolution", "2048"));
         if (resolution > 2048) {
+            //if bigger than 2048 performances are very bad with hardware acceleration so we disable it
             mImageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
         mAttacher = new PhotoViewAttacher(mImageView);
@@ -106,7 +116,12 @@ public class DetailViewActivity extends ActionBarActivity {
         progressDialog.setMessage("Setting wallpaper...");
 
         SDOImage img = (SDOImage) getIntent().getExtras().getSerializable("IMAGE");
+        if (Util.getURL(img, resolution, true) != null) {
+            pfssAvailable = true;
+        }
         getSupportActionBar().setTitle(img.toString());
+        //for transparent actionbar
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.argb(0, 0, 0, 0)));
     }
 
     void loadImage(boolean invalidateCache) {
@@ -117,9 +132,12 @@ public class DetailViewActivity extends ActionBarActivity {
         //
         SDOImage img = (SDOImage) getIntent().getExtras().getSerializable("IMAGE");
         if (invalidateCache) {
-            Picasso.with(this).invalidate(Util.getURL(img, resolution));
+            Picasso.with(this).invalidate(Util.getURL(img, resolution, false));
+            if (pfssAvailable) {
+                Picasso.with(this).invalidate(Util.getURL(img, resolution, true));
+            }
         }
-        Picasso.with(this).load(Util.getURL(img, resolution)).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(mImageView, imageLoadedCallback);
+        Picasso.with(this).load(Util.getURL(img, resolution, pfssAvailable & pfssVisible)).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(mImageView, imageLoadedCallback);
     }
 
     @Override
@@ -141,6 +159,8 @@ public class DetailViewActivity extends ActionBarActivity {
             MenuItem item = menu.findItem(R.id.action_about_this_image);
             item.setVisible(false);
         }
+        MenuItem item = menu.findItem(R.id.action_pfss);
+        item.setVisible(pfssAvailable);
         return true;
     }
 
@@ -155,7 +175,7 @@ public class DetailViewActivity extends ActionBarActivity {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             progressDialog.show();
                             SDOImage img = (SDOImage) getIntent().getExtras().getSerializable("IMAGE");
-                            Picasso.with(DetailViewActivity.this).load(Util.getURL(img, WALLPAPER_RESOLUTION)).into(targetSetWallpaper);
+                            Picasso.with(DetailViewActivity.this).load(Util.getURL(img, WALLPAPER_RESOLUTION, pfssAvailable & pfssVisible)).into(targetSetWallpaper);
                         }
                     })
                     .setNegativeButton(R.string.no, null).show();
@@ -176,6 +196,17 @@ public class DetailViewActivity extends ActionBarActivity {
             return true;
         }
         if (id == R.id.action_reload) {
+            loadImage(true);
+            return true;
+        }
+        if (id == R.id.action_pfss) {
+            pfssVisible = !pfssVisible;
+            item.setChecked(pfssVisible);
+            if (pfssVisible) {
+                item.setIcon(R.drawable.ic_action_pfss_on);
+            } else {
+                item.setIcon(R.drawable.ic_action_pfss_off);
+            }
             loadImage(true);
             return true;
         }

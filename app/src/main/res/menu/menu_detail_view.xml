@@ -2,6 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/action_pfss"
+        android:checkable="true"
+        android:icon="@drawable/ic_action_pfss_off"
+        android:title="Shof PFSS"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/action_about_this_image"
         android:icon="@drawable/ic_action_action_info_outline"
         android:title="@string/about_this_image"
@@ -14,5 +20,5 @@
         android:id="@+id/action_reload"
         android:icon="@drawable/ic_action_navigation_refresh"
         android:title="@string/reload"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 </menu>

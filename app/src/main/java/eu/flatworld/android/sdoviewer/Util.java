@@ -5,46 +5,67 @@ package eu.flatworld.android.sdoviewer;
  */
 public class Util {
 
-    public static String getURL(SDOImage si, int size) {
+    private static final String BASE_URL = "http://sdo.gsfc.nasa.gov/assets/img/latest/";
+
+    public static String getURL(SDOImage si, int size, boolean pfss) {
+        String pfssString = "";
+        if (pfss) {
+            pfssString = "pfss";
+        }
         switch (si) {
             case AIA_193:
-                return String.format("http://sdo.gsfc.nasa.gov/assets/img/latest/latest_%d_0193.jpg", size);
+                return String.format(BASE_URL + "latest_%d_0193%s.jpg", size, pfssString);
             case AIA_304:
-                return String.format("http://sdo.gsfc.nasa.gov/assets/img/latest/latest_%d_0304.jpg", size);
+                return String.format(BASE_URL + "latest_%d_0304%s.jpg", size, pfssString);
             case AIA_171:
-                return String.format("http://sdo.gsfc.nasa.gov/assets/img/latest/latest_%d_0171.jpg", size);
+                return String.format(BASE_URL + "latest_%d_0171%s.jpg", size, pfssString);
             case AIA_211:
-                return String.format("http://sdo.gsfc.nasa.gov/assets/img/latest/latest_%d_0211.jpg", size);
+                return String.format(BASE_URL + "latest_%d_0211%s.jpg", size, pfssString);
             case AIA_131:
-                return String.format("http://sdo.gsfc.nasa.gov/assets/img/latest/latest_%d_0131.jpg", size);
+                return String.format(BASE_URL + "latest_%d_0131%s.jpg", size, pfssString);
             case AIA_335:
-                return String.format("http://sdo.gsfc.nasa.gov/assets/img/latest/latest_%d_0335.jpg", size);
+                return String.format(BASE_URL + "latest_%d_0335%s.jpg", size, pfssString);
             case AIA_094:
-                return String.format("http://sdo.gsfc.nasa.gov/assets/img/latest/latest_%d_0094.jpg", size);
+                return String.format(BASE_URL + "latest_%d_0094%s.jpg", size, pfssString);
             case AIA_1600:
-                return String.format("http://sdo.gsfc.nasa.gov/assets/img/latest/latest_%d_1600.jpg", size);
+                return String.format(BASE_URL + "latest_%d_1600%s.jpg", size, pfssString);
             case AIA_1700:
-                return String.format("http://sdo.gsfc.nasa.gov/assets/img/latest/latest_%d_1700.jpg", size);
+                return String.format(BASE_URL + "latest_%d_1700%s.jpg", size, pfssString);
             case AIA_211_193_171:
-                return String.format("http://sdo.gsfc.nasa.gov/assets/img/latest/f_211_193_171_%d.jpg", size);
+                return String.format(BASE_URL + "f_211_193_171%s_%d.jpg", pfssString, size);
             case AIA_304_211_171:
-                return String.format("http://sdo.gsfc.nasa.gov/assets/img/latest/f_304_211_171_%d.jpg", size);
+                return String.format(BASE_URL + "f_304_211_171%s_%d.jpg", pfssString, size);
             case AIA_094_335_193:
-                return String.format("http://sdo.gsfc.nasa.gov/assets/img/latest/f_094_335_193_%d.jpg", size);
+                return String.format(BASE_URL + "f_094_335_193%s_%d.jpg", pfssString, size);
             case AIA_171_HMIB:
-                return String.format("http://sdo.gsfc.nasa.gov/assets/img/latest/f_HMImag_171_%d.jpg", size);
+                return String.format(BASE_URL + "f_HMImag_171%s_%d.jpg", pfssString, size);
             case HMI_Magnetogram:
-                return String.format("http://sdo.gsfc.nasa.gov/assets/img/latest/latest_%d_HMIB.jpg", size);
+                return String.format(BASE_URL + "latest_%d_HMIB%s.jpg", size, pfssString);
             case HMI_Colorized_Magnetogram:
-                return String.format("http://sdo.gsfc.nasa.gov/assets/img/latest/latest_%d_HMIBC.jpg", size);
+                if (pfss) {
+                    return null;
+                }
+                return String.format(BASE_URL + "latest_%d_HMIBC.jpg", size);
             case HMI_Intensitygram_Colored:
-                return String.format("http://sdo.gsfc.nasa.gov/assets/img/latest/latest_%d_HMIIC.jpg", size);
+                if (pfss) {
+                    return null;
+                }
+                return String.format(BASE_URL + "latest_%d_HMIIC.jpg", size);
             case HMI_Intensitygram_Flattened:
-                return String.format("http://sdo.gsfc.nasa.gov/assets/img/latest/latest_%d_HMIIF.jpg", size);
+                if (pfss) {
+                    return null;
+                }
+                return String.format(BASE_URL + "latest_%d_HMIIF.jpg", size);
             case HMI_Intensitygram:
-                return String.format("http://sdo.gsfc.nasa.gov/assets/img/latest/latest_%d_HMII.jpg", size);
+                if (pfss) {
+                    return null;
+                }
+                return String.format(BASE_URL + "latest_%d_HMII.jpg", size);
             case HMI_Dopplergram:
-                return String.format("http://sdo.gsfc.nasa.gov/assets/img/latest/latest_%d_HMID.jpg", size);
+                if (pfss) {
+                    return null;
+                }
+                return String.format(BASE_URL + "latest_%d_HMID.jpg", size);
         }
         return null;
     }
