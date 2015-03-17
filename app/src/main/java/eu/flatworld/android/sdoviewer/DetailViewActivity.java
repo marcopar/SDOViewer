@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.RectF;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -29,8 +30,6 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 
 public class DetailViewActivity extends ActionBarActivity {
     private static final int WALLPAPER_RESOLUTION = 2048;
-
-
     Callback imageLoadedCallback = new Callback() {
 
         @Override
@@ -111,6 +110,10 @@ public class DetailViewActivity extends ActionBarActivity {
         }
         mAttacher = new PhotoViewAttacher(mImageView);
         mAttacher.setMaximumScale(10);
+        if (savedInstanceState != null) {
+            mAttacher.setScale(savedInstanceState.getFloat("scale"), savedInstanceState.getFloat("x"), savedInstanceState.getFloat("y"), false);
+            pfssVisible = savedInstanceState.getBoolean("pfss");
+        }
         mAttacher.update();
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Setting wallpaper...");
@@ -145,6 +148,26 @@ public class DetailViewActivity extends ActionBarActivity {
         super.onResume();
         loadImage(false);
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        float scale = Math.max(mAttacher.getMinimumScale(), Math.min(mAttacher.getScale(), mAttacher.getMaximumScale()));
+        RectF original = new RectF();
+        original.top = mImageView.getTop();
+        original.bottom = mImageView.getBottom();
+        original.left = mImageView.getLeft();
+        original.right = mImageView.getRight();
+        RectF relative = mAttacher.getDisplayRect();
+
+        float focalX = (0.5f * (original.left + original.right) - relative.left) / scale;
+        float focalY = (0.5f * (original.top + original.bottom) - relative.top) / scale;
+        outState.putFloat("scale", scale);
+        outState.putFloat("x", focalX);
+        outState.putFloat("y", focalY);
+        outState.putBoolean("pfss", pfssVisible);
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
