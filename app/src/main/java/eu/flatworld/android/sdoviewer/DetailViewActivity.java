@@ -132,7 +132,7 @@ public class DetailViewActivity extends ActionBarActivity {
         //is not updated and shows the placeholder with the wrong size
         mImageView.setImageResource(R.drawable.ic_sun);
         mAttacher.update();
-        //
+
         SDOImage img = (SDOImage) getIntent().getExtras().getSerializable("IMAGE");
         if (invalidateCache) {
             Picasso.with(this).invalidate(Util.getURL(img, resolution, false));
@@ -184,6 +184,12 @@ public class DetailViewActivity extends ActionBarActivity {
         }
         MenuItem item = menu.findItem(R.id.action_pfss);
         item.setVisible(pfssAvailable);
+        item.setChecked(pfssVisible);
+        if (pfssVisible) {
+            item.setIcon(R.drawable.ic_action_pfss_on);
+        } else {
+            item.setIcon(R.drawable.ic_action_pfss_off);
+        }
         return true;
     }
 
