@@ -30,6 +30,10 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 
 public class DetailViewActivity extends ActionBarActivity {
     private static final int WALLPAPER_RESOLUTION = 2048;
+
+    //private ShareActionProvider mShareActionProvider;
+
+
     Callback imageLoadedCallback = new Callback() {
 
         @Override
@@ -172,6 +176,9 @@ public class DetailViewActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_detail_view, menu);
+
+        //MenuItem item = menu.findItem(R.id.menu_item_share);
+        //mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
         return true;
     }
 
@@ -240,7 +247,5 @@ public class DetailViewActivity extends ActionBarActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-
-
     }
 }
