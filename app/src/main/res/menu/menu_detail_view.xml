@@ -12,11 +12,11 @@
         android:icon="@drawable/ic_action_action_info_outline"
         android:title="@string/about_this_image"
         app:showAsAction="always" />
-    <!--item
-        android:id="@+id/menu_item_share"
+    <item
+        android:id="@+id/action_share"
+        android:icon="@drawable/ic_action_social_share"
         app:showAsAction="ifRoom"
-        android:title="Share"
-        app:actionProviderClass="android.support.v7.widget.ShareActionProvider" /-->
+        android:title="Share" />
     <item
         android:id="@+id/action_set_wallpaper"
         android:title="@string/set_wallpaper"

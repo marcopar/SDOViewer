@@ -24,4 +24,10 @@
     <string name="preferences_resolution_title">Full size image resolution</string>
     <string name="settings">Settings</string>
     <string name="reload">Reload</string>
+    <string name="share_the_image_using_">Share the image using:</string>
+    <string name="error_shareing_the_image_">"Error sharing image: "</string>
+    <string name="wallpaper_is_set">Wallpaper is set</string>
+    <string name="error_setting_the_wallpaper_">"Error setting the wallpaper: "</string>
+    <string name="setting_wallpaper_">Setting wallpaper...</string>
+    <string name="preparing_the_image_">Preparing the image...</string>
 </resources>

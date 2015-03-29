@@ -4,16 +4,23 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.app.WallpaperManager;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.WindowCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.ShareActionProvider;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,14 +32,13 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.io.File;
+
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 
 public class DetailViewActivity extends ActionBarActivity {
     private static final int WALLPAPER_RESOLUTION = 2048;
-
-    //private ShareActionProvider mShareActionProvider;
-
 
     Callback imageLoadedCallback = new Callback() {
 
@@ -67,12 +73,56 @@ public class DetailViewActivity extends ActionBarActivity {
             }).start();
         }
     };
+    Target targetShare = new Target() {
+        @Override
+        public void onBitmapFailed(Drawable errorDrawable) {
+
+        }
+
+        @Override
+        public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+        }
+
+        @Override
+        public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    share(bitmap);
+                }
+            }).start();
+        }
+    };
     private ImageView mImageView;
     private PhotoViewAttacher mAttacher;
     private ProgressDialog progressDialog;
     private int resolution;
     private boolean pfssAvailable = false;
     private boolean pfssVisible = false;
+
+
+
+    public void share(Bitmap b) {
+        try {
+        String path = MediaStore.Images.Media.insertImage(getContentResolver(),
+                b, "x", "x");
+        Uri uri = Uri.parse(path);
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+        shareIntent.setType("image/*");
+        startActivity(Intent.createChooser(shareIntent, getString(R.string.share_the_image_using_)));
+        } catch (final Exception ex) {
+            DetailViewActivity.this.runOnUiThread(new Runnable() {
+                public void run() {
+                    Toast.makeText(DetailViewActivity.this, getString(R.string.error_shareing_the_image_) + ex.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        } finally {
+            progressDialog.dismiss();
+        }
+    }
 
     void setFitWallpaper(Bitmap source) {
         try {
@@ -85,13 +135,13 @@ public class DetailViewActivity extends ActionBarActivity {
             wallpaperManager.setBitmap(target);
             DetailViewActivity.this.runOnUiThread(new Runnable() {
                 public void run() {
-                    Toast.makeText(DetailViewActivity.this, "Wallpaper is set", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DetailViewActivity.this, getString(R.string.wallpaper_is_set), Toast.LENGTH_SHORT).show();
                 }
             });
         } catch (final Exception ex) {
             DetailViewActivity.this.runOnUiThread(new Runnable() {
                 public void run() {
-                    Toast.makeText(DetailViewActivity.this, "Error setting the wallpaper: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DetailViewActivity.this, getString(R.string.error_setting_the_wallpaper_) + ex.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
         } finally {
@@ -120,7 +170,6 @@ public class DetailViewActivity extends ActionBarActivity {
         }
         mAttacher.update();
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Setting wallpaper...");
 
         SDOImage img = (SDOImage) getIntent().getExtras().getSerializable("IMAGE");
         if (Util.getURL(img, resolution, true) != null) {
@@ -176,9 +225,6 @@ public class DetailViewActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_detail_view, menu);
-
-        //MenuItem item = menu.findItem(R.id.menu_item_share);
-        //mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
         return true;
     }
 
@@ -209,6 +255,7 @@ public class DetailViewActivity extends ActionBarActivity {
                     .setMessage(getString(R.string.do_you_want_to_set))
                     .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
+                            progressDialog.setMessage(getString(R.string.setting_wallpaper_));
                             progressDialog.show();
                             SDOImage img = (SDOImage) getIntent().getExtras().getSerializable("IMAGE");
                             Picasso.with(DetailViewActivity.this).load(Util.getURL(img, WALLPAPER_RESOLUTION, pfssAvailable & pfssVisible)).into(targetSetWallpaper);
@@ -233,6 +280,13 @@ public class DetailViewActivity extends ActionBarActivity {
         }
         if (id == R.id.action_reload) {
             loadImage(true);
+            return true;
+        }
+        if (id == R.id.action_share) {
+            progressDialog.setMessage(getString(R.string.preparing_the_image_));
+            progressDialog.show();
+            SDOImage img = (SDOImage) getIntent().getExtras().getSerializable("IMAGE");
+            Picasso.with(DetailViewActivity.this).load(Util.getURL(img, resolution, pfssAvailable & pfssVisible)).into(targetShare);
             return true;
         }
         if (id == R.id.action_pfss) {
