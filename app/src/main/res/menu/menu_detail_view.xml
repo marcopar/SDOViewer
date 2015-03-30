@@ -6,17 +6,17 @@
         android:checkable="true"
         android:icon="@drawable/ic_action_pfss_off"
         android:title="Shof PFSS"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_share"
+        android:icon="@drawable/ic_action_social_share"
+        app:showAsAction="always"
+        android:title="Share" />
     <item
         android:id="@+id/action_about_this_image"
         android:icon="@drawable/ic_action_action_info_outline"
         android:title="@string/about_this_image"
         app:showAsAction="always" />
-    <item
-        android:id="@+id/action_share"
-        android:icon="@drawable/ic_action_social_share"
-        app:showAsAction="ifRoom"
-        android:title="Share" />
     <item
         android:id="@+id/action_set_wallpaper"
         android:title="@string/set_wallpaper"
