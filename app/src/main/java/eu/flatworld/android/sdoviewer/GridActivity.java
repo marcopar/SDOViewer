@@ -39,6 +39,7 @@ public class GridActivity extends ActionBarActivity implements SwipeRefreshLayou
                 bundle.putSerializable("IMAGE", a.getItem(position));
                 intent.putExtras(bundle);
                 startActivity(intent);
+
             }
         });
 

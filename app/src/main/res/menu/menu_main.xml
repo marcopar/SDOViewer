@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="eu.flatworld.android.sdoviewer.MainActivity">
+    <!--item android:id="@+id/action_force_reload" android:title="@string/force_reload"/-->
+    <item
+        android:id="@+id/action_settings"
+        android:title="@string/settings" />
+    <item
+        android:id="@+id/action_about"
+        android:title="@string/about" />
+</menu>

@@ -30,4 +30,8 @@
     <string name="error_setting_the_wallpaper_">"Error setting the wallpaper: "</string>
     <string name="setting_wallpaper_">Setting wallpaper...</string>
     <string name="preparing_the_image_">Preparing the image...</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_main">MainActivity</string>
 </resources>
