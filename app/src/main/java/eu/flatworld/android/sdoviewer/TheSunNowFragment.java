@@ -8,6 +8,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -22,7 +25,28 @@ public class TheSunNowFragment extends Fragment implements SwipeRefreshLayout.On
     private GridImageAdapter gridAdapter;
 
     public TheSunNowFragment() {
+        setHasOptionsMenu(true);
+    }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_main, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_about) {
+            Intent i = new Intent(getActivity(), AboutActivity.class);
+            this.startActivity(i);
+            return true;
+        }
+        if (id == R.id.action_settings) {
+            Intent i = new Intent(getActivity(), SettingsActivity.class);
+            this.startActivity(i);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -38,11 +62,11 @@ public class TheSunNowFragment extends Fragment implements SwipeRefreshLayout.On
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 GridImageAdapter a = (GridImageAdapter) gridview.getAdapter();
-                Intent intent = new Intent(getActivity().getBaseContext(), DetailViewActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("IMAGE", a.getItem(position));
-                intent.putExtras(bundle);
-                startActivity(intent);
+                ImageDetailFragment f = new ImageDetailFragment();
+                f.setArguments(bundle);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(android.R.id.content, f).addToBackStack(null).commit();
             }
         });
 
