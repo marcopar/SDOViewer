@@ -113,10 +113,6 @@ public class ImageDetailFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //for transparent actionbar
-        //((MainActivity)getActivity()).supportRequestWindowFeature(WindowCompat.FEATURE_ACTION_BAR_OVERLAY);
-        super.onCreate(savedInstanceState);
-
         mImageView = (ImageView) view.findViewById(R.id.imageView);
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         resolution = Integer.parseInt(pref.getString("resolution", "2048"));
@@ -138,8 +134,6 @@ public class ImageDetailFragment extends Fragment {
             pfssAvailable = true;
         }
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(img.toString());
-        //for transparent actionbar
-        //((MainActivity)getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.argb(0, 0, 0, 0)));
     }
 
     @Override

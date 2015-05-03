@@ -11,11 +11,9 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (getSupportFragmentManager().findFragmentById(android.R.id.content) == null) {
-            getSupportFragmentManager().beginTransaction().add(android.R.id.content, new TheSunNowFragment()).commit();
+        if (getSupportFragmentManager().findFragmentById(R.id.content_frame) == null) {
+            getSupportFragmentManager().beginTransaction().add(R.id.content_frame, new TheSunNowFragment()).commit();
         }
+
     }
-
-
-
 }

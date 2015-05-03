@@ -15,14 +15,10 @@
         android:largeHeap="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".DetailViewActivity"
-            android:label="@string/detailed_view" />
-        <activity
             android:name=".MainActivity"
             android:label="@string/sdo_viewer">
         <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
