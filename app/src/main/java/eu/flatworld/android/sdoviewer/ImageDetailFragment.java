@@ -113,9 +113,9 @@ public class ImageDetailFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mImageView = (ImageView) view.findViewById(R.id.imageView);
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         resolution = Integer.parseInt(pref.getString("resolution", "2048"));
+        mImageView = (ImageView) view.findViewById(R.id.imageView);
         if (resolution > 2048) {
             //if bigger than 2048 performances are very bad with hardware acceleration so we disable it
             mImageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
@@ -138,6 +138,9 @@ public class ImageDetailFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        setRetainInstance(true);
+        menu.clear();
         inflater.inflate(R.menu.menu_detail_view, menu);
     }
 
@@ -301,4 +304,9 @@ public class ImageDetailFragment extends Fragment {
         outState.putBoolean("pfss", pfssVisible);
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mAttacher.cleanup();
+    }
 }

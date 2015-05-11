@@ -26,10 +26,13 @@ public class TheSunNowFragment extends Fragment implements SwipeRefreshLayout.On
 
     public TheSunNowFragment() {
         setHasOptionsMenu(true);
+        setRetainInstance(true);
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
         inflater.inflate(R.menu.menu_main, menu);
     }
 
@@ -66,7 +69,7 @@ public class TheSunNowFragment extends Fragment implements SwipeRefreshLayout.On
                 bundle.putSerializable("IMAGE", a.getItem(position));
                 ImageDetailFragment f = new ImageDetailFragment();
                 f.setArguments(bundle);
-                getActivity().getSupportFragmentManager().beginTransaction().replace(android.R.id.content, f).addToBackStack(null).commit();
+                getFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack(null).commit();
             }
         });
 
@@ -74,10 +77,15 @@ public class TheSunNowFragment extends Fragment implements SwipeRefreshLayout.On
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        ActionBar bar = ((MainActivity) getActivity()).getSupportActionBar();
+        bar.setTitle(R.string.the_sun_now);
+    }
+
+    @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ActionBar bar = ((MainActivity) getActivity()).getSupportActionBar();
-        bar.setTitle(R.string.sdo_viewer);
     }
 
 
