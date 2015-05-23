@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,22 +28,17 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import uk.co.senab.photoview.PhotoViewAttacher;
-
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class ImageDetailFragment extends Fragment {
     private static final int WALLPAPER_RESOLUTION = 2048;
-
-    private ImageView mImageView;
-    private PhotoViewAttacher mAttacher;
     Callback imageLoadedCallback = new Callback() {
 
         @Override
         public void onSuccess() {
-            mAttacher.update();
+
         }
 
         @Override
@@ -52,6 +46,7 @@ public class ImageDetailFragment extends Fragment {
 
         }
     };
+    private ImageView mImageView;
     private ProgressDialog progressDialog;
     Target targetSetWallpaper = new Target() {
         @Override
@@ -120,13 +115,9 @@ public class ImageDetailFragment extends Fragment {
             //if bigger than 2048 performances are very bad with hardware acceleration so we disable it
             mImageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
-        mAttacher = new PhotoViewAttacher(mImageView);
-        mAttacher.setMaximumScale(10);
         if (savedInstanceState != null) {
-            mAttacher.setScale(savedInstanceState.getFloat("scale"), savedInstanceState.getFloat("x"), savedInstanceState.getFloat("y"), false);
             pfssVisible = savedInstanceState.getBoolean("pfss");
         }
-        mAttacher.update();
         progressDialog = new ProgressDialog(getActivity());
 
         SDOImage img = (SDOImage) getArguments().getSerializable("IMAGE");
@@ -267,7 +258,6 @@ public class ImageDetailFragment extends Fragment {
         //if we do not do this hack, when picasso sets the placeholder, photoview
         //is not updated and shows the placeholder with the wrong size
         mImageView.setImageResource(R.drawable.ic_sun);
-        mAttacher.update();
 
         SDOImage img = (SDOImage) getArguments().getSerializable("IMAGE");
         if (invalidateCache) {
@@ -288,25 +278,11 @@ public class ImageDetailFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        float scale = Math.max(mAttacher.getMinimumScale(), Math.min(mAttacher.getScale(), mAttacher.getMaximumScale()));
-        RectF original = new RectF();
-        original.top = mImageView.getTop();
-        original.bottom = mImageView.getBottom();
-        original.left = mImageView.getLeft();
-        original.right = mImageView.getRight();
-        RectF relative = mAttacher.getDisplayRect();
-
-        float focalX = (0.5f * (original.left + original.right) - relative.left) / scale;
-        float focalY = (0.5f * (original.top + original.bottom) - relative.top) / scale;
-        outState.putFloat("scale", scale);
-        outState.putFloat("x", focalX);
-        outState.putFloat("y", focalY);
         outState.putBoolean("pfss", pfssVisible);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mAttacher.cleanup();
     }
 }
