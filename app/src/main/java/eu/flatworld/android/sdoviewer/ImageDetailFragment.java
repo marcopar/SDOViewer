@@ -21,12 +21,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+
+import it.sephiroth.android.library.imagezoom.ImageViewTouch;
 
 
 /**
@@ -46,7 +47,7 @@ public class ImageDetailFragment extends Fragment {
 
         }
     };
-    private ImageView mImageView;
+    private ImageViewTouch mImageView;
     private ProgressDialog progressDialog;
     Target targetSetWallpaper = new Target() {
         @Override
@@ -110,7 +111,7 @@ public class ImageDetailFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         resolution = Integer.parseInt(pref.getString("resolution", "2048"));
-        mImageView = (ImageView) view.findViewById(R.id.imageView);
+        mImageView = (ImageViewTouch) view.findViewById(R.id.imageView);
         if (resolution > 2048) {
             //if bigger than 2048 performances are very bad with hardware acceleration so we disable it
             mImageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
