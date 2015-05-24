@@ -29,17 +29,30 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/clickableextviewstates" />
 
-    <TextView
-        android:id="@+id/aboutTVSDO"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="10dp"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:text="@string/sdo_website"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@color/clickableextviewstates" />
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:src="@drawable/sdo_logo" />
+
+        <TextView
+            android:id="@+id/aboutTVSDO"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/sdo_website"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/clickableextviewstates" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/aboutTVCredits"
