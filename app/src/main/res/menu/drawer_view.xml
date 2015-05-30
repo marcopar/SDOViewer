@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="none">
+        <item
+            android:id="@+id/nav_the_sun_now"
+            android:title="The Sun Now" />
+        <item
+            android:id="@+id/nav_browse_data"
+            android:title="Browse data" />
+    </group>
+</menu>
