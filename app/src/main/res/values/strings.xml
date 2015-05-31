@@ -33,4 +33,6 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="the_sun_now">The Sun Now</string>
     <string name="browse_data">Browse Data</string>
+    <string name="select_year">Select year</string>
+    <string name="select_month">Select month</string>
 </resources>

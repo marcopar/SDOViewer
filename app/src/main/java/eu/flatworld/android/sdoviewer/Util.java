@@ -1,5 +1,12 @@
 package eu.flatworld.android.sdoviewer;
 
+import android.content.Context;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
+
 /**
  * Created by marcopar on 22/02/15.
  */
@@ -112,5 +119,47 @@ public class Util {
                 return "<p>No description is available for this image</p>";
         }
         return null;
+    }
+
+
+    public static List<BrowseDataListItem> getYears(Context ctx) {
+        int maxYear = GregorianCalendar.getInstance().get(GregorianCalendar.YEAR);
+        List<BrowseDataListItem> l = new ArrayList<>();
+        for (int i = 2010; i <= maxYear; i++) {
+            String s = Integer.toString(i);
+            l.add(new BrowseDataListItem(s, s));
+        }
+        return l;
+    }
+
+    public static List<BrowseDataListItem> getMonths(Context ctx, int year) {
+        int maxMonth = 12;
+        if (year == GregorianCalendar.getInstance().get(GregorianCalendar.YEAR)) {
+            maxMonth = GregorianCalendar.getInstance().get(GregorianCalendar.MONTH) + 1;
+        }
+        List<BrowseDataListItem> l = new ArrayList<>();
+        for (int i = 1; i <= maxMonth; i++) {
+            String s = Integer.toString(i);
+            l.add(new BrowseDataListItem(s, s));
+        }
+        return l;
+    }
+
+    public static List<BrowseDataListItem> getDays(Context ctx, int year, int month) {
+        Calendar gc = GregorianCalendar.getInstance();
+        gc.set(GregorianCalendar.YEAR, year);
+        gc.set(GregorianCalendar.MONTH, month);
+        int maxDays = gc.getActualMaximum(GregorianCalendar.MONTH);
+        if (year == GregorianCalendar.getInstance().get(GregorianCalendar.YEAR)) {
+            if (month == GregorianCalendar.getInstance().get(GregorianCalendar.MONTH) + 1) {
+                maxDays = GregorianCalendar.getInstance().get(GregorianCalendar.DAY_OF_MONTH);
+            }
+        }
+        List<BrowseDataListItem> l = new ArrayList<>();
+        for (int i = 1; i <= maxDays; i++) {
+            String s = Integer.toString(i);
+            l.add(new BrowseDataListItem(s, s));
+        }
+        return l;
     }
 }
