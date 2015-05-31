@@ -33,9 +33,9 @@ public class GridImageAdapter extends BaseAdapter {
 
     public void invalidateCache() {
         for (SDOImage i : mItems) {
-            Picasso.with(mContext).invalidate(Util.getURL(i, 512, false));
-            if (Util.getURL(i, 512, true) != null) {
-                Picasso.with(mContext).invalidate(Util.getURL(i, 512, true));
+            Picasso.with(mContext).invalidate(Util.getLatestURL(i, 512, false));
+            if (Util.getLatestURL(i, 512, true) != null) {
+                Picasso.with(mContext).invalidate(Util.getLatestURL(i, 512, true));
             }
         }
     }
@@ -70,7 +70,7 @@ public class GridImageAdapter extends BaseAdapter {
         picture = (ImageView) v.getTag(R.id.picture);
         name = (TextView) v.getTag(R.id.text);
 
-        Picasso.with(mContext).load(Util.getURL(mItems.get(position), 512, false)).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(picture);
+        Picasso.with(mContext).load(Util.getLatestURL(mItems.get(position), 512, false)).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(picture);
         name.setText(mItems.get(position).toString());
 
         return v;

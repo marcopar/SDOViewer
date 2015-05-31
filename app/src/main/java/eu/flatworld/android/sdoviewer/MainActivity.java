@@ -41,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
                                 getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                                 getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new TheSunNowFragment()).commit();
                             }
+                            if (menuItem.getItemId() == R.id.nav_browse_data) {
+                                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new BrowseDataFragment()).addToBackStack(null).commit();
+                            }
                             mDrawerLayout.closeDrawers();
                             return true;
                         }

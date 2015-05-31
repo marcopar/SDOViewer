@@ -26,7 +26,6 @@ public class TheSunNowFragment extends Fragment implements SwipeRefreshLayout.On
 
     public TheSunNowFragment() {
         setHasOptionsMenu(true);
-        setRetainInstance(true);
     }
 
     @Override

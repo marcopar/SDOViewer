@@ -122,7 +122,7 @@ public class ImageDetailFragment extends Fragment {
         progressDialog = new ProgressDialog(getActivity());
 
         SDOImage img = (SDOImage) getArguments().getSerializable("IMAGE");
-        if (Util.getURL(img, resolution, true) != null) {
+        if (Util.getLatestURL(img, resolution, true) != null) {
             pfssAvailable = true;
         }
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(img.toString());
@@ -131,7 +131,6 @@ public class ImageDetailFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        setRetainInstance(true);
         menu.clear();
         inflater.inflate(R.menu.menu_detail_view, menu);
     }
@@ -165,7 +164,7 @@ public class ImageDetailFragment extends Fragment {
                             progressDialog.setMessage(getString(R.string.setting_wallpaper_));
                             progressDialog.show();
                             SDOImage img = (SDOImage) getArguments().getSerializable("IMAGE");
-                            Picasso.with(getActivity()).load(Util.getURL(img, WALLPAPER_RESOLUTION, pfssAvailable & pfssVisible)).into(targetSetWallpaper);
+                            Picasso.with(getActivity()).load(Util.getLatestURL(img, WALLPAPER_RESOLUTION, pfssAvailable & pfssVisible)).into(targetSetWallpaper);
                         }
                     })
                     .setNegativeButton(R.string.no, null).show();
@@ -193,7 +192,7 @@ public class ImageDetailFragment extends Fragment {
             progressDialog.setMessage(getString(R.string.preparing_the_image_));
             progressDialog.show();
             SDOImage img = (SDOImage) getArguments().getSerializable("IMAGE");
-            Picasso.with(getActivity()).load(Util.getURL(img, resolution, pfssAvailable & pfssVisible)).into(targetShare);
+            Picasso.with(getActivity()).load(Util.getLatestURL(img, resolution, pfssAvailable & pfssVisible)).into(targetShare);
             return true;
         }
         if (id == R.id.action_pfss) {
@@ -262,12 +261,12 @@ public class ImageDetailFragment extends Fragment {
 
         SDOImage img = (SDOImage) getArguments().getSerializable("IMAGE");
         if (invalidateCache) {
-            Picasso.with(getActivity()).invalidate(Util.getURL(img, resolution, false));
+            Picasso.with(getActivity()).invalidate(Util.getLatestURL(img, resolution, false));
             if (pfssAvailable) {
-                Picasso.with(getActivity()).invalidate(Util.getURL(img, resolution, true));
+                Picasso.with(getActivity()).invalidate(Util.getLatestURL(img, resolution, true));
             }
         }
-        Picasso.with(getActivity()).load(Util.getURL(img, resolution, pfssAvailable & pfssVisible)).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(mImageView, imageLoadedCallback);
+        Picasso.with(getActivity()).load(Util.getLatestURL(img, resolution, pfssAvailable & pfssVisible)).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(mImageView, imageLoadedCallback);
     }
 
     @Override

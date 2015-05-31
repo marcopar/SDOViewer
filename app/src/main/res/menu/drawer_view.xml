@@ -4,9 +4,9 @@
     <group android:checkableBehavior="none">
         <item
             android:id="@+id/nav_the_sun_now"
-            android:title="The Sun Now" />
+            android:title="@string/the_sun_now" />
         <item
             android:id="@+id/nav_browse_data"
-            android:title="Browse data" />
+            android:title="@string/browse_data" />
     </group>
 </menu>

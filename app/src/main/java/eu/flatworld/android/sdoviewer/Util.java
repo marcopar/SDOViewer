@@ -5,67 +5,67 @@ package eu.flatworld.android.sdoviewer;
  */
 public class Util {
 
-    private static final String BASE_URL = "http://sdo.gsfc.nasa.gov/assets/img/latest/";
+    private static final String BASE_URL_LATEST = "http://sdo.gsfc.nasa.gov/assets/img/latest/";
 
-    public static String getURL(SDOImage si, int size, boolean pfss) {
+    public static String getLatestURL(SDOImage si, int size, boolean pfss) {
         String pfssString = "";
         if (pfss) {
             pfssString = "pfss";
         }
         switch (si) {
             case AIA_193:
-                return String.format(BASE_URL + "latest_%d_0193%s.jpg", size, pfssString);
+                return String.format(BASE_URL_LATEST + "latest_%d_0193%s.jpg", size, pfssString);
             case AIA_304:
-                return String.format(BASE_URL + "latest_%d_0304%s.jpg", size, pfssString);
+                return String.format(BASE_URL_LATEST + "latest_%d_0304%s.jpg", size, pfssString);
             case AIA_171:
-                return String.format(BASE_URL + "latest_%d_0171%s.jpg", size, pfssString);
+                return String.format(BASE_URL_LATEST + "latest_%d_0171%s.jpg", size, pfssString);
             case AIA_211:
-                return String.format(BASE_URL + "latest_%d_0211%s.jpg", size, pfssString);
+                return String.format(BASE_URL_LATEST + "latest_%d_0211%s.jpg", size, pfssString);
             case AIA_131:
-                return String.format(BASE_URL + "latest_%d_0131%s.jpg", size, pfssString);
+                return String.format(BASE_URL_LATEST + "latest_%d_0131%s.jpg", size, pfssString);
             case AIA_335:
-                return String.format(BASE_URL + "latest_%d_0335%s.jpg", size, pfssString);
+                return String.format(BASE_URL_LATEST + "latest_%d_0335%s.jpg", size, pfssString);
             case AIA_094:
-                return String.format(BASE_URL + "latest_%d_0094%s.jpg", size, pfssString);
+                return String.format(BASE_URL_LATEST + "latest_%d_0094%s.jpg", size, pfssString);
             case AIA_1600:
-                return String.format(BASE_URL + "latest_%d_1600%s.jpg", size, pfssString);
+                return String.format(BASE_URL_LATEST + "latest_%d_1600%s.jpg", size, pfssString);
             case AIA_1700:
-                return String.format(BASE_URL + "latest_%d_1700%s.jpg", size, pfssString);
+                return String.format(BASE_URL_LATEST + "latest_%d_1700%s.jpg", size, pfssString);
             case AIA_211_193_171:
-                return String.format(BASE_URL + "f_211_193_171%s_%d.jpg", pfssString, size);
+                return String.format(BASE_URL_LATEST + "f_211_193_171%s_%d.jpg", pfssString, size);
             case AIA_304_211_171:
-                return String.format(BASE_URL + "f_304_211_171%s_%d.jpg", pfssString, size);
+                return String.format(BASE_URL_LATEST + "f_304_211_171%s_%d.jpg", pfssString, size);
             case AIA_094_335_193:
-                return String.format(BASE_URL + "f_094_335_193%s_%d.jpg", pfssString, size);
+                return String.format(BASE_URL_LATEST + "f_094_335_193%s_%d.jpg", pfssString, size);
             case AIA_171_HMIB:
-                return String.format(BASE_URL + "f_HMImag_171%s_%d.jpg", pfssString, size);
+                return String.format(BASE_URL_LATEST + "f_HMImag_171%s_%d.jpg", pfssString, size);
             case HMI_Magnetogram:
-                return String.format(BASE_URL + "latest_%d_HMIB%s.jpg", size, pfssString);
+                return String.format(BASE_URL_LATEST + "latest_%d_HMIB%s.jpg", size, pfssString);
             case HMI_Colorized_Magnetogram:
                 if (pfss) {
                     return null;
                 }
-                return String.format(BASE_URL + "latest_%d_HMIBC.jpg", size);
+                return String.format(BASE_URL_LATEST + "latest_%d_HMIBC.jpg", size);
             case HMI_Intensitygram_Colored:
                 if (pfss) {
                     return null;
                 }
-                return String.format(BASE_URL + "latest_%d_HMIIC.jpg", size);
+                return String.format(BASE_URL_LATEST + "latest_%d_HMIIC.jpg", size);
             case HMI_Intensitygram_Flattened:
                 if (pfss) {
                     return null;
                 }
-                return String.format(BASE_URL + "latest_%d_HMIIF.jpg", size);
+                return String.format(BASE_URL_LATEST + "latest_%d_HMIIF.jpg", size);
             case HMI_Intensitygram:
                 if (pfss) {
                     return null;
                 }
-                return String.format(BASE_URL + "latest_%d_HMII.jpg", size);
+                return String.format(BASE_URL_LATEST + "latest_%d_HMII.jpg", size);
             case HMI_Dopplergram:
                 if (pfss) {
                     return null;
                 }
-                return String.format(BASE_URL + "latest_%d_HMID.jpg", size);
+                return String.format(BASE_URL_LATEST + "latest_%d_HMID.jpg", size);
         }
         return null;
     }
