@@ -42,10 +42,7 @@ public class MainActivity extends AppCompatActivity {
                                 getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new TheSunNowFragment()).commit();
                             }
                             if (menuItem.getItemId() == R.id.nav_browse_data) {
-                                BrowseDataListAdapter adapter = new BrowseDataListAdapter(MainActivity.this, Util.getYears(MainActivity.this));
                                 BrowseDataFragment bdfy = new BrowseDataFragment();
-                                bdfy.setLevel(BrowseDataFragment.LEVEL.YEAR);
-                                bdfy.setListAdapter(adapter);
                                 getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, bdfy).addToBackStack(null).commit();
                             }
                             mDrawerLayout.closeDrawers();

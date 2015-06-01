@@ -126,6 +126,7 @@ public class ImageDetailFragment extends Fragment {
             pfssAvailable = true;
         }
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(img.toString());
+        ((MainActivity) getActivity()).getSupportActionBar().setSubtitle(null);
     }
 
     @Override

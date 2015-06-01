@@ -80,6 +80,7 @@ public class TheSunNowFragment extends Fragment implements SwipeRefreshLayout.On
         super.onResume();
         ActionBar bar = ((MainActivity) getActivity()).getSupportActionBar();
         bar.setTitle(R.string.the_sun_now);
+        bar.setSubtitle(null);
     }
 
     @Override

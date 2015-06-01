@@ -148,10 +148,10 @@ public class Util {
     public static List<BrowseDataListItem> getDays(Context ctx, int year, int month) {
         Calendar gc = GregorianCalendar.getInstance();
         gc.set(GregorianCalendar.YEAR, year);
-        gc.set(GregorianCalendar.MONTH, month);
-        int maxDays = gc.getActualMaximum(GregorianCalendar.MONTH);
+        gc.set(GregorianCalendar.MONTH, month - 1);
+        int maxDays = gc.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
         if (year == GregorianCalendar.getInstance().get(GregorianCalendar.YEAR)) {
-            if (month == GregorianCalendar.getInstance().get(GregorianCalendar.MONTH) + 1) {
+            if (month == (GregorianCalendar.getInstance().get(GregorianCalendar.MONTH) + 1)) {
                 maxDays = GregorianCalendar.getInstance().get(GregorianCalendar.DAY_OF_MONTH);
             }
         }
