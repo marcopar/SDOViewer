@@ -1,7 +1,11 @@
 package eu.flatworld.android.sdoviewer;
 
-import android.content.Context;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -14,7 +18,7 @@ public class Util {
 
     private static final String BASE_URL_LATEST = "http://sdo.gsfc.nasa.gov/assets/img/latest/";
 
-    public static String getLatestURL(SDOImage si, int size, boolean pfss) {
+    public static String getLatestURL(SDOImageType si, int size, boolean pfss) {
         String pfssString = "";
         if (pfss) {
             pfssString = "pfss";
@@ -77,7 +81,7 @@ public class Util {
         return null;
     }
 
-    public static String getDescription(SDOImage si) {
+    public static String getDescription(SDOImageType si) {
         switch (si) {
             case AIA_193:
                 return "<p>This channel highlights the outer atmosphere of the Sun - called the corona - as well as hot flare plasma. Hot active regions, solar flares, and coronal mass ejections will appear bright here. The dark areas - called coronal holes - are places where very little radiation is emitted, yet are the main source of solar wind particles.</p><p><strong>Where:</strong> Corona and hot flare plasma<br><strong>Wavelength:</strong>  193 angstroms (0.0000000193 m) = Extreme Ultraviolet<br><strong>Primary ions seen:</strong> 11 times ionized iron (Fe XII)<br><strong>Characteristic temperature:</strong> 1.25 million K (2.25 million F)</p>";
@@ -122,7 +126,7 @@ public class Util {
     }
 
 
-    public static List<BrowseDataListItem> getYears(Context ctx) {
+    public static List<BrowseDataListItem> getYears() {
         int maxYear = GregorianCalendar.getInstance().get(GregorianCalendar.YEAR);
         List<BrowseDataListItem> l = new ArrayList<>();
         for (int i = 2010; i <= maxYear; i++) {
@@ -132,7 +136,7 @@ public class Util {
         return l;
     }
 
-    public static List<BrowseDataListItem> getMonths(Context ctx, int year) {
+    public static List<BrowseDataListItem> getMonths(int year) {
         int maxMonth = 12;
         if (year == GregorianCalendar.getInstance().get(GregorianCalendar.YEAR)) {
             maxMonth = GregorianCalendar.getInstance().get(GregorianCalendar.MONTH) + 1;
@@ -145,7 +149,7 @@ public class Util {
         return l;
     }
 
-    public static List<BrowseDataListItem> getDays(Context ctx, int year, int month) {
+    public static List<BrowseDataListItem> getDays(int year, int month) {
         Calendar gc = GregorianCalendar.getInstance();
         gc.set(GregorianCalendar.YEAR, year);
         gc.set(GregorianCalendar.MONTH, month - 1);
@@ -159,6 +163,33 @@ public class Util {
         for (int i = 1; i <= maxDays; i++) {
             String s = Integer.toString(i);
             l.add(new BrowseDataListItem(s, s));
+        }
+        return l;
+    }
+
+    public static List<BrowseDataListItem> getImageTypes() {
+        List<BrowseDataListItem> l = new ArrayList<>();
+        for (SDOImageType t : SDOImageType.values()) {
+            l.add(new BrowseDataListItem(String.format("%s (%s)", t.toString(), t.getShortCode()), t.name()));
+        }
+        return l;
+    }
+
+    public static List<BrowseDataListItem> getImages(int year, int month, int day, SDOImageType type, int resolution) throws IOException {
+        String baseUrl = String.format("http://sdo.gsfc.nasa.gov/assets/img/browse/%d/%02d/%02d/", year, month, day);
+
+        Document doc = Jsoup..connect(baseUrl).maxBodySize(0).get();
+        Elements links = doc.select("a[href]");
+
+        List<BrowseDataListItem> l = new ArrayList<>();
+        String regex = String.format("%d%02d%02d_\\d\\d\\d\\d\\d\\d_%d_%s.jpg", year, month, day, resolution, type.getShortCode());
+        for (Element link : links) {
+            String s = link.attr("abs:href");
+            String url = s.substring(s.lastIndexOf('/') + 1);
+            if (url.matches(regex)) {
+                String text = String.format("%s:%s:%s", url.substring(9, 11), url.substring(11, 13), url.substring(13, 15));
+                l.add(new BrowseDataListItem(text, url));
+            }
         }
         return l;
     }

@@ -121,7 +121,7 @@ public class ImageDetailFragment extends Fragment {
         }
         progressDialog = new ProgressDialog(getActivity());
 
-        SDOImage img = (SDOImage) getArguments().getSerializable("IMAGE");
+        SDOImageType img = (SDOImageType) getArguments().getSerializable("IMAGE");
         if (Util.getLatestURL(img, resolution, true) != null) {
             pfssAvailable = true;
         }
@@ -138,7 +138,7 @@ public class ImageDetailFragment extends Fragment {
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        SDOImage img = (SDOImage) getArguments().getSerializable("IMAGE");
+        SDOImageType img = (SDOImageType) getArguments().getSerializable("IMAGE");
         if (Util.getDescription(img) == null) {
             MenuItem item = menu.findItem(R.id.action_about_this_image);
             item.setVisible(false);
@@ -164,7 +164,7 @@ public class ImageDetailFragment extends Fragment {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             progressDialog.setMessage(getString(R.string.setting_wallpaper_));
                             progressDialog.show();
-                            SDOImage img = (SDOImage) getArguments().getSerializable("IMAGE");
+                            SDOImageType img = (SDOImageType) getArguments().getSerializable("IMAGE");
                             Picasso.with(getActivity()).load(Util.getLatestURL(img, WALLPAPER_RESOLUTION, pfssAvailable & pfssVisible)).into(targetSetWallpaper);
                         }
                     })
@@ -172,7 +172,7 @@ public class ImageDetailFragment extends Fragment {
             return true;
         }
         if (id == R.id.action_about_this_image) {
-            SDOImage img = (SDOImage) getArguments().getSerializable("IMAGE");
+            SDOImageType img = (SDOImageType) getArguments().getSerializable("IMAGE");
             new AlertDialog.Builder(getActivity())
                     .setTitle(img.toString())
                     .setMessage(Html.fromHtml(Util.getDescription(img)))
@@ -192,7 +192,7 @@ public class ImageDetailFragment extends Fragment {
         if (id == R.id.action_share) {
             progressDialog.setMessage(getString(R.string.preparing_the_image_));
             progressDialog.show();
-            SDOImage img = (SDOImage) getArguments().getSerializable("IMAGE");
+            SDOImageType img = (SDOImageType) getArguments().getSerializable("IMAGE");
             Picasso.with(getActivity()).load(Util.getLatestURL(img, resolution, pfssAvailable & pfssVisible)).into(targetShare);
             return true;
         }
@@ -260,7 +260,7 @@ public class ImageDetailFragment extends Fragment {
         //is not updated and shows the placeholder with the wrong size
         mImageView.setImageResource(R.drawable.ic_sun);
 
-        SDOImage img = (SDOImage) getArguments().getSerializable("IMAGE");
+        SDOImageType img = (SDOImageType) getArguments().getSerializable("IMAGE");
         if (invalidateCache) {
             Picasso.with(getActivity()).invalidate(Util.getLatestURL(img, resolution, false));
             if (pfssAvailable) {

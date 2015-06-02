@@ -17,7 +17,7 @@ import java.util.List;
  * Created by marcopar on 20/02/15.
  */
 public class GridImageAdapter extends BaseAdapter {
-    private final List<SDOImage> mItems;
+    private final List<SDOImageType> mItems;
     private final LayoutInflater mInflater;
 
     private Context mContext;
@@ -25,14 +25,14 @@ public class GridImageAdapter extends BaseAdapter {
     public GridImageAdapter(Context c) {
         mInflater = LayoutInflater.from(c);
         mContext = c;
-        mItems = new ArrayList<SDOImage>();
-        for(SDOImage i: SDOImage.values()) {
+        mItems = new ArrayList<SDOImageType>();
+        for (SDOImageType i : SDOImageType.values()) {
             mItems.add(i);
         }
     }
 
     public void invalidateCache() {
-        for (SDOImage i : mItems) {
+        for (SDOImageType i : mItems) {
             Picasso.with(mContext).invalidate(Util.getLatestURL(i, 512, false));
             if (Util.getLatestURL(i, 512, true) != null) {
                 Picasso.with(mContext).invalidate(Util.getLatestURL(i, 512, true));
@@ -46,7 +46,7 @@ public class GridImageAdapter extends BaseAdapter {
     }
 
     @Override
-    public SDOImage getItem(int position) {
+    public SDOImageType getItem(int position) {
         return mItems.get(position);
     }
 
