@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ListFragment;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -13,7 +14,16 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 /**
  * Created by marcopar on 31/05/15.
@@ -23,6 +33,8 @@ public class BrowseDataFragment extends ListFragment {
     int month = -1;
     int day = -1;
     SDOImageType type = null;
+
+    DownloadImageListTask task = null;
 
     private int resolution;
 
@@ -65,6 +77,7 @@ public class BrowseDataFragment extends ListFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getListView().setFastScrollEnabled(true);
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         resolution = Integer.parseInt(pref.getString("resolution", "2048"));
         if (savedInstanceState != null) {
@@ -73,7 +86,9 @@ public class BrowseDataFragment extends ListFragment {
             year = savedInstanceState.getInt("year", -1);
             type = (SDOImageType) savedInstanceState.getSerializable("type");
         }
-        new DownloadImageListTask().execute();
+        Log.d(Main.LOGTAG, "Start AsyncTask");
+        task = new DownloadImageListTask();
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override
@@ -95,6 +110,15 @@ public class BrowseDataFragment extends ListFragment {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        if (task != null) {
+            Log.d(Main.LOGTAG, "Cancel AsyncTask");
+            task.cancel(true);
+        }
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("day", day);
@@ -103,17 +127,92 @@ public class BrowseDataFragment extends ListFragment {
         outState.putSerializable("type", type);
     }
 
+
+    List<BrowseDataListItem> getYears() {
+        int maxYear = GregorianCalendar.getInstance().get(GregorianCalendar.YEAR);
+        List<BrowseDataListItem> l = new ArrayList<>();
+        for (int i = 2010; i <= maxYear; i++) {
+            String s = Integer.toString(i);
+            l.add(new BrowseDataListItem(s, s));
+        }
+        return l;
+    }
+
+    List<BrowseDataListItem> getMonths(int year) {
+        int maxMonth = 12;
+        if (year == GregorianCalendar.getInstance().get(GregorianCalendar.YEAR)) {
+            maxMonth = GregorianCalendar.getInstance().get(GregorianCalendar.MONTH) + 1;
+        }
+        List<BrowseDataListItem> l = new ArrayList<>();
+        for (int i = 1; i <= maxMonth; i++) {
+            String s = Integer.toString(i);
+            l.add(new BrowseDataListItem(s, s));
+        }
+        return l;
+    }
+
+    List<BrowseDataListItem> getDays(int year, int month) {
+        Calendar gc = GregorianCalendar.getInstance();
+        gc.set(GregorianCalendar.YEAR, year);
+        gc.set(GregorianCalendar.MONTH, month - 1);
+        int maxDays = gc.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
+        if (year == GregorianCalendar.getInstance().get(GregorianCalendar.YEAR)) {
+            if (month == (GregorianCalendar.getInstance().get(GregorianCalendar.MONTH) + 1)) {
+                maxDays = GregorianCalendar.getInstance().get(GregorianCalendar.DAY_OF_MONTH);
+            }
+        }
+        List<BrowseDataListItem> l = new ArrayList<>();
+        for (int i = 1; i <= maxDays; i++) {
+            String s = Integer.toString(i);
+            l.add(new BrowseDataListItem(s, s));
+        }
+        return l;
+    }
+
+    List<BrowseDataListItem> getImageTypes() {
+        List<BrowseDataListItem> l = new ArrayList<>();
+        for (SDOImageType t : SDOImageType.values()) {
+            l.add(new BrowseDataListItem(String.format("%s (%s)", t.toString(), t.getShortCode()), t.name()));
+        }
+        return l;
+    }
+
+    List<BrowseDataListItem> getImages(int year, int month, int day, SDOImageType type, int resolution) throws IOException {
+        String baseUrl = String.format("http://sdo.gsfc.nasa.gov/assets/img/browse/%d/%02d/%02d/", year, month, day);
+        //String html = HttpRequest.get(baseUrl).body();
+        //Log.d(Main.LOGTAG, html);
+        Document doc = Jsoup.connect(baseUrl).maxBodySize(0).get();
+        //Document doc = Jsoup.parse(html);
+        Elements links = doc.select("a[href]");
+        List<BrowseDataListItem> l = new ArrayList<>();
+        String regex = String.format("%d%02d%02d_\\d\\d\\d\\d\\d\\d_%d_%s.jpg", year, month, day, resolution, type.getShortCode());
+        for (Element link : links) {
+            String s = link.attr("abs:href");
+            String url = s.substring(s.lastIndexOf('/') + 1);
+            if (url.matches(regex)) {
+                String text = String.format("%s:%s:%s", url.substring(9, 11), url.substring(11, 13), url.substring(13, 15));
+                l.add(new BrowseDataListItem(text, url));
+            }
+        }
+        return l;
+    }
+
     BrowseDataListAdapter createAdapter() throws IOException {
         if (type != null) {
-            return new BrowseDataListAdapter(getActivity(), Util.getImages(year, month, day, type, resolution));
+            Log.d(Main.LOGTAG, "Load images");
+            return new BrowseDataListAdapter(getActivity(), getImages(year, month, day, type, resolution));
         } else if (day != -1) {
-            return new BrowseDataListAdapter(getActivity(), Util.getImageTypes());
+            Log.d(Main.LOGTAG, "Load image types");
+            return new BrowseDataListAdapter(getActivity(), getImageTypes());
         } else if (month != -1) {
-            return new BrowseDataListAdapter(getActivity(), Util.getDays(year, month));
+            Log.d(Main.LOGTAG, "Load days");
+            return new BrowseDataListAdapter(getActivity(), getDays(year, month));
         } else if (year != -1) {
-            return new BrowseDataListAdapter(getActivity(), Util.getMonths(year));
+            Log.d(Main.LOGTAG, "Load months");
+            return new BrowseDataListAdapter(getActivity(), getMonths(year));
         } else {
-            return new BrowseDataListAdapter(getActivity(), Util.getYears());
+            Log.d(Main.LOGTAG, "Load years");
+            return new BrowseDataListAdapter(getActivity(), getYears());
         }
     }
 
@@ -172,6 +271,7 @@ public class BrowseDataFragment extends ListFragment {
     }
 
     private class DownloadImageListTask extends AsyncTask<Void, Void, BrowseDataListAdapter> {
+
         protected BrowseDataListAdapter doInBackground(Void... v) {
             try {
                 return createAdapter();
@@ -182,11 +282,18 @@ public class BrowseDataFragment extends ListFragment {
 
         @Override
         protected void onPostExecute(BrowseDataListAdapter result) {
+            Log.d(Main.LOGTAG, "AsyncTask completed");
+            task = null;
             if (result != null) {
                 setListAdapter(result);
             } else {
                 Toast.makeText(getActivity(), "Error getting the image list.", Toast.LENGTH_LONG);
             }
+        }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
         }
     }
 

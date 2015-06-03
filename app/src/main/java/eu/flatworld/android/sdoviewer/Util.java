@@ -1,16 +1,5 @@
 package eu.flatworld.android.sdoviewer;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
-
 /**
  * Created by marcopar on 22/02/15.
  */
@@ -126,71 +115,4 @@ public class Util {
     }
 
 
-    public static List<BrowseDataListItem> getYears() {
-        int maxYear = GregorianCalendar.getInstance().get(GregorianCalendar.YEAR);
-        List<BrowseDataListItem> l = new ArrayList<>();
-        for (int i = 2010; i <= maxYear; i++) {
-            String s = Integer.toString(i);
-            l.add(new BrowseDataListItem(s, s));
-        }
-        return l;
-    }
-
-    public static List<BrowseDataListItem> getMonths(int year) {
-        int maxMonth = 12;
-        if (year == GregorianCalendar.getInstance().get(GregorianCalendar.YEAR)) {
-            maxMonth = GregorianCalendar.getInstance().get(GregorianCalendar.MONTH) + 1;
-        }
-        List<BrowseDataListItem> l = new ArrayList<>();
-        for (int i = 1; i <= maxMonth; i++) {
-            String s = Integer.toString(i);
-            l.add(new BrowseDataListItem(s, s));
-        }
-        return l;
-    }
-
-    public static List<BrowseDataListItem> getDays(int year, int month) {
-        Calendar gc = GregorianCalendar.getInstance();
-        gc.set(GregorianCalendar.YEAR, year);
-        gc.set(GregorianCalendar.MONTH, month - 1);
-        int maxDays = gc.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
-        if (year == GregorianCalendar.getInstance().get(GregorianCalendar.YEAR)) {
-            if (month == (GregorianCalendar.getInstance().get(GregorianCalendar.MONTH) + 1)) {
-                maxDays = GregorianCalendar.getInstance().get(GregorianCalendar.DAY_OF_MONTH);
-            }
-        }
-        List<BrowseDataListItem> l = new ArrayList<>();
-        for (int i = 1; i <= maxDays; i++) {
-            String s = Integer.toString(i);
-            l.add(new BrowseDataListItem(s, s));
-        }
-        return l;
-    }
-
-    public static List<BrowseDataListItem> getImageTypes() {
-        List<BrowseDataListItem> l = new ArrayList<>();
-        for (SDOImageType t : SDOImageType.values()) {
-            l.add(new BrowseDataListItem(String.format("%s (%s)", t.toString(), t.getShortCode()), t.name()));
-        }
-        return l;
-    }
-
-    public static List<BrowseDataListItem> getImages(int year, int month, int day, SDOImageType type, int resolution) throws IOException {
-        String baseUrl = String.format("http://sdo.gsfc.nasa.gov/assets/img/browse/%d/%02d/%02d/", year, month, day);
-
-        Document doc = Jsoup..connect(baseUrl).maxBodySize(0).get();
-        Elements links = doc.select("a[href]");
-
-        List<BrowseDataListItem> l = new ArrayList<>();
-        String regex = String.format("%d%02d%02d_\\d\\d\\d\\d\\d\\d_%d_%s.jpg", year, month, day, resolution, type.getShortCode());
-        for (Element link : links) {
-            String s = link.attr("abs:href");
-            String url = s.substring(s.lastIndexOf('/') + 1);
-            if (url.matches(regex)) {
-                String text = String.format("%s:%s:%s", url.substring(9, 11), url.substring(11, 13), url.substring(13, 15));
-                l.add(new BrowseDataListItem(text, url));
-            }
-        }
-        return l;
-    }
 }
