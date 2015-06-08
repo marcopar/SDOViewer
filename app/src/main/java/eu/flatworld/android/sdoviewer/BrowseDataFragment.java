@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Created by marcopar on 31/05/15.
@@ -33,6 +34,7 @@ public class BrowseDataFragment extends ListFragment {
     int month = -1;
     int day = -1;
     SDOImageType type = null;
+    Elements links = null;
 
     DownloadImageListTask task = null;
 
@@ -85,6 +87,7 @@ public class BrowseDataFragment extends ListFragment {
             month = savedInstanceState.getInt("month", -1);
             year = savedInstanceState.getInt("year", -1);
             type = (SDOImageType) savedInstanceState.getSerializable("type");
+            links = (Elements) savedInstanceState.getSerializable("links");
         }
         Log.d(Main.LOGTAG, "Start AsyncTask");
         task = new DownloadImageListTask();
@@ -125,6 +128,7 @@ public class BrowseDataFragment extends ListFragment {
         outState.putInt("month", month);
         outState.putInt("year", year);
         outState.putSerializable("type", type);
+        outState.putSerializable("links", links);
     }
 
 
@@ -179,21 +183,24 @@ public class BrowseDataFragment extends ListFragment {
 
     List<BrowseDataListItem> getImages(int year, int month, int day, SDOImageType type, int resolution) throws IOException {
         String baseUrl = String.format("http://sdo.gsfc.nasa.gov/assets/img/browse/%d/%02d/%02d/", year, month, day);
-        //String html = HttpRequest.get(baseUrl).body();
-        //Log.d(Main.LOGTAG, html);
-        Document doc = Jsoup.connect(baseUrl).maxBodySize(0).get();
-        //Document doc = Jsoup.parse(html);
-        Elements links = doc.select("a[href]");
+        if (links == null) {
+            Log.d(Main.LOGTAG, "Load links");
+            Document doc = Jsoup.connect(baseUrl).maxBodySize(0).get();
+            links = doc.select("a[href]");
+        }
         List<BrowseDataListItem> l = new ArrayList<>();
         String regex = String.format("%d%02d%02d_\\d\\d\\d\\d\\d\\d_%d_%s.jpg", year, month, day, resolution, type.getShortCode());
+        Pattern p = Pattern.compile(regex);
+        Log.d(Main.LOGTAG, "Parse links");
         for (Element link : links) {
             String s = link.attr("abs:href");
             String url = s.substring(s.lastIndexOf('/') + 1);
-            if (url.matches(regex)) {
+            if (p.matcher(url).matches()) {
                 String text = String.format("%s:%s:%s", url.substring(9, 11), url.substring(11, 13), url.substring(13, 15));
                 l.add(new BrowseDataListItem(text, url));
             }
         }
+        Log.d(Main.LOGTAG, "Parse links complete");
         return l;
     }
 
