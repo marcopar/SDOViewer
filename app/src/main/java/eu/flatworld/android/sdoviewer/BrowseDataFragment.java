@@ -44,32 +44,21 @@ public class BrowseDataFragment extends ListFragment {
         setHasOptionsMenu(true);
     }
 
-    public int getYear() {
-        return year;
+    public void setLinks(Elements links) {
+        this.links = links;
     }
 
     public void setYear(int year) {
         this.year = year;
     }
 
-    public int getMonth() {
-        return month;
-    }
 
     public void setMonth(int month) {
         this.month = month;
     }
 
-    public int getDay() {
-        return day;
-    }
-
     public void setDay(int day) {
         this.day = day;
-    }
-
-    public SDOImageType getType() {
-        return type;
     }
 
     public void setType(SDOImageType type) {
@@ -100,15 +89,15 @@ public class BrowseDataFragment extends ListFragment {
         ActionBar bar = ((MainActivity) getActivity()).getSupportActionBar();
         bar.setTitle(R.string.browse_data);
         if (type != null) {
-            bar.setSubtitle(String.format("%d/%d/%d/%s : %s", year, month, day, type.getShortCode(), "Select image"));
+            bar.setSubtitle(String.format("%d/%d/%d/%s : %s", year, month, day, type.getShortCode(), "Loading hours..."));
         } else if (day != -1) {
-            bar.setSubtitle(String.format("%d/%d/%d: %s", year, month, day, "Select image type"));
+            bar.setSubtitle(String.format("%d/%d/%d: %s", year, month, day, "Loading images..."));
         } else if (month != -1) {
-            bar.setSubtitle(String.format("%d/%d: %s", year, month, "Select day"));
+            bar.setSubtitle(String.format("%d/%d: %s", year, month, "Loading days..."));
         } else if (year != -1) {
-            bar.setSubtitle(String.format("%d: %s", year, "Select month"));
+            bar.setSubtitle(String.format("%d: %s", year, "Loading months..."));
         } else {
-            bar.setSubtitle("Select year");
+            bar.setSubtitle("Loading years...");
         }
     }
 
@@ -121,6 +110,7 @@ public class BrowseDataFragment extends ListFragment {
         }
     }
 
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -132,7 +122,7 @@ public class BrowseDataFragment extends ListFragment {
     }
 
 
-    List<BrowseDataListItem> getYears() {
+    List<BrowseDataListItem> loadYears() {
         int maxYear = GregorianCalendar.getInstance().get(GregorianCalendar.YEAR);
         List<BrowseDataListItem> l = new ArrayList<>();
         for (int i = 2010; i <= maxYear; i++) {
@@ -142,7 +132,7 @@ public class BrowseDataFragment extends ListFragment {
         return l;
     }
 
-    List<BrowseDataListItem> getMonths(int year) {
+    List<BrowseDataListItem> loadMonths(int year) {
         int maxMonth = 12;
         if (year == GregorianCalendar.getInstance().get(GregorianCalendar.YEAR)) {
             maxMonth = GregorianCalendar.getInstance().get(GregorianCalendar.MONTH) + 1;
@@ -155,7 +145,7 @@ public class BrowseDataFragment extends ListFragment {
         return l;
     }
 
-    List<BrowseDataListItem> getDays(int year, int month) {
+    List<BrowseDataListItem> loadDays(int year, int month) {
         Calendar gc = GregorianCalendar.getInstance();
         gc.set(GregorianCalendar.YEAR, year);
         gc.set(GregorianCalendar.MONTH, month - 1);
@@ -173,7 +163,7 @@ public class BrowseDataFragment extends ListFragment {
         return l;
     }
 
-    List<BrowseDataListItem> getImageTypes() {
+    List<BrowseDataListItem> loadImageTypes() {
         List<BrowseDataListItem> l = new ArrayList<>();
         for (SDOImageType t : SDOImageType.values()) {
             l.add(new BrowseDataListItem(String.format("%s (%s)", t.toString(), t.getShortCode()), t.name()));
@@ -181,13 +171,7 @@ public class BrowseDataFragment extends ListFragment {
         return l;
     }
 
-    List<BrowseDataListItem> getImages(int year, int month, int day, SDOImageType type, int resolution) throws IOException {
-        String baseUrl = String.format("http://sdo.gsfc.nasa.gov/assets/img/browse/%d/%02d/%02d/", year, month, day);
-        if (links == null) {
-            Log.d(Main.LOGTAG, "Load links");
-            Document doc = Jsoup.connect(baseUrl).maxBodySize(0).get();
-            links = doc.select("a[href]");
-        }
+    List<BrowseDataListItem> loadImages(SDOImageType type, int resolution) throws IOException {
         List<BrowseDataListItem> l = new ArrayList<>();
         String regex = String.format("%d%02d%02d_\\d\\d\\d\\d\\d\\d_%d_%s.jpg", year, month, day, resolution, type.getShortCode());
         Pattern p = Pattern.compile(regex);
@@ -204,22 +188,30 @@ public class BrowseDataFragment extends ListFragment {
         return l;
     }
 
+    Elements loadLinks(int year, int month, int day) throws IOException {
+        String baseUrl = String.format("http://sdo.gsfc.nasa.gov/assets/img/browse/%d/%02d/%02d/", year, month, day);
+        Log.d(Main.LOGTAG, "Load links");
+        Document doc = Jsoup.connect(baseUrl).maxBodySize(0).get();
+        return doc.select("a[href]");
+    }
+
     BrowseDataListAdapter createAdapter() throws IOException {
         if (type != null) {
             Log.d(Main.LOGTAG, "Load images");
-            return new BrowseDataListAdapter(getActivity(), getImages(year, month, day, type, resolution));
+            return new BrowseDataListAdapter(getActivity(), loadImages(type, resolution));
         } else if (day != -1) {
             Log.d(Main.LOGTAG, "Load image types");
-            return new BrowseDataListAdapter(getActivity(), getImageTypes());
+            links = loadLinks(year, month, day);
+            return new BrowseDataListAdapter(getActivity(), loadImageTypes());
         } else if (month != -1) {
             Log.d(Main.LOGTAG, "Load days");
-            return new BrowseDataListAdapter(getActivity(), getDays(year, month));
+            return new BrowseDataListAdapter(getActivity(), loadDays(year, month));
         } else if (year != -1) {
             Log.d(Main.LOGTAG, "Load months");
-            return new BrowseDataListAdapter(getActivity(), getMonths(year));
+            return new BrowseDataListAdapter(getActivity(), loadMonths(year));
         } else {
             Log.d(Main.LOGTAG, "Load years");
-            return new BrowseDataListAdapter(getActivity(), getYears());
+            return new BrowseDataListAdapter(getActivity(), loadYears());
         }
     }
 
@@ -236,6 +228,7 @@ public class BrowseDataFragment extends ListFragment {
             bdf.setMonth(month);
             bdf.setDay(day);
             bdf.setType(type);
+            bdf.setLinks(links);
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack(null).commit();
         } else if (month != -1) {
             int day = Integer.valueOf(bdli.getUrl());
@@ -293,6 +286,18 @@ public class BrowseDataFragment extends ListFragment {
             task = null;
             if (result != null) {
                 setListAdapter(result);
+                ActionBar bar = ((MainActivity) getActivity()).getSupportActionBar();
+                if (type != null) {
+                    bar.setSubtitle(String.format("%d/%d/%d/%s : %s", year, month, day, type.getShortCode(), "Select hour"));
+                } else if (day != -1) {
+                    bar.setSubtitle(String.format("%d/%d/%d: %s", year, month, day, "Select image"));
+                } else if (month != -1) {
+                    bar.setSubtitle(String.format("%d/%d: %s", year, month, "Select day"));
+                } else if (year != -1) {
+                    bar.setSubtitle(String.format("%d: %s", year, "Select month"));
+                } else {
+                    bar.setSubtitle("Select year");
+                }
             } else {
                 Toast.makeText(getActivity(), "Error getting the image list.", Toast.LENGTH_LONG);
             }
