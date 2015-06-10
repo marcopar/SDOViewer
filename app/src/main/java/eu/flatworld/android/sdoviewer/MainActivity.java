@@ -54,8 +54,8 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().add(R.id.content_frame, new TheSunNowFragment()).commit();
         }
-
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

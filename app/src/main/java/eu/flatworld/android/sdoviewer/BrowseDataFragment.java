@@ -77,6 +77,7 @@ public class BrowseDataFragment extends ListFragment {
             year = savedInstanceState.getInt("year", -1);
             type = (SDOImageType) savedInstanceState.getSerializable("type");
             links = (Elements) savedInstanceState.getSerializable("links");
+            Log.d(Main.LOGTAG, String.format("restore instance %d,%d,%d,%s,%s", year, month, day, type, links));
         }
         Log.d(Main.LOGTAG, "Start AsyncTask");
         task = new DownloadImageListTask();
@@ -99,6 +100,7 @@ public class BrowseDataFragment extends ListFragment {
         } else {
             bar.setSubtitle("Loading years...");
         }
+        Log.d(Main.LOGTAG, String.format("resume %d,%d,%d,%s,%s", year, month, day, type, links));
     }
 
     @Override
@@ -108,6 +110,7 @@ public class BrowseDataFragment extends ListFragment {
             Log.d(Main.LOGTAG, "Cancel AsyncTask");
             task.cancel(true);
         }
+        Log.d(Main.LOGTAG, String.format("pause %d,%d,%d,%s,%s", year, month, day, type, links));
     }
 
 
@@ -119,6 +122,7 @@ public class BrowseDataFragment extends ListFragment {
         outState.putInt("year", year);
         outState.putSerializable("type", type);
         outState.putSerializable("links", links);
+        Log.d(Main.LOGTAG, String.format("save instance %d,%d,%d,%s,%s", year, month, day, type, links));
     }
 
 
@@ -201,7 +205,9 @@ public class BrowseDataFragment extends ListFragment {
             return new BrowseDataListAdapter(getActivity(), loadImages(type, resolution));
         } else if (day != -1) {
             Log.d(Main.LOGTAG, "Load image types");
-            links = loadLinks(year, month, day);
+            if (links == null) {
+                links = loadLinks(year, month, day);
+            }
             return new BrowseDataListAdapter(getActivity(), loadImageTypes());
         } else if (month != -1) {
             Log.d(Main.LOGTAG, "Load days");
