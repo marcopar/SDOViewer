@@ -85,7 +85,7 @@ public class BrowseDataFragment extends ListFragment {
             year = savedInstanceState.getInt("year", -1);
             type = (SDOImageType) savedInstanceState.getSerializable("type");
             links = (Elements) savedInstanceState.getSerializable("links");
-            Log.d(Main.LOGTAG, String.format("restore instance %d,%d,%d,%s,%s", year, month, day, type, links == null ? -1 : links.size()));
+            Log.d(Main.LOGTAG, String.format("view created instance %d,%d,%d,%s,%s", year, month, day, type, links == null ? -1 : links.size()));
         }
         Log.d(Main.LOGTAG, "Start AsyncTask");
         task = new DownloadImageListTask();
