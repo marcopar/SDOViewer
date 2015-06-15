@@ -65,8 +65,8 @@ public class BrowseDataFragment extends ListFragment {
         this.type = type;
     }
 
-    void dumpBackstack() {
-        Log.d(Main.LOGTAG, "====================");
+    void dumpBackstack(String s) {
+        Log.d(Main.LOGTAG, s + "====================");
         for (int i = 0; i < getActivity().getSupportFragmentManager().getBackStackEntryCount(); i++) {
             Log.d(Main.LOGTAG, getActivity().getSupportFragmentManager().getBackStackEntryAt(i).toString());
         }
@@ -91,7 +91,7 @@ public class BrowseDataFragment extends ListFragment {
         task = new DownloadImageListTask();
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
-        dumpBackstack();
+        dumpBackstack("view created");
     }
 
     @Override
@@ -112,7 +112,7 @@ public class BrowseDataFragment extends ListFragment {
         }
         Log.d(Main.LOGTAG, String.format("resume %d,%d,%d,%s,%s", year, month, day, type, links == null ? -1 : links.size()));
 
-        dumpBackstack();
+        dumpBackstack("resume");
     }
 
     @Override
@@ -125,7 +125,7 @@ public class BrowseDataFragment extends ListFragment {
         Log.d(Main.LOGTAG, String.format("pause %d,%d,%d,%s,%s", year, month, day, type, links == null ? -1 : links.size()));
 
 
-        dumpBackstack();
+        dumpBackstack("pause");
     }
 
 
@@ -139,7 +139,7 @@ public class BrowseDataFragment extends ListFragment {
         outState.putSerializable("links", links);
         Log.d(Main.LOGTAG, String.format("save instance %d,%d,%d,%s,%s", year, month, day, type, links == null ? -1 : links.size()));
 
-        dumpBackstack();
+        dumpBackstack("save instance");
     }
 
 
@@ -274,7 +274,7 @@ public class BrowseDataFragment extends ListFragment {
         }
 
 
-        dumpBackstack();
+        dumpBackstack("click");
     }
 
     @Override
