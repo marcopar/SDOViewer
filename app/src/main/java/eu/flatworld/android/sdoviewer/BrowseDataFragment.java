@@ -65,6 +65,14 @@ public class BrowseDataFragment extends ListFragment {
         this.type = type;
     }
 
+    void dumpBackstack() {
+        Log.d(Main.LOGTAG, "====================");
+        for (int i = 0; i < getActivity().getSupportFragmentManager().getBackStackEntryCount(); i++) {
+            Log.d(Main.LOGTAG, getActivity().getSupportFragmentManager().getBackStackEntryAt(i).toString());
+        }
+        Log.d(Main.LOGTAG, "====================");
+    }
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -77,11 +85,13 @@ public class BrowseDataFragment extends ListFragment {
             year = savedInstanceState.getInt("year", -1);
             type = (SDOImageType) savedInstanceState.getSerializable("type");
             links = (Elements) savedInstanceState.getSerializable("links");
-            Log.d(Main.LOGTAG, String.format("restore instance %d,%d,%d,%s,%s", year, month, day, type, links));
+            Log.d(Main.LOGTAG, String.format("restore instance %d,%d,%d,%s,%s", year, month, day, type, links == null ? -1 : links.size()));
         }
         Log.d(Main.LOGTAG, "Start AsyncTask");
         task = new DownloadImageListTask();
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+        dumpBackstack();
     }
 
     @Override
@@ -100,7 +110,9 @@ public class BrowseDataFragment extends ListFragment {
         } else {
             bar.setSubtitle("Loading years...");
         }
-        Log.d(Main.LOGTAG, String.format("resume %d,%d,%d,%s,%s", year, month, day, type, links));
+        Log.d(Main.LOGTAG, String.format("resume %d,%d,%d,%s,%s", year, month, day, type, links == null ? -1 : links.size()));
+
+        dumpBackstack();
     }
 
     @Override
@@ -110,7 +122,10 @@ public class BrowseDataFragment extends ListFragment {
             Log.d(Main.LOGTAG, "Cancel AsyncTask");
             task.cancel(true);
         }
-        Log.d(Main.LOGTAG, String.format("pause %d,%d,%d,%s,%s", year, month, day, type, links));
+        Log.d(Main.LOGTAG, String.format("pause %d,%d,%d,%s,%s", year, month, day, type, links == null ? -1 : links.size()));
+
+
+        dumpBackstack();
     }
 
 
@@ -122,7 +137,9 @@ public class BrowseDataFragment extends ListFragment {
         outState.putInt("year", year);
         outState.putSerializable("type", type);
         outState.putSerializable("links", links);
-        Log.d(Main.LOGTAG, String.format("save instance %d,%d,%d,%s,%s", year, month, day, type, links));
+        Log.d(Main.LOGTAG, String.format("save instance %d,%d,%d,%s,%s", year, month, day, type, links == null ? -1 : links.size()));
+
+        dumpBackstack();
     }
 
 
@@ -255,6 +272,9 @@ public class BrowseDataFragment extends ListFragment {
             bdf.setYear(year);
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack(null).commit();
         }
+
+
+        dumpBackstack();
     }
 
     @Override

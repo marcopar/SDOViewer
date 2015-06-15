@@ -53,9 +53,16 @@ public class MainActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().add(R.id.content_frame, new TheSunNowFragment()).commit();
+        } else {
+            //getSupportFragmentManager().getFragment(savedInstanceState, "currentFragment");
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //getSupportFragmentManager().putFragment(outState,"currentFragment", getSupportFragmentManager().findFragmentById(R.id.content_frame));
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
