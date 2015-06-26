@@ -74,19 +74,29 @@ public class BrowseDataFragment extends ListFragment {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        getListView().setFastScrollEnabled(true);
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        resolution = Integer.parseInt(pref.getString("resolution", "2048"));
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
             day = savedInstanceState.getInt("day", -1);
             month = savedInstanceState.getInt("month", -1);
             year = savedInstanceState.getInt("year", -1);
             type = (SDOImageType) savedInstanceState.getSerializable("type");
             links = (Elements) savedInstanceState.getSerializable("links");
-            Log.d(Main.LOGTAG, String.format("view created instance %d,%d,%d,%s,%s", year, month, day, type, links == null ? -1 : links.size()));
+            Log.d(Main.LOGTAG, String.format("fragment created instance %d,%d,%d,%s,%s", year, month, day, type, links == null ? -1 : links.size()));
+        } else {
+            Log.d(Main.LOGTAG, String.format("fragment created no instance"));
         }
+
+        dumpBackstack("fragment created");
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        getListView().setFastScrollEnabled(true);
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        resolution = Integer.parseInt(pref.getString("resolution", "2048"));
+
         Log.d(Main.LOGTAG, "Start AsyncTask");
         task = new DownloadImageListTask();
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -252,25 +262,25 @@ public class BrowseDataFragment extends ListFragment {
             bdf.setDay(day);
             bdf.setType(type);
             bdf.setLinks(links);
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack(null).commit();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("ora").commit();
         } else if (month != -1) {
             int day = Integer.valueOf(bdli.getUrl());
             BrowseDataFragment bdf = new BrowseDataFragment();
             bdf.setYear(year);
             bdf.setMonth(month);
             bdf.setDay(day);
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack(null).commit();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("tipo").commit();
         } else if (year != -1) {
             int month = Integer.valueOf(bdli.getUrl());
             BrowseDataFragment bdf = new BrowseDataFragment();
             bdf.setYear(year);
             bdf.setMonth(month);
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack(null).commit();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("giorno").commit();
         } else {
             int year = Integer.valueOf(bdli.getUrl());
             BrowseDataFragment bdf = new BrowseDataFragment();
             bdf.setYear(year);
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack(null).commit();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("mese").commit();
         }
 
 

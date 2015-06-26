@@ -8,6 +8,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
 
@@ -38,12 +39,12 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public boolean onNavigationItemSelected(MenuItem menuItem) {
                             if (menuItem.getItemId() == R.id.nav_the_sun_now) {
-                                getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                                getSupportFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                                 getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new TheSunNowFragment()).commit();
                             }
                             if (menuItem.getItemId() == R.id.nav_browse_data) {
                                 BrowseDataFragment bdfy = new BrowseDataFragment();
-                                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, bdfy).addToBackStack(null).commit();
+                                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, bdfy).addToBackStack("anno").commit();
                             }
                             mDrawerLayout.closeDrawers();
                             return true;
@@ -52,8 +53,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().add(R.id.content_frame, new TheSunNowFragment()).commit();
+            Log.d(Main.LOGTAG, String.format("activity created no instance"));
+            getSupportFragmentManager().beginTransaction().add(R.id.content_frame, new TheSunNowFragment(), "thesunnow").commit();
         } else {
+            Log.d(Main.LOGTAG, String.format("acivity created instance"));
             //getSupportFragmentManager().getFragment(savedInstanceState, "currentFragment");
         }
     }
