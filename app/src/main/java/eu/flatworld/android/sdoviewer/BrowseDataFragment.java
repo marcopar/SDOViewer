@@ -65,14 +65,6 @@ public class BrowseDataFragment extends ListFragment {
         this.type = type;
     }
 
-    void dumpBackstack(String s) {
-        Log.d(Main.LOGTAG, s + "====================");
-        for (int i = 0; i < getActivity().getSupportFragmentManager().getBackStackEntryCount(); i++) {
-            Log.d(Main.LOGTAG, getActivity().getSupportFragmentManager().getBackStackEntryAt(i).toString());
-        }
-        Log.d(Main.LOGTAG, "====================");
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,12 +74,7 @@ public class BrowseDataFragment extends ListFragment {
             year = savedInstanceState.getInt("year", -1);
             type = (SDOImageType) savedInstanceState.getSerializable("type");
             links = (Elements) savedInstanceState.getSerializable("links");
-            Log.d(Main.LOGTAG, String.format("fragment created instance %d,%d,%d,%s,%s", year, month, day, type, links == null ? -1 : links.size()));
-        } else {
-            Log.d(Main.LOGTAG, String.format("fragment created no instance"));
         }
-
-        dumpBackstack("fragment created");
     }
 
     @Override
@@ -100,8 +87,6 @@ public class BrowseDataFragment extends ListFragment {
         Log.d(Main.LOGTAG, "Start AsyncTask");
         task = new DownloadImageListTask();
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
-        dumpBackstack("view created");
     }
 
     @Override
@@ -120,9 +105,6 @@ public class BrowseDataFragment extends ListFragment {
         } else {
             bar.setSubtitle("Loading years...");
         }
-        Log.d(Main.LOGTAG, String.format("resume %d,%d,%d,%s,%s", year, month, day, type, links == null ? -1 : links.size()));
-
-        dumpBackstack("resume");
     }
 
     @Override
@@ -132,10 +114,6 @@ public class BrowseDataFragment extends ListFragment {
             Log.d(Main.LOGTAG, "Cancel AsyncTask");
             task.cancel(true);
         }
-        Log.d(Main.LOGTAG, String.format("pause %d,%d,%d,%s,%s", year, month, day, type, links == null ? -1 : links.size()));
-
-
-        dumpBackstack("pause");
     }
 
 
@@ -147,9 +125,6 @@ public class BrowseDataFragment extends ListFragment {
         outState.putInt("year", year);
         outState.putSerializable("type", type);
         outState.putSerializable("links", links);
-        Log.d(Main.LOGTAG, String.format("save instance %d,%d,%d,%s,%s", year, month, day, type, links == null ? -1 : links.size()));
-
-        dumpBackstack("save instance");
     }
 
 
@@ -253,7 +228,11 @@ public class BrowseDataFragment extends ListFragment {
         super.onListItemClick(l, v, position, id);
         BrowseDataListItem bdli = (BrowseDataListItem) getListAdapter().getItem(position);
         if (type != null) {
-
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("IMAGE", bdli.getUrl());
+            ImageDetailFragment f = new ImageDetailFragment();
+            f.setArguments(bundle);
+            getFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack(null).commit();
         } else if (day != -1) {
             SDOImageType type = SDOImageType.valueOf(bdli.getUrl());
             BrowseDataFragment bdf = new BrowseDataFragment();
@@ -262,29 +241,26 @@ public class BrowseDataFragment extends ListFragment {
             bdf.setDay(day);
             bdf.setType(type);
             bdf.setLinks(links);
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("ora").commit();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("hour").commit();
         } else if (month != -1) {
             int day = Integer.valueOf(bdli.getUrl());
             BrowseDataFragment bdf = new BrowseDataFragment();
             bdf.setYear(year);
             bdf.setMonth(month);
             bdf.setDay(day);
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("tipo").commit();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("type").commit();
         } else if (year != -1) {
             int month = Integer.valueOf(bdli.getUrl());
             BrowseDataFragment bdf = new BrowseDataFragment();
             bdf.setYear(year);
             bdf.setMonth(month);
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("giorno").commit();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("day").commit();
         } else {
             int year = Integer.valueOf(bdli.getUrl());
             BrowseDataFragment bdf = new BrowseDataFragment();
             bdf.setYear(year);
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("mese").commit();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("month").commit();
         }
-
-
-        dumpBackstack("click");
     }
 
     @Override
@@ -296,7 +272,6 @@ public class BrowseDataFragment extends ListFragment {
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-
         super.onPrepareOptionsMenu(menu);
     }
 

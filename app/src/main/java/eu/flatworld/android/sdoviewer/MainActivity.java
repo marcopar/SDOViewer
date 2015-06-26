@@ -8,7 +8,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 
 
@@ -44,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                             if (menuItem.getItemId() == R.id.nav_browse_data) {
                                 BrowseDataFragment bdfy = new BrowseDataFragment();
-                                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, bdfy).addToBackStack("anno").commit();
+                                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, bdfy).addToBackStack("year").commit();
                             }
                             mDrawerLayout.closeDrawers();
                             return true;
@@ -53,18 +52,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (savedInstanceState == null) {
-            Log.d(Main.LOGTAG, String.format("activity created no instance"));
             getSupportFragmentManager().beginTransaction().add(R.id.content_frame, new TheSunNowFragment(), "thesunnow").commit();
-        } else {
-            Log.d(Main.LOGTAG, String.format("acivity created instance"));
-            //getSupportFragmentManager().getFragment(savedInstanceState, "currentFragment");
         }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        //getSupportFragmentManager().putFragment(outState,"currentFragment", getSupportFragmentManager().findFragmentById(R.id.content_frame));
     }
 
     @Override
