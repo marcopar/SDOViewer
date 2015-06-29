@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="resolutionsValues">
+        <item>512</item>
         <item>1024</item>
         <item>2048</item>
         <item>4096</item>
     </string-array>
     <string-array name="resolutions">
+        <item>512x512 pixels</item>
         <item>1024x1024 pixels</item>
         <item>2048x2048 pixels</item>
         <item>4096x4096 pixels</item>

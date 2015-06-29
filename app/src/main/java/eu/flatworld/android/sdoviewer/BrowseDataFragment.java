@@ -187,7 +187,8 @@ public class BrowseDataFragment extends ListFragment {
             String url = s.substring(s.lastIndexOf('/') + 1);
             if (p.matcher(url).matches()) {
                 String text = String.format("%s:%s:%s", url.substring(9, 11), url.substring(11, 13), url.substring(13, 15));
-                l.add(new BrowseDataListItem(text, url));
+                String fullUrl = String.format("http://sdo.gsfc.nasa.gov/assets/img/browse/%d/%02d/%02d/%s", year, month, day, url);
+                l.add(new BrowseDataListItem(text, fullUrl));
             }
         }
         Log.d(Main.LOGTAG, "Parse links complete");
@@ -198,7 +199,9 @@ public class BrowseDataFragment extends ListFragment {
         String baseUrl = String.format("http://sdo.gsfc.nasa.gov/assets/img/browse/%d/%02d/%02d/", year, month, day);
         Log.d(Main.LOGTAG, "Load links");
         Document doc = Jsoup.connect(baseUrl).maxBodySize(0).get();
-        return doc.select("a[href]");
+        Elements e = doc.select("a[href]");
+        Log.d(Main.LOGTAG, "Load links completed");
+        return e;
     }
 
     BrowseDataListAdapter createAdapter() throws IOException {
@@ -229,7 +232,9 @@ public class BrowseDataFragment extends ListFragment {
         BrowseDataListItem bdli = (BrowseDataListItem) getListAdapter().getItem(position);
         if (type != null) {
             Bundle bundle = new Bundle();
-            bundle.putSerializable("IMAGE", bdli.getUrl());
+            bundle.putSerializable("imageType", type);
+            bundle.putString("imageUrl", bdli.getUrl());
+            bundle.putString("description", Util.getDescription(type));
             ImageDetailFragment f = new ImageDetailFragment();
             f.setArguments(bundle);
             getFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack(null).commit();
@@ -287,15 +292,16 @@ public class BrowseDataFragment extends ListFragment {
             try {
                 return createAdapter();
             } catch (IOException e) {
+                e.printStackTrace();
                 return null;
             }
         }
 
         @Override
         protected void onPostExecute(BrowseDataListAdapter result) {
-            Log.d(Main.LOGTAG, "AsyncTask completed");
             task = null;
             if (result != null) {
+                Log.d(Main.LOGTAG, "AsyncTask completed");
                 setListAdapter(result);
                 ActionBar bar = ((MainActivity) getActivity()).getSupportActionBar();
                 if (type != null) {
@@ -310,12 +316,14 @@ public class BrowseDataFragment extends ListFragment {
                     bar.setSubtitle("Select year");
                 }
             } else {
+                Log.d(Main.LOGTAG, "AsyncTask completed with error");
                 Toast.makeText(getActivity(), "Error getting the image list.", Toast.LENGTH_LONG);
             }
         }
 
         @Override
         protected void onCancelled() {
+            Log.d(Main.LOGTAG, "AsyncTask cancelled");
             super.onCancelled();
         }
     }

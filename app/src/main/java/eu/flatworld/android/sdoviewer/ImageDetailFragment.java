@@ -91,8 +91,7 @@ public class ImageDetailFragment extends Fragment {
             }).start();
         }
     };
-    private int resolution;
-    private boolean pfssAvailable = false;
+
     private boolean pfssVisible = false;
 
     public ImageDetailFragment() {
@@ -107,25 +106,26 @@ public class ImageDetailFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        progressDialog = new ProgressDialog(getActivity());
+        if (savedInstanceState != null) {
+            pfssVisible = savedInstanceState.getBoolean("pfssVisible");
+        }
+    }
+
+    @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        resolution = Integer.parseInt(pref.getString("resolution", "2048"));
+        int resolution = Integer.parseInt(pref.getString("resolution", "2048"));
         mImageView = (ImageViewTouch) view.findViewById(R.id.imageView);
         if (resolution > 2048) {
             //if bigger than 2048 performances are very bad with hardware acceleration so we disable it
             mImageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
-        if (savedInstanceState != null) {
-            pfssVisible = savedInstanceState.getBoolean("pfss");
-        }
-        progressDialog = new ProgressDialog(getActivity());
-
-        SDOImageType img = (SDOImageType) getArguments().getSerializable("IMAGE");
-        if (Util.getLatestURL(img, resolution, true) != null) {
-            pfssAvailable = true;
-        }
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle(img.toString());
+        SDOImageType imageType = (SDOImageType) getArguments().getSerializable("imageType");
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle(imageType.toString());
         ((MainActivity) getActivity()).getSupportActionBar().setSubtitle(null);
     }
 
@@ -138,13 +138,14 @@ public class ImageDetailFragment extends Fragment {
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        SDOImageType img = (SDOImageType) getArguments().getSerializable("IMAGE");
-        if (Util.getDescription(img) == null) {
+        String description = getArguments().getString("description");
+        if (description == null) {
             MenuItem item = menu.findItem(R.id.action_about_this_image);
             item.setVisible(false);
         }
+        String pfssUrl = (String) getArguments().getSerializable("pfssUrl");
         MenuItem item = menu.findItem(R.id.action_pfss);
-        item.setVisible(pfssAvailable);
+        item.setVisible(pfssUrl != null);
         item.setChecked(pfssVisible);
         if (pfssVisible) {
             item.setIcon(R.drawable.ic_action_pfss_on);
@@ -155,6 +156,10 @@ public class ImageDetailFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        final SDOImageType imageType = (SDOImageType) getArguments().getSerializable("imageType");
+        final String pfssUrl = (String) getArguments().getSerializable("pfssUrl");
+        final String imageUrl = (String) getArguments().getSerializable("imageUrl");
+        final String description = (String) getArguments().getSerializable("description");
         int id = item.getItemId();
         if (id == R.id.action_set_wallpaper) {
             new AlertDialog.Builder(getActivity())
@@ -164,18 +169,16 @@ public class ImageDetailFragment extends Fragment {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             progressDialog.setMessage(getString(R.string.setting_wallpaper_));
                             progressDialog.show();
-                            SDOImageType img = (SDOImageType) getArguments().getSerializable("IMAGE");
-                            Picasso.with(getActivity()).load(Util.getLatestURL(img, WALLPAPER_RESOLUTION, pfssAvailable & pfssVisible)).into(targetSetWallpaper);
+                            Picasso.with(getActivity()).load(Util.getLatestURL(imageType, WALLPAPER_RESOLUTION, pfssVisible)).into(targetSetWallpaper);
                         }
                     })
                     .setNegativeButton(R.string.no, null).show();
             return true;
         }
         if (id == R.id.action_about_this_image) {
-            SDOImageType img = (SDOImageType) getArguments().getSerializable("IMAGE");
             new AlertDialog.Builder(getActivity())
-                    .setTitle(img.toString())
-                    .setMessage(Html.fromHtml(Util.getDescription(img)))
+                    .setTitle(imageType.toString())
+                    .setMessage(Html.fromHtml(description))
                     .setCancelable(true)
                     .setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
                         @Override
@@ -192,8 +195,11 @@ public class ImageDetailFragment extends Fragment {
         if (id == R.id.action_share) {
             progressDialog.setMessage(getString(R.string.preparing_the_image_));
             progressDialog.show();
-            SDOImageType img = (SDOImageType) getArguments().getSerializable("IMAGE");
-            Picasso.with(getActivity()).load(Util.getLatestURL(img, resolution, pfssAvailable & pfssVisible)).into(targetShare);
+            if (pfssVisible) {
+                Picasso.with(getActivity()).load(pfssUrl).into(targetShare);
+            } else {
+                Picasso.with(getActivity()).load(imageUrl).into(targetShare);
+            }
             return true;
         }
         if (id == R.id.action_pfss) {
@@ -256,18 +262,21 @@ public class ImageDetailFragment extends Fragment {
     }
 
     void loadImage(boolean invalidateCache) {
-        //if we do not do this hack, when picasso sets the placeholder, photoview
-        //is not updated and shows the placeholder with the wrong size
         mImageView.setImageResource(R.drawable.ic_sun);
-
-        SDOImageType img = (SDOImageType) getArguments().getSerializable("IMAGE");
+        final SDOImageType imageType = (SDOImageType) getArguments().getSerializable("imageType");
+        final String pfssUrl = (String) getArguments().getSerializable("pfssUrl");
+        final String imageUrl = (String) getArguments().getSerializable("imageUrl");
         if (invalidateCache) {
-            Picasso.with(getActivity()).invalidate(Util.getLatestURL(img, resolution, false));
-            if (pfssAvailable) {
-                Picasso.with(getActivity()).invalidate(Util.getLatestURL(img, resolution, true));
+            Picasso.with(getActivity()).invalidate(imageUrl);
+            if (pfssUrl != null) {
+                Picasso.with(getActivity()).invalidate(pfssUrl);
             }
         }
-        Picasso.with(getActivity()).load(Util.getLatestURL(img, resolution, pfssAvailable & pfssVisible)).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(mImageView, imageLoadedCallback);
+        if (pfssVisible) {
+            Picasso.with(getActivity()).load(pfssUrl).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(mImageView, imageLoadedCallback);
+        } else {
+            Picasso.with(getActivity()).load(imageUrl).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(mImageView, imageLoadedCallback);
+        }
     }
 
     @Override
@@ -279,7 +288,7 @@ public class ImageDetailFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean("pfss", pfssVisible);
+        outState.putBoolean("pfssVisible", pfssVisible);
     }
 
     @Override
