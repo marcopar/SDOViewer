@@ -109,6 +109,7 @@ public class ImageDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setCanceledOnTouchOutside(false);
         if (savedInstanceState != null) {
             pfssVisible = savedInstanceState.getBoolean("pfssVisible");
         }

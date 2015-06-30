@@ -12,7 +12,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -20,6 +19,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -95,22 +95,22 @@ public class BrowseDataFragment extends ListFragment {
         ActionBar bar = ((MainActivity) getActivity()).getSupportActionBar();
         bar.setTitle(R.string.browse_data);
         if (type != null) {
-            bar.setSubtitle(String.format("%d/%d/%d/%s : %s", year, month, day, type.getShortCode(), "Loading hours..."));
+            bar.setSubtitle(String.format("%d/%d/%d/%s : %s", year, month, day, type.getShortCode(), getString(R.string.loading_hours)));
         } else if (day != -1) {
-            bar.setSubtitle(String.format("%d/%d/%d: %s", year, month, day, "Loading images..."));
+            bar.setSubtitle(String.format("%d/%d/%d: %s", year, month, day, getString(R.string.loading_images)));
         } else if (month != -1) {
-            bar.setSubtitle(String.format("%d/%d: %s", year, month, "Loading days..."));
+            bar.setSubtitle(String.format("%d/%d: %s", year, month, getString(R.string.loading_days)));
         } else if (year != -1) {
-            bar.setSubtitle(String.format("%d: %s", year, "Loading months..."));
+            bar.setSubtitle(String.format("%d: %s", year, getString(R.string.loading_months)));
         } else {
-            bar.setSubtitle("Loading years...");
+            bar.setSubtitle(R.string.loading_years);
         }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (task != null) {
+        if (task != null && !task.isCancelled()) {
             Log.d(Main.LOGTAG, "Cancel AsyncTask");
             task.cancel(true);
         }
@@ -287,12 +287,19 @@ public class BrowseDataFragment extends ListFragment {
     }
 
     private class DownloadImageListTask extends AsyncTask<Void, Void, BrowseDataListAdapter> {
+        String errorString = null;
 
         protected BrowseDataListAdapter doInBackground(Void... v) {
             try {
+                errorString = null;
                 return createAdapter();
             } catch (IOException e) {
-                e.printStackTrace();
+                if (e instanceof SocketTimeoutException) {
+                    errorString = getString(R.string.error_getting_data) + ":  " + getString(R.string.timeout);
+                } else {
+                    errorString = getString(R.string.error_getting_data);
+                }
+                Log.d(Main.LOGTAG, "AsyncTask completed with error: " + e.toString());
                 return null;
             }
         }
@@ -305,19 +312,20 @@ public class BrowseDataFragment extends ListFragment {
                 setListAdapter(result);
                 ActionBar bar = ((MainActivity) getActivity()).getSupportActionBar();
                 if (type != null) {
-                    bar.setSubtitle(String.format("%d/%d/%d/%s : %s", year, month, day, type.getShortCode(), "Select hour"));
+                    bar.setSubtitle(String.format("%d/%d/%d/%s : %s", year, month, day, type.getShortCode(), getString(R.string.select_hour)));
                 } else if (day != -1) {
-                    bar.setSubtitle(String.format("%d/%d/%d: %s", year, month, day, "Select image"));
+                    bar.setSubtitle(String.format("%d/%d/%d: %s", year, month, day, getString(R.string.select_image)));
                 } else if (month != -1) {
-                    bar.setSubtitle(String.format("%d/%d: %s", year, month, "Select day"));
+                    bar.setSubtitle(String.format("%d/%d: %s", year, month, getString(R.string.select_day)));
                 } else if (year != -1) {
-                    bar.setSubtitle(String.format("%d: %s", year, "Select month"));
+                    bar.setSubtitle(String.format("%d: %s", year, getString(R.string.select_month)));
                 } else {
-                    bar.setSubtitle("Select year");
+                    bar.setSubtitle(getString(R.string.select_year));
                 }
             } else {
-                Log.d(Main.LOGTAG, "AsyncTask completed with error");
-                Toast.makeText(getActivity(), "Error getting the image list.", Toast.LENGTH_LONG);
+                setEmptyText(errorString);
+
+                setListAdapter(null);
             }
         }
 

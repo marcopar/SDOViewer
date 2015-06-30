@@ -35,4 +35,14 @@
     <string name="browse_data">Browse Data</string>
     <string name="select_year">Select year</string>
     <string name="select_month">Select month</string>
+    <string name="loading_hours">Loading hours...</string>
+    <string name="loading_images">Loading images...</string>
+    <string name="loading_days">Loading days...</string>
+    <string name="loading_months">Loading months...</string>
+    <string name="loading_years">Loading years...</string>
+    <string name="error_getting_data">Error getting data</string>
+    <string name="select_hour">Select hour</string>
+    <string name="select_image">Select image</string>
+    <string name="select_day">Select day</string>
+    <string name="timeout">timeout</string>
 </resources>

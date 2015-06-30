@@ -1,7 +1,6 @@
 package eu.flatworld.android.sdoviewer;
 
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,22 +33,12 @@ public class TheSunNowFragment extends Fragment implements SwipeRefreshLayout.On
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         menu.clear();
-        inflater.inflate(R.menu.menu_main, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_about) {
-            Intent i = new Intent(getActivity(), AboutActivity.class);
-            this.startActivity(i);
-            return true;
-        }
-        if (id == R.id.action_settings) {
-            Intent i = new Intent(getActivity(), SettingsActivity.class);
-            this.startActivity(i);
-            return true;
-        }
+
         return super.onOptionsItemSelected(item);
     }
 

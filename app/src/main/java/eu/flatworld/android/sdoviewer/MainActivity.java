@@ -1,5 +1,6 @@
 package eu.flatworld.android.sdoviewer;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -44,6 +45,14 @@ public class MainActivity extends AppCompatActivity {
                             if (menuItem.getItemId() == R.id.nav_browse_data) {
                                 BrowseDataFragment bdfy = new BrowseDataFragment();
                                 getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, bdfy).addToBackStack("year").commit();
+                            }
+                            if (menuItem.getItemId() == R.id.action_settings) {
+                                Intent i = new Intent(MainActivity.this, SettingsActivity.class);
+                                MainActivity.this.startActivity(i);
+                            }
+                            if (menuItem.getItemId() == R.id.action_about) {
+                                Intent i = new Intent(MainActivity.this, AboutActivity.class);
+                                MainActivity.this.startActivity(i);
                             }
                             mDrawerLayout.closeDrawers();
                             return true;
