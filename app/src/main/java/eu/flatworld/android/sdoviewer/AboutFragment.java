@@ -1,19 +1,35 @@
 package eu.flatworld.android.sdoviewer;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class AboutActivity extends Activity implements OnClickListener {
+
+public class AboutFragment extends Fragment implements View.OnClickListener {
+
+
+    public AboutFragment() {
+        // Required empty public constructor
+    }
+
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_about, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         String version;
         try {
-            version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+            version = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0).versionName;
         } catch (Exception ex) {
             version = "-";
             ex.printStackTrace();
@@ -21,20 +37,21 @@ public class AboutActivity extends Activity implements OnClickListener {
 
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.about);
-        TextView tv = (TextView) findViewById(R.id.aboutTVName);
+        TextView tv = (TextView) view.findViewById(R.id.aboutTVName);
         try {
             tv.setText(getResources().getString(R.string.app_name) + " " + version + "\nwww.flatworld.eu");
         } catch (Exception e) {
             tv.setText(getResources().getString(R.string.app_name) + "\nwww.flatworld.eu");
         }
 
-        tv = (TextView) findViewById(R.id.aboutTVName);
+        tv = (TextView) view.findViewById(R.id.aboutTVName);
         tv.setOnClickListener(this);
-        tv = (TextView) findViewById(R.id.aboutTVSDO);
+        tv = (TextView) view.findViewById(R.id.aboutTVSDO);
         tv.setOnClickListener(this);
-    }
 
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle(R.string.about);
+        ((MainActivity) getActivity()).getSupportActionBar().setSubtitle(null);
+    }
 
     @Override
     public void onClick(View v) {
@@ -53,11 +70,5 @@ public class AboutActivity extends Activity implements OnClickListener {
             }
         }
 
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 }

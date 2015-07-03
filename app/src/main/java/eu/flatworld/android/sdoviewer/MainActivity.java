@@ -51,8 +51,8 @@ public class MainActivity extends AppCompatActivity {
                                 MainActivity.this.startActivity(i);
                             }
                             if (menuItem.getItemId() == R.id.action_about) {
-                                Intent i = new Intent(MainActivity.this, AboutActivity.class);
-                                MainActivity.this.startActivity(i);
+                                AboutFragment f = new AboutFragment();
+                                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack("about").commit();
                             }
                             mDrawerLayout.closeDrawers();
                             return true;

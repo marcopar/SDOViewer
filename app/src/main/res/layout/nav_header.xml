@@ -16,16 +16,52 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="160dp"
     android:background="?attr/colorPrimaryDark"
     android:gravity="bottom"
     android:orientation="vertical"
-    android:padding="16dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="SDO Viewer" />
+        android:gravity="right"
+        android:padding="16dp"
+        android:text="SDO Viewer"
+        android:textSize="24dp" />
+
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="#FF0000"
+        android:orientation="vertical"
+        android:padding="0dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark" />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="#FFFF00"
+        android:orientation="vertical"
+        android:padding="0dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark" />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="#00FF00"
+        android:orientation="vertical"
+        android:padding="0dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark" />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="#0000FF"
+        android:orientation="vertical"
+        android:padding="0dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark" />
 
 </LinearLayout>
