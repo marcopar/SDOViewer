@@ -1,10 +1,10 @@
 package eu.flatworld.android.sdoviewer;
 
+import android.app.ListFragment;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ListFragment;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.Menu;
@@ -246,25 +246,25 @@ public class BrowseDataFragment extends ListFragment {
             bdf.setDay(day);
             bdf.setType(type);
             bdf.setLinks(links);
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("hour").commit();
+            getActivity().getFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("hour").commit();
         } else if (month != -1) {
             int day = Integer.valueOf(bdli.getUrl());
             BrowseDataFragment bdf = new BrowseDataFragment();
             bdf.setYear(year);
             bdf.setMonth(month);
             bdf.setDay(day);
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("type").commit();
+            getActivity().getFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("type").commit();
         } else if (year != -1) {
             int month = Integer.valueOf(bdli.getUrl());
             BrowseDataFragment bdf = new BrowseDataFragment();
             bdf.setYear(year);
             bdf.setMonth(month);
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("day").commit();
+            getActivity().getFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("day").commit();
         } else {
             int year = Integer.valueOf(bdli.getUrl());
             BrowseDataFragment bdf = new BrowseDataFragment();
             bdf.setYear(year);
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("month").commit();
+            getActivity().getFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("month").commit();
         }
     }
 

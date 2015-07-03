@@ -2,6 +2,7 @@ package eu.flatworld.android.sdoviewer;
 
 
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.app.WallpaperManager;
 import android.content.DialogInterface;
@@ -13,7 +14,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.Menu;

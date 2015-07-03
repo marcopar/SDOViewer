@@ -1,11 +1,11 @@
 package eu.flatworld.android.sdoviewer;
 
 
+import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;

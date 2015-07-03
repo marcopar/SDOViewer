@@ -1,9 +1,8 @@
 package eu.flatworld.android.sdoviewer;
 
-import android.content.Intent;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -16,6 +15,15 @@ public class MainActivity extends AppCompatActivity {
     DrawerLayout mDrawerLayout;
 
     public MainActivity() {
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getFragmentManager().getBackStackEntryCount() != 0) {
+            getFragmentManager().popBackStack();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
@@ -39,20 +47,20 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public boolean onNavigationItemSelected(MenuItem menuItem) {
                             if (menuItem.getItemId() == R.id.nav_the_sun_now) {
-                                getSupportFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new TheSunNowFragment()).commit();
+                                getFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                                getFragmentManager().beginTransaction().replace(R.id.content_frame, new TheSunNowFragment()).commit();
                             }
                             if (menuItem.getItemId() == R.id.nav_browse_data) {
                                 BrowseDataFragment bdfy = new BrowseDataFragment();
-                                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, bdfy).addToBackStack("year").commit();
+                                getFragmentManager().beginTransaction().replace(R.id.content_frame, bdfy).addToBackStack("year").commit();
                             }
                             if (menuItem.getItemId() == R.id.action_settings) {
-                                Intent i = new Intent(MainActivity.this, SettingsActivity.class);
-                                MainActivity.this.startActivity(i);
+                                SettingsFragment f = new SettingsFragment();
+                                getFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack("settings").commit();
                             }
                             if (menuItem.getItemId() == R.id.action_about) {
                                 AboutFragment f = new AboutFragment();
-                                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack("about").commit();
+                                getFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack("about").commit();
                             }
                             mDrawerLayout.closeDrawers();
                             return true;
@@ -61,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().add(R.id.content_frame, new TheSunNowFragment(), "thesunnow").commit();
+            getFragmentManager().beginTransaction().add(R.id.content_frame, new TheSunNowFragment(), "thesunnow").commit();
         }
     }
 
