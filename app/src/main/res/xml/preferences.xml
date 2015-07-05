@@ -1,5 +1,5 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="@string/general">
+    <!--PreferenceCategory android:title="@string/general"-->
         <ListPreference
             android:defaultValue="2048"
             android:entries="@array/resolutions"
@@ -7,5 +7,5 @@
             android:key="resolution"
             android:summary=""
             android:title="@string/preferences_resolution_title" />
-    </PreferenceCategory>
+    <!--/PreferenceCategory-->
 </PreferenceScreen>
