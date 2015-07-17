@@ -45,4 +45,5 @@
     <string name="select_image">Select image</string>
     <string name="select_day">Select day</string>
     <string name="timeout">timeout</string>
+    <string name="loading___">Loading...</string>
 </resources>

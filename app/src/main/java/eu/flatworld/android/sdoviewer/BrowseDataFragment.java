@@ -75,6 +75,9 @@ public class BrowseDataFragment extends ListFragment {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         resolution = Integer.parseInt(pref.getString("resolution", "2048"));
 
+        setListShown(true);
+        setListAdapter(null);
+        setEmptyText(getString(R.string.loading___));
     }
 
     @Override
@@ -241,7 +244,6 @@ public class BrowseDataFragment extends ListFragment {
                 }
             } else {
                 setEmptyText(errorString);
-
                 setListAdapter(null);
             }
         }

@@ -29,6 +29,7 @@
         android:gravity="right"
         android:padding="16dp"
         android:text="SDO Viewer"
+        android:textColor="#FFFFFF"
         android:textSize="24dp" />
 
 
