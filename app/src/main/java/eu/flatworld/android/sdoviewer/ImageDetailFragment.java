@@ -34,7 +34,6 @@ import it.sephiroth.android.library.imagezoom.ImageViewTouch;
  * A simple {@link Fragment} subclass.
  */
 public class ImageDetailFragment extends Fragment {
-    private static final int WALLPAPER_RESOLUTION = 2048;
     Callback imageLoadedCallback = new Callback() {
 
         @Override
@@ -170,7 +169,11 @@ public class ImageDetailFragment extends Fragment {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             progressDialog.setMessage(getString(R.string.setting_wallpaper_));
                             progressDialog.show();
-                            Picasso.with(getActivity()).load(Util.getLatestURL(imageType, WALLPAPER_RESOLUTION, pfssVisible)).into(targetSetWallpaper);
+                            if (pfssVisible) {
+                                Picasso.with(getActivity()).load(pfssUrl).into(targetSetWallpaper);
+                            } else {
+                                Picasso.with(getActivity()).load(imageUrl).into(targetSetWallpaper);
+                            }
                         }
                     })
                     .setNegativeButton(R.string.no, null).show();
