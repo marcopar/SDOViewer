@@ -21,11 +21,6 @@ import java.util.ArrayList;
  * Created by marcopar on 31/05/15.
  */
 public class BrowseDataFragment extends ListFragment {
-    int year = -1;
-    int month = -1;
-    int day = -1;
-    SDOImageType type = null;
-    ArrayList<String> links = null;
 
     DownloadImageListTask task = null;
 
@@ -35,37 +30,10 @@ public class BrowseDataFragment extends ListFragment {
         setHasOptionsMenu(true);
     }
 
-    public void setLinks(ArrayList<String> links) {
-        this.links = links;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
-    }
-
-
-    public void setMonth(int month) {
-        this.month = month;
-    }
-
-    public void setDay(int day) {
-        this.day = day;
-    }
-
-    public void setType(SDOImageType type) {
-        this.type = type;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState != null) {
-            day = savedInstanceState.getInt("day", -1);
-            month = savedInstanceState.getInt("month", -1);
-            year = savedInstanceState.getInt("year", -1);
-            type = (SDOImageType) savedInstanceState.getSerializable("type");
-            links = (ArrayList<String>) savedInstanceState.getSerializable("links");
-        }
     }
 
     @Override
@@ -85,17 +53,24 @@ public class BrowseDataFragment extends ListFragment {
         super.onResume();
         ActionBar bar = ((MainActivity) getActivity()).getSupportActionBar();
         bar.setTitle(R.string.browse_data);
-        if (type != null) {
-            bar.setSubtitle(String.format("%d/%d/%d/%s : %s", year, month, day, type.getShortCode(), getString(R.string.loading_hours)));
-        } else if (day != -1) {
-            bar.setSubtitle(String.format("%d/%d/%d: %s", year, month, day, getString(R.string.loading_images)));
-        } else if (month != -1) {
-            bar.setSubtitle(String.format("%d/%d: %s", year, month, getString(R.string.loading_days)));
-        } else if (year != -1) {
-            bar.setSubtitle(String.format("%d: %s", year, getString(R.string.loading_months)));
-        } else {
+        if (getArguments() == null) {
             bar.setSubtitle(R.string.loading_years);
+        } else {
+            SDOImageType type = (SDOImageType) getArguments().getSerializable("type");
+            int year = getArguments().getInt("year", -1);
+            int month = getArguments().getInt("month", -1);
+            int day = getArguments().getInt("day", -1);
+            if (type != null) {
+                bar.setSubtitle(String.format("%d/%d/%d/%s : %s", year, month, day, type.getShortCode(), getString(R.string.loading_hours)));
+            } else if (day != -1) {
+                bar.setSubtitle(String.format("%d/%d/%d: %s", year, month, day, getString(R.string.loading_images)));
+            } else if (month != -1) {
+                bar.setSubtitle(String.format("%d/%d: %s", year, month, getString(R.string.loading_days)));
+            } else if (year != -1) {
+                bar.setSubtitle(String.format("%d: %s", year, getString(R.string.loading_months)));
+            }
         }
+
 
         Log.d(Main.LOGTAG, "Start AsyncTask");
         task = new DownloadImageListTask();
@@ -115,34 +90,38 @@ public class BrowseDataFragment extends ListFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt("day", day);
-        outState.putInt("month", month);
-        outState.putInt("year", year);
-        outState.putSerializable("type", type);
-        outState.putSerializable("links", links);
     }
 
 
 
     BrowseDataListAdapter createAdapter() throws IOException {
-        if (type != null) {
-            Log.d(Main.LOGTAG, "Load images");
-            return new BrowseDataListAdapter(getActivity(), Util.loadImages(year, month, day, links, type, resolution));
-        } else if (day != -1) {
-            Log.d(Main.LOGTAG, "Load image types");
-            if (links == null) {
-                links = Util.loadLinks(year, month, day);
-            }
-            return new BrowseDataListAdapter(getActivity(), Util.loadImageTypes());
-        } else if (month != -1) {
-            Log.d(Main.LOGTAG, "Load days");
-            return new BrowseDataListAdapter(getActivity(), Util.loadDays(year, month));
-        } else if (year != -1) {
-            Log.d(Main.LOGTAG, "Load months");
-            return new BrowseDataListAdapter(getActivity(), Util.loadMonths(year));
-        } else {
+        if (getArguments() == null) {
             Log.d(Main.LOGTAG, "Load years");
             return new BrowseDataListAdapter(getActivity(), Util.loadYears());
+        } else {
+            SDOImageType type = (SDOImageType) getArguments().getSerializable("type");
+            int year = getArguments().getInt("year", -1);
+            int month = getArguments().getInt("month", -1);
+            int day = getArguments().getInt("day", -1);
+            ArrayList<String> links = (ArrayList<String>) getArguments().getSerializable("links");
+            if (type != null) {
+                Log.d(Main.LOGTAG, "Load images");
+                return new BrowseDataListAdapter(getActivity(), Util.loadImages(year, month, day, links, type, resolution));
+            } else if (day != -1) {
+                Log.d(Main.LOGTAG, "Load image types");
+                if (links == null) {
+                    links = Util.loadLinks(year, month, day);
+                    getArguments().putSerializable("links", links);
+                }
+                return new BrowseDataListAdapter(getActivity(), Util.loadImageTypes());
+            } else if (month != -1) {
+                Log.d(Main.LOGTAG, "Load days");
+                return new BrowseDataListAdapter(getActivity(), Util.loadDays(year, month));
+            } else if (year != -1) {
+                Log.d(Main.LOGTAG, "Load months");
+                return new BrowseDataListAdapter(getActivity(), Util.loadMonths(year));
+            }
+            return null;
         }
     }
 
@@ -150,41 +129,52 @@ public class BrowseDataFragment extends ListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         BrowseDataListItem bdli = (BrowseDataListItem) getListAdapter().getItem(position);
-        if (type != null) {
+        if (getArguments() == null) {
+            BrowseDataFragment bdf = new BrowseDataFragment();
             Bundle bundle = new Bundle();
-            bundle.putSerializable("imageType", type);
-            bundle.putString("imageUrl", bdli.getUrl());
-            bundle.putString("description", Util.getDescription(type));
-            ImageDetailFragment f = new ImageDetailFragment();
-            f.setArguments(bundle);
-            getFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack(null).commit();
-        } else if (day != -1) {
-            SDOImageType type = SDOImageType.valueOf(bdli.getUrl());
-            BrowseDataFragment bdf = new BrowseDataFragment();
-            bdf.setYear(year);
-            bdf.setMonth(month);
-            bdf.setDay(day);
-            bdf.setType(type);
-            bdf.setLinks(links);
-            getActivity().getFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("hour").commit();
-        } else if (month != -1) {
-            int day = Integer.valueOf(bdli.getUrl());
-            BrowseDataFragment bdf = new BrowseDataFragment();
-            bdf.setYear(year);
-            bdf.setMonth(month);
-            bdf.setDay(day);
-            getActivity().getFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("type").commit();
-        } else if (year != -1) {
-            int month = Integer.valueOf(bdli.getUrl());
-            BrowseDataFragment bdf = new BrowseDataFragment();
-            bdf.setYear(year);
-            bdf.setMonth(month);
-            getActivity().getFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("day").commit();
-        } else {
-            int year = Integer.valueOf(bdli.getUrl());
-            BrowseDataFragment bdf = new BrowseDataFragment();
-            bdf.setYear(year);
+            bundle.putInt("year", Integer.valueOf(bdli.getUrl()));
+            bdf.setArguments(bundle);
             getActivity().getFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("month").commit();
+        } else {
+            SDOImageType type = (SDOImageType) getArguments().getSerializable("type");
+            int year = getArguments().getInt("year", -1);
+            int month = getArguments().getInt("month", -1);
+            int day = getArguments().getInt("day", -1);
+            ArrayList<String> links = (ArrayList<String>) getArguments().getSerializable("links");
+            if (type != null) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("imageType", type);
+                bundle.putString("imageUrl", bdli.getUrl());
+                bundle.putString("description", Util.getDescription(type));
+                ImageDetailFragment f = new ImageDetailFragment();
+                f.setArguments(bundle);
+                getFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack(null).commit();
+            } else if (day != -1) {
+                BrowseDataFragment bdf = new BrowseDataFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt("year", year);
+                bundle.putInt("month", month);
+                bundle.putInt("day", day);
+                bundle.putSerializable("type", SDOImageType.valueOf(bdli.getUrl()));
+                bundle.putSerializable("links", links);
+                bdf.setArguments(bundle);
+                getActivity().getFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("hour").commit();
+            } else if (month != -1) {
+                BrowseDataFragment bdf = new BrowseDataFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt("year", year);
+                bundle.putInt("month", month);
+                bundle.putInt("day", Integer.valueOf(bdli.getUrl()));
+                bdf.setArguments(bundle);
+                getActivity().getFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("type").commit();
+            } else if (year != -1) {
+                BrowseDataFragment bdf = new BrowseDataFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt("year", year);
+                bundle.putInt("month", Integer.valueOf(bdli.getUrl()));
+                bdf.setArguments(bundle);
+                getActivity().getFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("day").commit();
+            }
         }
     }
 
@@ -231,17 +221,25 @@ public class BrowseDataFragment extends ListFragment {
                 Log.d(Main.LOGTAG, "AsyncTask completed");
                 setListAdapter(result);
                 ActionBar bar = ((MainActivity) getActivity()).getSupportActionBar();
-                if (type != null) {
-                    bar.setSubtitle(String.format("%d/%d/%d/%s : %s", year, month, day, type.getShortCode(), getString(R.string.select_hour)));
-                } else if (day != -1) {
-                    bar.setSubtitle(String.format("%d/%d/%d: %s", year, month, day, getString(R.string.select_image)));
-                } else if (month != -1) {
-                    bar.setSubtitle(String.format("%d/%d: %s", year, month, getString(R.string.select_day)));
-                } else if (year != -1) {
-                    bar.setSubtitle(String.format("%d: %s", year, getString(R.string.select_month)));
-                } else {
+                if (getArguments() == null) {
                     bar.setSubtitle(getString(R.string.select_year));
+                } else {
+                    SDOImageType type = (SDOImageType) getArguments().getSerializable("type");
+                    int year = getArguments().getInt("year", -1);
+                    int month = getArguments().getInt("month", -1);
+                    int day = getArguments().getInt("day", -1);
+                    ArrayList<String> links = (ArrayList<String>) getArguments().getSerializable("links");
+                    if (type != null) {
+                        bar.setSubtitle(String.format("%d/%d/%d/%s : %s", year, month, day, type.getShortCode(), getString(R.string.select_hour)));
+                    } else if (day != -1) {
+                        bar.setSubtitle(String.format("%d/%d/%d: %s", year, month, day, getString(R.string.select_image)));
+                    } else if (month != -1) {
+                        bar.setSubtitle(String.format("%d/%d: %s", year, month, getString(R.string.select_day)));
+                    } else if (year != -1) {
+                        bar.setSubtitle(String.format("%d: %s", year, getString(R.string.select_month)));
+                    }
                 }
+
             } else {
                 setEmptyText(errorString);
                 setListAdapter(null);

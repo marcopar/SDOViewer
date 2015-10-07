@@ -48,11 +48,12 @@ public class MainActivity extends AppCompatActivity {
                         public boolean onNavigationItemSelected(MenuItem menuItem) {
                             if (menuItem.getItemId() == R.id.nav_the_sun_now) {
                                 getFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                                getFragmentManager().beginTransaction().replace(R.id.content_frame, new TheSunNowFragment()).commit();
+                                TheSunNowFragment f = new TheSunNowFragment();
+                                getFragmentManager().beginTransaction().replace(R.id.content_frame, f, "thesunnow").commit();
                             }
                             if (menuItem.getItemId() == R.id.nav_browse_data) {
-                                BrowseDataFragment bdfy = new BrowseDataFragment();
-                                getFragmentManager().beginTransaction().replace(R.id.content_frame, bdfy).addToBackStack("year").commit();
+                                BrowseDataFragment f = new BrowseDataFragment();
+                                getFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack("year").commit();
                             }
                             if (menuItem.getItemId() == R.id.action_settings) {
                                 SettingsFragment f = new SettingsFragment();
@@ -69,7 +70,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction().add(R.id.content_frame, new TheSunNowFragment(), "thesunnow").commit();
+            TheSunNowFragment f = new TheSunNowFragment();
+            getFragmentManager().beginTransaction().add(R.id.content_frame, f, "thesunnow").commit();
         }
     }
 

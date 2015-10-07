@@ -8,8 +8,8 @@ android {
         applicationId "eu.flatworld.android.sdoviewer"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 10601
-        versionName "1.6.1"
+        versionCode 10700
+        versionName "1.7.0"
     }
 
     signingConfigs {
@@ -44,4 +44,5 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.0'
     compile 'com.github.kevinsawicki:http-request:6.0'
     compile 'org.jsoup:jsoup:1.8+'
+    compile 'de.greenrobot:eventbus:2.4.0'
 }
