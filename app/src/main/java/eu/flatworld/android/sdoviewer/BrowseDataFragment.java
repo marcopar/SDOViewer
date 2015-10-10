@@ -110,8 +110,11 @@ public class BrowseDataFragment extends ListFragment {
             } else if (day != -1) {
                 Log.d(Main.LOGTAG, "Load image types");
                 if (links == null) {
+                    Log.d(Main.LOGTAG, "Load links");
                     links = Util.loadLinks(year, month, day);
                     getArguments().putSerializable("links", links);
+                } else {
+                    Log.d(Main.LOGTAG, "Using cached links");
                 }
                 return new BrowseDataListAdapter(getActivity(), Util.loadImageTypes());
             } else if (month != -1) {
