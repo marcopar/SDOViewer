@@ -17,6 +17,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import de.greenrobot.event.EventBus;
+import eu.flatworld.android.sdoviewer.eventbus.ImageSelectedEvent;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -63,9 +66,7 @@ public class TheSunNowFragment extends Fragment implements SwipeRefreshLayout.On
                 bundle.putString("imageUrl", Util.getLatestURL(imageType, resolution, false));
                 bundle.putString("pfssUrl", Util.getLatestURL(imageType, resolution, true));
                 bundle.putString("description", Util.getDescription(imageType));
-                ImageDetailFragment f = new ImageDetailFragment();
-                f.setArguments(bundle);
-                getFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack(null).commit();
+                EventBus.getDefault().post(new ImageSelectedEvent(bundle));
             }
         });
 

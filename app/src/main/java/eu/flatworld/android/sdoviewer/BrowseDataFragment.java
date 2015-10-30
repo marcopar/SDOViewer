@@ -17,6 +17,10 @@ import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 
+import de.greenrobot.event.EventBus;
+import eu.flatworld.android.sdoviewer.eventbus.BrowseDataEvent;
+import eu.flatworld.android.sdoviewer.eventbus.ImageSelectedEvent;
+
 /**
  * Created by marcopar on 31/05/15.
  */
@@ -133,11 +137,9 @@ public class BrowseDataFragment extends ListFragment {
         super.onListItemClick(l, v, position, id);
         BrowseDataListItem bdli = (BrowseDataListItem) getListAdapter().getItem(position);
         if (getArguments() == null) {
-            BrowseDataFragment bdf = new BrowseDataFragment();
             Bundle bundle = new Bundle();
             bundle.putInt("year", Integer.valueOf(bdli.getUrl()));
-            bdf.setArguments(bundle);
-            getActivity().getFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("month").commit();
+            EventBus.getDefault().post(new BrowseDataEvent(bundle));
         } else {
             SDOImageType type = (SDOImageType) getArguments().getSerializable("type");
             int year = getArguments().getInt("year", -1);
@@ -149,34 +151,26 @@ public class BrowseDataFragment extends ListFragment {
                 bundle.putSerializable("imageType", type);
                 bundle.putString("imageUrl", bdli.getUrl());
                 bundle.putString("description", Util.getDescription(type));
-                ImageDetailFragment f = new ImageDetailFragment();
-                f.setArguments(bundle);
-                getFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack(null).commit();
+                EventBus.getDefault().post(new ImageSelectedEvent(bundle));
             } else if (day != -1) {
-                BrowseDataFragment bdf = new BrowseDataFragment();
                 Bundle bundle = new Bundle();
                 bundle.putInt("year", year);
                 bundle.putInt("month", month);
                 bundle.putInt("day", day);
                 bundle.putSerializable("type", SDOImageType.valueOf(bdli.getUrl()));
                 bundle.putSerializable("links", links);
-                bdf.setArguments(bundle);
-                getActivity().getFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("hour").commit();
+                EventBus.getDefault().post(new BrowseDataEvent(bundle));
             } else if (month != -1) {
-                BrowseDataFragment bdf = new BrowseDataFragment();
                 Bundle bundle = new Bundle();
                 bundle.putInt("year", year);
                 bundle.putInt("month", month);
                 bundle.putInt("day", Integer.valueOf(bdli.getUrl()));
-                bdf.setArguments(bundle);
-                getActivity().getFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("type").commit();
+                EventBus.getDefault().post(new BrowseDataEvent(bundle));
             } else if (year != -1) {
-                BrowseDataFragment bdf = new BrowseDataFragment();
                 Bundle bundle = new Bundle();
                 bundle.putInt("year", year);
                 bundle.putInt("month", Integer.valueOf(bdli.getUrl()));
-                bdf.setArguments(bundle);
-                getActivity().getFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("day").commit();
+                EventBus.getDefault().post(new BrowseDataEvent(bundle));
             }
         }
     }

@@ -10,8 +10,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import de.greenrobot.event.EventBus;
+import eu.flatworld.android.sdoviewer.eventbus.BrowseDataEvent;
+import eu.flatworld.android.sdoviewer.eventbus.ImageSelectedEvent;
 
-public class MainActivity extends AppCompatActivity {
+
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     DrawerLayout mDrawerLayout;
 
     public MainActivity() {
@@ -43,37 +47,47 @@ public class MainActivity extends AppCompatActivity {
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         if (navigationView != null) {
-            navigationView.setNavigationItemSelectedListener(
-                    new NavigationView.OnNavigationItemSelectedListener() {
-                        @Override
-                        public boolean onNavigationItemSelected(MenuItem menuItem) {
-                            if (menuItem.getItemId() == R.id.nav_the_sun_now) {
-                                getFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                                TheSunNowFragment f = new TheSunNowFragment();
-                                getFragmentManager().beginTransaction().replace(R.id.content_frame, f, "thesunnow").commit();
-                            }
-                            if (menuItem.getItemId() == R.id.nav_browse_data) {
-                                BrowseDataFragment f = new BrowseDataFragment();
-                                getFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack("year").commit();
-                            }
-                            if (menuItem.getItemId() == R.id.action_settings) {
-                                SettingsFragment f = new SettingsFragment();
-                                getFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack("settings").commit();
-                            }
-                            if (menuItem.getItemId() == R.id.action_about) {
-                                AboutFragment f = new AboutFragment();
-                                getFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack("about").commit();
-                            }
-                            mDrawerLayout.closeDrawers();
-                            return true;
-                        }
-                    });
+            navigationView.setNavigationItemSelectedListener(this);
         }
 
         if (savedInstanceState == null) {
             TheSunNowFragment f = new TheSunNowFragment();
             getFragmentManager().beginTransaction().add(R.id.content_frame, f, "thesunnow").commit();
         }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem menuItem) {
+        if (menuItem.getItemId() == R.id.nav_the_sun_now) {
+            getFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            TheSunNowFragment f = new TheSunNowFragment();
+            getFragmentManager().beginTransaction().replace(R.id.content_frame, f, "thesunnow").commit();
+        }
+        if (menuItem.getItemId() == R.id.nav_browse_data) {
+            EventBus.getDefault().post(new BrowseDataEvent(null));
+        }
+        if (menuItem.getItemId() == R.id.action_settings) {
+            SettingsFragment f = new SettingsFragment();
+            getFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack("settings").commit();
+        }
+        if (menuItem.getItemId() == R.id.action_about) {
+            AboutFragment f = new AboutFragment();
+            getFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack("about").commit();
+        }
+        mDrawerLayout.closeDrawers();
+        return true;
+    }
+
+    public void onEvent(BrowseDataEvent event) {
+        BrowseDataFragment f = new BrowseDataFragment();
+        f.setArguments(event.getBundle());
+        getFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack(null).commit();
+    }
+
+    public void onEvent(ImageSelectedEvent event) {
+        ImageDetailFragment f = new ImageDetailFragment();
+        f.setArguments(event.getBundle());
+        getFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack(null).commit();
     }
 
     @Override
@@ -89,5 +103,17 @@ public class MainActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
     }
 }
