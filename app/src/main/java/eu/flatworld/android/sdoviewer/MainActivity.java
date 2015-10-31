@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (savedInstanceState == null) {
             TheSunNowFragment f = new TheSunNowFragment();
-            getFragmentManager().beginTransaction().add(R.id.content_frame, f, "thesunnow").commit();
+            getFragmentManager().beginTransaction().add(R.id.content_frame, f, null).commit();
         }
     }
 
@@ -61,18 +61,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (menuItem.getItemId() == R.id.nav_the_sun_now) {
             getFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             TheSunNowFragment f = new TheSunNowFragment();
-            getFragmentManager().beginTransaction().replace(R.id.content_frame, f, "thesunnow").commit();
+            getFragmentManager().beginTransaction().replace(R.id.content_frame, f, null).commit();
         }
         if (menuItem.getItemId() == R.id.nav_browse_data) {
             EventBus.getDefault().post(new BrowseDataEvent(null));
         }
         if (menuItem.getItemId() == R.id.action_settings) {
             SettingsFragment f = new SettingsFragment();
-            getFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack("settings").commit();
+            getFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack(null).commit();
         }
         if (menuItem.getItemId() == R.id.action_about) {
             AboutFragment f = new AboutFragment();
-            getFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack("about").commit();
+            getFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack(null).commit();
         }
         mDrawerLayout.closeDrawers();
         return true;

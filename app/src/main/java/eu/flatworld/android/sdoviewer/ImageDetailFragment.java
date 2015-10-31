@@ -222,7 +222,7 @@ public class ImageDetailFragment extends Fragment {
 
     public void share(Bitmap b) {
         try {
-            String path = MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), b, "x", "x");
+            String path = MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), b, Main.LOGTAG, Main.LOGTAG);
             Uri uri = Uri.parse(path);
             Intent shareIntent = new Intent();
             shareIntent.setAction(Intent.ACTION_SEND);
