@@ -12,6 +12,4 @@ public class BrowseDataListAdapter extends ArrayAdapter<BrowseDataListItem> {
     public BrowseDataListAdapter(Context context, List<BrowseDataListItem> objects) {
         super(context, android.R.layout.simple_list_item_1, objects);
     }
-
-
 }
