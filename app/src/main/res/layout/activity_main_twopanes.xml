@@ -19,44 +19,33 @@
             android:background="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|enterAlways" />
 
-        <!--single pane view -->
-        <FrameLayout
-            android:id="@+id/frame_single"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <FrameLayout
-                android:id="@+id/frame_single_content"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-        </FrameLayout>
-
-        <!--double pane view-->
         <android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/frame_double"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <FrameLayout
-                android:id="@+id/frame_double_content"
+                android:id="@+id/content_frame"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 app:layout_widthPercent="30%" />
 
             <FrameLayout
-                android:id="@+id/frame_double_detail"
+                android:id="@+id/detail_frame"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_toRightOf="@id/frame_double_content"
-                app:layout_widthPercent="70%"></FrameLayout>
+                android:layout_toRightOf="@id/content_frame"
+                app:layout_widthPercent="70%">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/splash" />
+            </FrameLayout>
 
         </android.support.percent.PercentRelativeLayout>
 
-
     </LinearLayout>
-
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
