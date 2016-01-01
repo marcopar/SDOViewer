@@ -2,6 +2,7 @@ package eu.flatworld.android.sdoviewer;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -27,7 +28,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     AboutFragment aboutFragment;
     ImageDetailFragment imageDetailFragment;
     ImageDetailEmptyFragment imageDetailEmptyFragment;
+
     SCREEN currentScreen = SCREEN.THESUNNOW;
+    int currentOrientation = Configuration.ORIENTATION_UNDEFINED;
+    Bundle currentBundle;
 
     public MainActivity() {
     }
@@ -51,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     replace(id, f, null).
                     commit();
         } else {
-            id = R.id.frame_single_content;
+            id = R.id.frame_single_master;
             getFragmentManager().beginTransaction().
                     replace(id, f, null).
                     addToBackStack(null).
@@ -60,30 +64,48 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     void setupScreen(SCREEN newScreen, Bundle bundle) {
-        int orientation = this.getResources().getConfiguration().orientation;
-        boolean setDoubleView = false;
+        int newOrientation = this.getResources().getConfiguration().orientation;
+        boolean setDoubleView;
         Integer contentId;
         Integer detailId;
 
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            if (newScreen.equals(SCREEN.THESUNNOW) || newScreen.equals(SCREEN.BROWSE)) {
-                setDoubleView = true;
-            }
+        if (newOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+            setDoubleView = newScreen.equals(SCREEN.THESUNNOW) || newScreen.equals(SCREEN.BROWSE);
+        } else {
+            setDoubleView = false;
         }
+
         if (setDoubleView == false) {
             findViewById(R.id.frame_double).setVisibility(View.GONE);
             findViewById(R.id.frame_single).setVisibility(View.VISIBLE);
-            contentId = R.id.frame_single_content;
+            contentId = R.id.frame_single_master;
             detailId = null;
+            //cleanup double view fragments
+            Fragment fdm = getFragmentManager().findFragmentById(R.id.frame_double_master);
+            Fragment fdd = getFragmentManager().findFragmentById(R.id.frame_double_detail);
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            if (fdm != null) {
+                ft.remove(fdm);
+            }
+            if (fdd != null) {
+                ft.remove(fdd);
+            }
+            ft.commit();
         } else {
             findViewById(R.id.frame_double).setVisibility(View.VISIBLE);
             findViewById(R.id.frame_single).setVisibility(View.GONE);
-            contentId = R.id.frame_double_content;
+            contentId = R.id.frame_double_master;
             detailId = R.id.frame_double_detail;
+            //cleanup single view fragment
+            Fragment fdm = getFragmentManager().findFragmentById(R.id.frame_single_master);
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            if (fdm != null) {
+                ft.remove(fdm);
+            }
+            ft.commit();
         }
         Fragment content = null;
         Fragment detail = null;
-        currentScreen = newScreen;
         switch (newScreen) {
             case THESUNNOW:
                 getFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
@@ -114,58 +136,54 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
         }
         if (detailId != null) {
-            getFragmentManager().beginTransaction().
-                    replace(contentId, content, null).
-                    replace(detailId, detail, null).
-                    addToBackStack(null).
-                    commit();
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.replace(contentId, content, null).
+                    replace(detailId, detail, null);
+            if (currentOrientation == newOrientation) {
+                ft.addToBackStack(null);
+            }
+            ft.commit();
         } else {
-            getFragmentManager().beginTransaction().
-                    replace(contentId, content, null).
-                    addToBackStack(null).
-                    commit();
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.replace(contentId, content, null);
+            if (currentOrientation == newOrientation) {
+                ft.addToBackStack(null);
+            }
+            ft.commit();
         }
+        currentScreen = newScreen;
+        currentOrientation = newOrientation;
+        currentBundle = bundle;
+
     }
 
     TheSunNowFragment getTheSunNowFragment() {
-        //if(theSunNowFragment == null) {
         theSunNowFragment = new TheSunNowFragment();
-        //}
         return theSunNowFragment;
     }
 
     BrowseDataFragment getBrowseDataFragment() {
-        //if(browseDataFrament == null) {
         browseDataFrament = new BrowseDataFragment();
-        //}
         return browseDataFrament;
     }
 
     SettingsFragment getSettingsFragment() {
-        //if(settingsFragment == null) {
         settingsFragment = new SettingsFragment();
-        //}
         return settingsFragment;
     }
 
     AboutFragment getAboutFragment() {
-        //if(aboutFragment == null) {
         aboutFragment = new AboutFragment();
-        //}
         return aboutFragment;
     }
 
     ImageDetailFragment getImageDetailFragment() {
-        //if(imageDetailFragment == null) {
         imageDetailFragment = new ImageDetailFragment();
-        //}
         return imageDetailFragment;
     }
 
     ImageDetailEmptyFragment getImageDetailEmptyFragment() {
-        //if(imageDetailEmptyFragment == null) {
         imageDetailEmptyFragment = new ImageDetailEmptyFragment();
-        //}
         return imageDetailEmptyFragment;
     }
 
@@ -191,7 +209,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             navigationView.setNavigationItemSelectedListener(this);
         }
 
-        setupScreen(currentScreen, null);
+        if (savedInstanceState != null) {
+            currentScreen = (SCREEN) savedInstanceState.getSerializable("currentscreen");
+            if (currentScreen == null) {
+                currentScreen = SCREEN.THESUNNOW;
+            }
+            currentBundle = savedInstanceState.getBundle("currentbundle");
+        }
+
+        setupScreen(currentScreen, currentBundle);
     }
 
     @Override
@@ -223,6 +249,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putSerializable("currentscreen", currentScreen);
+        outState.putBundle("currentbundle", currentBundle);
     }
 
     @Override

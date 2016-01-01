@@ -145,12 +145,14 @@ public class ImageDetailFragment extends Fragment {
         }
         String pfssUrl = (String) getArguments().getSerializable("pfssUrl");
         MenuItem item = menu.findItem(R.id.action_pfss);
-        item.setVisible(pfssUrl != null);
-        item.setChecked(pfssVisible);
-        if (pfssVisible) {
-            item.setIcon(R.drawable.ic_action_pfss_on);
-        } else {
-            item.setIcon(R.drawable.ic_action_pfss_off);
+        if (item != null) {
+            item.setVisible(pfssUrl != null);
+            item.setChecked(pfssVisible);
+            if (pfssVisible) {
+                item.setIcon(R.drawable.ic_action_pfss_on);
+            } else {
+                item.setIcon(R.drawable.ic_action_pfss_off);
+            }
         }
     }
 
