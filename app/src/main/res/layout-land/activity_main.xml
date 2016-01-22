@@ -20,7 +20,7 @@
             app:layout_scrollFlags="scroll|enterAlways" />
 
         <!--double pane view-->
-        <android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -29,16 +29,16 @@
                 android:id="@+id/frame_master"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                app:layout_widthPercent="30%" />
+                android:layout_weight="1" />
 
             <FrameLayout
                 android:id="@+id/frame_detail"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_toRightOf="@id/frame_master"
-                app:layout_widthPercent="70%"></FrameLayout>
+                android:layout_weight="2" />
 
-        </android.support.percent.PercentRelativeLayout>
+        </LinearLayout>
 
 
     </LinearLayout>

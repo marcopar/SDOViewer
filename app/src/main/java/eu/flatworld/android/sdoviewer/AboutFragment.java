@@ -10,13 +10,17 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 
-public class AboutFragment extends Fragment implements View.OnClickListener {
+public class AboutFragment extends Fragment implements View.OnClickListener, IFragmentProperties {
 
 
     public AboutFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public ScreenType getScreenType() {
+        return ScreenType.ABOUT;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

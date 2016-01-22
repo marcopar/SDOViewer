@@ -10,10 +10,15 @@ import android.view.ViewGroup;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ImageDetailEmptyFragment extends Fragment {
+public class ImageDetailEmptyFragment extends Fragment implements IFragmentProperties {
 
 
     public ImageDetailEmptyFragment() {
+    }
+
+    @Override
+    public ScreenType getScreenType() {
+        return ScreenType.IMAGEDETAILEMPTY;
     }
 
 

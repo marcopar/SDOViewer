@@ -24,7 +24,7 @@ import eu.flatworld.android.sdoviewer.eventbus.ImageSelectedEvent;
 /**
  * Created by marcopar on 31/05/15.
  */
-public class BrowseDataFragment extends ListFragment {
+public class BrowseDataFragment extends ListFragment implements IFragmentProperties {
 
     DownloadImageListTask task = null;
 
@@ -32,6 +32,11 @@ public class BrowseDataFragment extends ListFragment {
 
     public BrowseDataFragment() {
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public ScreenType getScreenType() {
+        return ScreenType.BROWSE;
     }
 
 

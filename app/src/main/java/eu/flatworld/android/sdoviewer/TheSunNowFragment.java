@@ -24,12 +24,17 @@ import eu.flatworld.android.sdoviewer.eventbus.ImageSelectedEvent;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TheSunNowFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class TheSunNowFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, IFragmentProperties {
     private SwipeRefreshLayout swipeLayout;
     private GridImageAdapter gridAdapter;
 
     public TheSunNowFragment() {
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public ScreenType getScreenType() {
+        return ScreenType.THESUNNOW;
     }
 
     @Override

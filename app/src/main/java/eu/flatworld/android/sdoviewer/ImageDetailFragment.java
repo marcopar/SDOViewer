@@ -33,7 +33,7 @@ import it.sephiroth.android.library.imagezoom.ImageViewTouch;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ImageDetailFragment extends Fragment {
+public class ImageDetailFragment extends Fragment implements IFragmentProperties {
     Callback imageLoadedCallback = new Callback() {
 
         @Override
@@ -95,6 +95,11 @@ public class ImageDetailFragment extends Fragment {
 
     public ImageDetailFragment() {
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public ScreenType getScreenType() {
+        return ScreenType.IMAGEDETAIL;
     }
 
 

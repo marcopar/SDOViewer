@@ -13,9 +13,14 @@ import android.view.View;
 /**
  * Created by marcopar on 03/07/15.
  */
-public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener, IFragmentProperties {
 
     public SettingsFragment() {
+    }
+
+    @Override
+    public ScreenType getScreenType() {
+        return ScreenType.SETTINGS;
     }
 
     @Override
