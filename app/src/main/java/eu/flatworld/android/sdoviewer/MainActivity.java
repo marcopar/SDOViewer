@@ -18,7 +18,7 @@ import eu.flatworld.android.sdoviewer.eventbus.BrowseDataEvent;
 import eu.flatworld.android.sdoviewer.eventbus.ImageSelectedEvent;
 
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, FragmentManager.OnBackStackChangedListener {
     SDOViewerApplication application;
     DrawerLayout mDrawerLayout;
 
@@ -30,20 +30,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onBackPressed() {
         if (getFragmentManager().getBackStackEntryCount() != 0) {
-            getFragmentManager().popBackStackImmediate();
-            IFragmentProperties f = (IFragmentProperties) getFragmentManager().findFragmentById(R.id.frame_master);
-            setupScreen(f.getScreenType());
-            if (findViewById(R.id.frame_detail) != null && getFragmentManager().findFragmentById(R.id.frame_detail) == null) {
-                getFragmentManager().beginTransaction().replace(R.id.frame_detail, new ImageDetailEmptyFragment()).commit();
-            }
+            getFragmentManager().popBackStack();
+
         } else {
             super.onBackPressed();
         }
     }
 
+    @Override
+    public void onBackStackChanged() {
+        IFragmentProperties f = (IFragmentProperties) getFragmentManager().findFragmentById(R.id.frame_master);
+        setupScreen(f.getScreenType());
+        if (findViewById(R.id.frame_detail) != null && getFragmentManager().findFragmentById(R.id.frame_detail) == null) {
+            getFragmentManager().beginTransaction().replace(R.id.frame_detail, new ImageDetailEmptyFragment()).commit();
+        }
+    }
+
     void setImageDetail(Bundle bundle) {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-
         if (findViewById(R.id.frame_detail) != null) {
             Fragment f = new ImageDetailFragment();
             f.setArguments(bundle);

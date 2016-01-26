@@ -129,9 +129,6 @@ public class ImageDetailFragment extends Fragment implements IFragmentProperties
             //if bigger than 2048 performances are very bad with hardware acceleration so we disable it
             mImageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
-        SDOImageType imageType = (SDOImageType) getArguments().getSerializable("imageType");
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle(imageType.toString());
-        ((MainActivity) getActivity()).getSupportActionBar().setSubtitle(null);
     }
 
     @Override
@@ -293,6 +290,9 @@ public class ImageDetailFragment extends Fragment implements IFragmentProperties
     @Override
     public void onResume() {
         super.onResume();
+        SDOImageType imageType = (SDOImageType) getArguments().getSerializable("imageType");
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle(imageType.toString());
+        ((MainActivity) getActivity()).getSupportActionBar().setSubtitle(null);
         loadImage(false);
     }
 

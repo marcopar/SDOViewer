@@ -36,13 +36,13 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle(R.string.settings);
-        ((MainActivity) getActivity()).getSupportActionBar().setSubtitle(null);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle(R.string.settings);
+        ((MainActivity) getActivity()).getSupportActionBar().setSubtitle(null);
         // Set up a listener whenever a key changes
         getPreferenceScreen().getSharedPreferences()
                 .registerOnSharedPreferenceChangeListener(this);
