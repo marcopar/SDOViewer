@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         boolean setDoubleView;
 
         if (findViewById(R.id.frame_detail) != null) {
-            setDoubleView = screen.equals(ScreenType.THESUNNOW) | screen.equals(ScreenType.BROWSE);
+            setDoubleView = !screen.equals(ScreenType.SETTINGS);
         } else {
             setDoubleView = false;
         }
@@ -92,6 +92,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setTheme(R.style.Theme_SDO);
         super.onCreate(savedInstanceState);
 
+        getFragmentManager().addOnBackStackChangedListener(this);
+
         application = (SDOViewerApplication) getApplication();
 
         setContentView(R.layout.activity_main);
@@ -112,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (savedInstanceState != null) {
             ScreenType cs = (ScreenType) savedInstanceState.getSerializable("currentscreen");
             setupScreen(cs);
-            if (cs == ScreenType.THESUNNOW) {
+            if (cs == ScreenType.THESUNNOW || cs == ScreenType.IMAGEDETAIL) {
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 if (findViewById(R.id.frame_detail) != null) {
                     Fragment f = getFragmentManager().findFragmentById(R.id.frame_master);

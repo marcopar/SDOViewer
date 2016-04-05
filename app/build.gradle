@@ -14,8 +14,8 @@ android {
 
     signingConfigs {
         release {
-            //storeFile file('c:/users/marcopar/Dropbox/keystore/androidkeystore')
-            storeFile file('/home/marcopar/Dropbox/keystore/androidkeystore')
+            //storeFile file('c:/users/marcopar/Dropbox/dati/keystore/androidkeystore')
+            storeFile file('/home/marcopar/Dropbox/dati/keystore/androidkeystore')
             storePassword System.getenv("KEYSTORE_PASSWORD")
             keyAlias System.getenv("KEY_ALIAS")
             keyPassword System.getenv("KEY_PASSWORD")
@@ -40,7 +40,7 @@ dependencies {
     compile 'com.android.support:design:23+'
     compile 'com.android.support:appcompat-v7:23+'
     compile 'com.android.support:support-v4:23+'
-    compile 'it.sephiroth.android.library.imagezoom:imagezoom:+'
+    compile 'it.sephiroth.android.library.imagezoom:imagezoom:2.2.4'
     compile 'com.squareup.picasso:picasso:2.5+'
     compile 'com.github.kevinsawicki:http-request:6.0'
     compile 'org.jsoup:jsoup:1.8+'
