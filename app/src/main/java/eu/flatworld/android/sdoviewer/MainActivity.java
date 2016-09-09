@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onBackPressed() {
         if (getFragmentManager().getBackStackEntryCount() != 0) {
             getFragmentManager().popBackStack();
-
         } else {
             super.onBackPressed();
         }
@@ -46,35 +45,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    void setImageDetail(Bundle bundle) {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        if (findViewById(R.id.frame_detail) != null) {
-            Fragment f = new ImageDetailFragment();
-            f.setArguments(bundle);
-            ft.replace(R.id.frame_detail, f, null);
-        } else {
-            Fragment f = new ImageDetailFragment();
-            f.setArguments(bundle);
-            ft.replace(R.id.frame_master, f, null).addToBackStack(null);
-        }
-        ft.commit();
-    }
-
     void setupScreen(ScreenType screen) {
-        boolean setDoubleView;
+        boolean isDoubleView;
 
         if (findViewById(R.id.frame_detail) != null) {
-            setDoubleView = !screen.equals(ScreenType.SETTINGS);
+            isDoubleView = !screen.equals(ScreenType.SETTINGS);
         } else {
-            setDoubleView = false;
+            isDoubleView = false;
         }
 
-        if (setDoubleView == false) {
+        if (isDoubleView == false) {
+            Fragment f = getFragmentManager().findFragmentById(R.id.frame_detail);
+            if (f != null) {
+                getFragmentManager().beginTransaction().remove(f).commit();
+            }
             if (findViewById(R.id.frame_detail) != null) {
-                Fragment f = getFragmentManager().findFragmentById(R.id.frame_detail);
-                if (f != null) {
-                    getFragmentManager().beginTransaction().remove(f).commit();
-                }
                 findViewById(R.id.frame_detail).setVisibility(View.GONE);
             }
         } else {
@@ -222,13 +207,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void onEvent(BrowseDataEvent event) {
-        Bundle b = event.getBundle();
+        Bundle bundle = event.getBundle();
         setupScreen(ScreenType.BROWSE);
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment f = new BrowseDataFragment();
+        f.setArguments(bundle);
+        ft.replace(R.id.frame_master, f).addToBackStack(null);
+        if (findViewById(R.id.frame_detail) != null) {
+            f = new ImageDetailEmptyFragment();
+            ft.replace(R.id.frame_detail, f);
+        }
+        ft.commit();
     }
 
     public void onEvent(ImageSelectedEvent event) {
         setImageDetail(event.getBundle());
     }
+
+
+    void setImageDetail(Bundle bundle) {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        if (findViewById(R.id.frame_detail) != null) {
+            Fragment f = new ImageDetailFragment();
+            f.setArguments(bundle);
+            ft.replace(R.id.frame_detail, f, null);
+        } else {
+            Fragment f = new ImageDetailFragment();
+            f.setArguments(bundle);
+            ft.replace(R.id.frame_master, f, null).addToBackStack(null);
+        }
+        ft.commit();
+    }
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {

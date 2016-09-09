@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    buildToolsVersion "24.0.2"
 
     defaultConfig {
         applicationId "eu.flatworld.android.sdoviewer"
@@ -14,8 +14,8 @@ android {
 
     signingConfigs {
         release {
-            //storeFile file('c:/users/marcopar/Dropbox/dati/keystore/androidkeystore')
-            storeFile file('/home/marcopar/Dropbox/dati/keystore/androidkeystore')
+            //storeFile file('c:/users/marcopar/Dropbox/pc/keystore/androidkeystore')
+            storeFile file('/home/marcopar/Dropbox/pc/keystore/androidkeystore')
             storePassword System.getenv("KEYSTORE_PASSWORD")
             keyAlias System.getenv("KEY_ALIAS")
             keyPassword System.getenv("KEY_PASSWORD")
