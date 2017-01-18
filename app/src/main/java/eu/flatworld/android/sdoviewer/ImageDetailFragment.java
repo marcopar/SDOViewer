@@ -177,9 +177,9 @@ public class ImageDetailFragment extends Fragment {
                             progressDialog.setMessage(getString(R.string.setting_wallpaper_));
                             progressDialog.show();
                             if (pfssVisible) {
-                                Picasso.with(getActivity()).load(pfssUrl).into(targetSetWallpaper);
+                                picassoBuilder.build().with(getActivity()).load(pfssUrl).into(targetSetWallpaper);
                             } else {
-                                Picasso.with(getActivity()).load(imageUrl).into(targetSetWallpaper);
+                                picassoBuilder.build().with(getActivity()).load(imageUrl).into(targetSetWallpaper);
                             }
                         }
                     })
@@ -207,9 +207,9 @@ public class ImageDetailFragment extends Fragment {
             progressDialog.setMessage(getString(R.string.preparing_the_image_));
             progressDialog.show();
             if (pfssVisible) {
-                Picasso.with(getActivity()).load(pfssUrl).into(targetShare);
+                picassoBuilder.build().with(getActivity()).load(pfssUrl).into(targetShare);
             } else {
-                Picasso.with(getActivity()).load(imageUrl).into(targetShare);
+                picassoBuilder.build().with(getActivity()).load(imageUrl).into(targetShare);
             }
             return true;
         }
@@ -278,9 +278,9 @@ public class ImageDetailFragment extends Fragment {
         final String pfssUrl = (String) getArguments().getSerializable("pfssUrl");
         final String imageUrl = (String) getArguments().getSerializable("imageUrl");
         if (invalidateCache) {
-            Picasso.with(getActivity()).invalidate(imageUrl);
+            picassoBuilder.build().with(getActivity()).invalidate(imageUrl);
             if (pfssUrl != null) {
-                Picasso.with(getActivity()).invalidate(pfssUrl);
+                picassoBuilder.build().with(getActivity()).invalidate(pfssUrl);
             }
         }
         if (pfssVisible) {

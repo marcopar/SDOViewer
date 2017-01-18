@@ -1,6 +1,8 @@
 package eu.flatworld.android.sdoviewer;
 
 import android.content.Context;
+import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +21,7 @@ import java.util.List;
 public class GridImageAdapter extends BaseAdapter {
     private final List<SDOImageType> mItems;
     private final LayoutInflater mInflater;
+    Picasso.Builder picassoBuilder;
 
     private Context mContext;
 
@@ -29,13 +32,20 @@ public class GridImageAdapter extends BaseAdapter {
         for (SDOImageType i : SDOImageType.values()) {
             mItems.add(i);
         }
+        picassoBuilder = new Picasso.Builder(c);
+        picassoBuilder.listener(new Picasso.Listener() {
+            @Override
+            public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
+                Log.e(Main.LOGTAG, "Picasso error", exception);
+            }
+        });
     }
 
     public void invalidateCache() {
         for (SDOImageType i : mItems) {
-            Picasso.with(mContext).invalidate(Util.getLatestURL(i, 512, false));
+            picassoBuilder.build().with(mContext).invalidate(Util.getLatestURL(i, 512, false));
             if (Util.getLatestURL(i, 512, true) != null) {
-                Picasso.with(mContext).invalidate(Util.getLatestURL(i, 512, true));
+                picassoBuilder.build().with(mContext).invalidate(Util.getLatestURL(i, 512, true));
             }
         }
     }
@@ -70,7 +80,7 @@ public class GridImageAdapter extends BaseAdapter {
         picture = (ImageView) v.getTag(R.id.picture);
         name = (TextView) v.getTag(R.id.text);
 
-        Picasso.with(mContext).load(Util.getLatestURL(mItems.get(position), 512, false)).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(picture);
+        picassoBuilder.build().with(mContext).load(Util.getLatestURL(mItems.get(position), 512, false)).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(picture);
         name.setText(mItems.get(position).toString());
 
         return v;
