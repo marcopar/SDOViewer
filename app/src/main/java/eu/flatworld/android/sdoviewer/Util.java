@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
  */
 public class Util {
 
-    public static final String SDO_URL = "http://sdo.gsfc.nasa.gov/";
+    public static final String SDO_URL = "https://sdo.gsfc.nasa.gov/";
     public static final String BASE_URL_LATEST = SDO_URL + "assets/img/latest/";
     public static final String BASE_URL_BROWSE = SDO_URL + "assets/img/browse/";
 

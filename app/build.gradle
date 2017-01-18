@@ -14,8 +14,8 @@ android {
 
     signingConfigs {
         release {
-            //storeFile file('c:/users/marcopar/Dropbox/keystore/androidkeystore')
-            storeFile file('/home/marcopar/Dropbox/keystore/androidkeystore')
+            //storeFile file('c:/users/marcopar/Dropbox/pc/keystore/androidkeystore')
+            storeFile file('/home/marcopar/Dropbox/pc/keystore/androidkeystore')
             storePassword System.getenv("KEYSTORE_PASSWORD")
             keyAlias System.getenv("KEY_ALIAS")
             keyPassword System.getenv("KEY_PASSWORD")
