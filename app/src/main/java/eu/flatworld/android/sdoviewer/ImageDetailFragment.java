@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -43,9 +44,9 @@ public class ImageDetailFragment extends Fragment {
 
         @Override
         public void onError() {
-
         }
     };
+    Picasso.Builder picassoBuilder;
     private ImageViewTouch mImageView;
     private ProgressDialog progressDialog;
     Target targetSetWallpaper = new Target() {
@@ -90,7 +91,6 @@ public class ImageDetailFragment extends Fragment {
             }).start();
         }
     };
-
     private boolean pfssVisible = false;
 
     public ImageDetailFragment() {
@@ -112,6 +112,13 @@ public class ImageDetailFragment extends Fragment {
         if (savedInstanceState != null) {
             pfssVisible = savedInstanceState.getBoolean("pfssVisible");
         }
+        picassoBuilder = new Picasso.Builder(getActivity());
+        picassoBuilder.listener(new Picasso.Listener() {
+            @Override
+            public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
+                Log.e(Main.LOGTAG, "Picasso error", exception);
+            }
+        });
     }
 
     @Override
@@ -277,9 +284,9 @@ public class ImageDetailFragment extends Fragment {
             }
         }
         if (pfssVisible) {
-            Picasso.with(getActivity()).load(pfssUrl).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(mImageView, imageLoadedCallback);
+            picassoBuilder.build().load(pfssUrl).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(mImageView, imageLoadedCallback);
         } else {
-            Picasso.with(getActivity()).load(imageUrl).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(mImageView, imageLoadedCallback);
+            picassoBuilder.build().load(imageUrl).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(mImageView, imageLoadedCallback);
         }
     }
 
