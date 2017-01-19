@@ -2,7 +2,6 @@ package eu.flatworld.android.sdoviewer;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +35,7 @@ public class GridImageAdapter extends BaseAdapter {
         picassoBuilder.listener(new Picasso.Listener() {
             @Override
             public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
-                Log.e(Main.LOGTAG, "Picasso error", exception);
+                Util.firebaseLog(mContext, "Picasso GridImageAdapter", exception);
             }
         });
     }

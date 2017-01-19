@@ -1,8 +1,11 @@
 package eu.flatworld.android.sdoviewer;
 
+import android.content.Context;
+import android.provider.Settings;
 import android.util.Log;
 
 import com.github.kevinsawicki.http.HttpRequest;
+import com.google.firebase.crash.FirebaseCrash;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -24,6 +27,15 @@ public class Util {
     public static final String SDO_URL = "https://sdo.gsfc.nasa.gov/";
     public static final String BASE_URL_LATEST = SDO_URL + "assets/img/latest/";
     public static final String BASE_URL_BROWSE = SDO_URL + "assets/img/browse/";
+
+    public static void firebaseLog(Context ctx, String text, Throwable ex) {
+        String android_id = Settings.Secure.getString(ctx.getContentResolver(),
+                Settings.Secure.ANDROID_ID);
+        String s = String.format("ID: %s, MSG: %s", android_id, text);
+        Log.e(Main.LOGTAG, s, ex);
+        FirebaseCrash.log(s);
+        FirebaseCrash.report(ex);
+    }
 
     public static String getLatestURL(SDOImageType si, int size, boolean pfss) {
         String pfssString = "";
