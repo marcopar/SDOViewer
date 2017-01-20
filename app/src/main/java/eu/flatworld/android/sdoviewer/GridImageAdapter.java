@@ -20,7 +20,7 @@ import java.util.List;
 public class GridImageAdapter extends BaseAdapter {
     private final List<SDOImageType> mItems;
     private final LayoutInflater mInflater;
-    Picasso.Builder picassoBuilder;
+    Picasso picasso;
 
     private Context mContext;
 
@@ -31,20 +31,20 @@ public class GridImageAdapter extends BaseAdapter {
         for (SDOImageType i : SDOImageType.values()) {
             mItems.add(i);
         }
-        picassoBuilder = new Picasso.Builder(c);
-        picassoBuilder.listener(new Picasso.Listener() {
+        Picasso.Builder picassoBuilder = new Picasso.Builder(mContext);
+        picasso = picassoBuilder.listener(new Picasso.Listener() {
             @Override
             public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
-                Util.firebaseLog(mContext, "Picasso GridImageAdapter", exception);
+                Util.firebaseLog(mContext, "Picasso error GridImageAdapter", exception);
             }
-        });
+        }).build();
     }
 
     public void invalidateCache() {
         for (SDOImageType i : mItems) {
-            picassoBuilder.build().with(mContext).invalidate(Util.getLatestURL(i, 512, false));
+            picasso.invalidate(Util.getLatestURL(i, 512, false));
             if (Util.getLatestURL(i, 512, true) != null) {
-                picassoBuilder.build().with(mContext).invalidate(Util.getLatestURL(i, 512, true));
+                picasso.invalidate(Util.getLatestURL(i, 512, true));
             }
         }
     }
@@ -79,7 +79,7 @@ public class GridImageAdapter extends BaseAdapter {
         picture = (ImageView) v.getTag(R.id.picture);
         name = (TextView) v.getTag(R.id.text);
 
-        picassoBuilder.build().with(mContext).load(Util.getLatestURL(mItems.get(position), 512, false)).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(picture);
+        picasso.load(Util.getLatestURL(mItems.get(position), 512, false)).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(picture);
         name.setText(mItems.get(position).toString());
 
         return v;

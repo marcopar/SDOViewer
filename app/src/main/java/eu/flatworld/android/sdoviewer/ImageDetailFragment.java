@@ -23,7 +23,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -34,18 +33,8 @@ import it.sephiroth.android.library.imagezoom.ImageViewTouch;
  * A simple {@link Fragment} subclass.
  */
 public class ImageDetailFragment extends Fragment {
-    Callback imageLoadedCallback = new Callback() {
 
-        @Override
-        public void onSuccess() {
-
-        }
-
-        @Override
-        public void onError() {
-        }
-    };
-    Picasso.Builder picassoBuilder;
+    Picasso picasso;
     private ImageViewTouch mImageView;
     private ProgressDialog progressDialog;
     Target targetSetWallpaper = new Target() {
@@ -111,13 +100,13 @@ public class ImageDetailFragment extends Fragment {
         if (savedInstanceState != null) {
             pfssVisible = savedInstanceState.getBoolean("pfssVisible");
         }
-        picassoBuilder = new Picasso.Builder(getActivity());
-        picassoBuilder.listener(new Picasso.Listener() {
+        Picasso.Builder picassoBuilder = new Picasso.Builder(getActivity());
+        picasso = picassoBuilder.listener(new Picasso.Listener() {
             @Override
             public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
                 Util.firebaseLog(getActivity(), "Picasso error ImageDetailFragment", exception);
             }
-        });
+        }).build();
     }
 
     @Override
@@ -176,9 +165,9 @@ public class ImageDetailFragment extends Fragment {
                             progressDialog.setMessage(getString(R.string.setting_wallpaper_));
                             progressDialog.show();
                             if (pfssVisible) {
-                                picassoBuilder.build().with(getActivity()).load(pfssUrl).into(targetSetWallpaper);
+                                picasso.load(pfssUrl).into(targetSetWallpaper);
                             } else {
-                                picassoBuilder.build().with(getActivity()).load(imageUrl).into(targetSetWallpaper);
+                                picasso.load(imageUrl).into(targetSetWallpaper);
                             }
                         }
                     })
@@ -206,9 +195,9 @@ public class ImageDetailFragment extends Fragment {
             progressDialog.setMessage(getString(R.string.preparing_the_image_));
             progressDialog.show();
             if (pfssVisible) {
-                picassoBuilder.build().with(getActivity()).load(pfssUrl).into(targetShare);
+                Picasso.with(getActivity()).load(pfssUrl).into(targetShare);
             } else {
-                picassoBuilder.build().with(getActivity()).load(imageUrl).into(targetShare);
+                Picasso.with(getActivity()).load(imageUrl).into(targetShare);
             }
             return true;
         }
@@ -277,15 +266,15 @@ public class ImageDetailFragment extends Fragment {
         final String pfssUrl = (String) getArguments().getSerializable("pfssUrl");
         final String imageUrl = (String) getArguments().getSerializable("imageUrl");
         if (invalidateCache) {
-            picassoBuilder.build().with(getActivity()).invalidate(imageUrl);
+            Picasso.with(getActivity()).invalidate(imageUrl);
             if (pfssUrl != null) {
-                picassoBuilder.build().with(getActivity()).invalidate(pfssUrl);
+                Picasso.with(getActivity()).invalidate(pfssUrl);
             }
         }
         if (pfssVisible) {
-            picassoBuilder.build().load(pfssUrl).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(mImageView, imageLoadedCallback);
+            picasso.load(pfssUrl).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(mImageView);
         } else {
-            picassoBuilder.build().load(imageUrl).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(mImageView, imageLoadedCallback);
+            picasso.load(imageUrl).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(mImageView);
         }
     }
 
