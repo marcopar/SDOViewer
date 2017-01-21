@@ -104,7 +104,7 @@ public class ImageDetailFragment extends Fragment {
         picasso = picassoBuilder.listener(new Picasso.Listener() {
             @Override
             public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
-                Util.firebaseLog(getActivity(), "Picasso error ImageDetailFragment", exception);
+                //Util.firebaseLog(getActivity(), "Picasso error ImageDetailFragment", exception);
             }
         }).build();
     }

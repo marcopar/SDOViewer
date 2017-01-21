@@ -35,7 +35,7 @@ public class GridImageAdapter extends BaseAdapter {
         picasso = picassoBuilder.listener(new Picasso.Listener() {
             @Override
             public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
-                Util.firebaseLog(mContext, "Picasso error GridImageAdapter", exception);
+                //Util.firebaseLog(mContext, "Picasso error GridImageAdapter", exception);
             }
         }).build();
     }
