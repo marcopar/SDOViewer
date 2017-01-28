@@ -4,7 +4,6 @@ import android.content.Context;
 import android.provider.Settings;
 import android.util.Log;
 
-import com.github.kevinsawicki.http.HttpRequest;
 import com.google.firebase.crash.FirebaseCrash;
 
 import org.jsoup.Jsoup;
@@ -17,12 +16,21 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by marcopar on 22/02/15.
  */
 public class Util {
+    public static final OkHttpClient httpClient = new OkHttpClient.Builder()
+            .readTimeout(2, TimeUnit.MINUTES).connectTimeout(10, TimeUnit.SECONDS)
+            .build();
+
 
     public static final String SDO_URL = "https://sdo.gsfc.nasa.gov/";
     public static final String BASE_URL_LATEST = SDO_URL + "assets/img/latest/";
@@ -227,10 +235,9 @@ public class Util {
     public static ArrayList<String> loadLinks(int year, int month, int day) throws IOException {
         String baseUrl = String.format("%s/%d/%02d/%02d/", BASE_URL_BROWSE, year, month, day);
         Log.d(Main.LOGTAG, "Load links");
-        HttpRequest hr = HttpRequest.get(baseUrl).readTimeout(60000 * 2).connectTimeout(5000);
         ArrayList<String> al = new ArrayList<>();
-        if (hr.ok()) {
-            String sb = hr.body();
+        try {
+            String sb = getUrl(baseUrl);
             Document doc = Jsoup.parse(sb, baseUrl);
             Elements elements = doc.select("a[href]");
             for (Element e : elements) {
@@ -238,11 +245,20 @@ public class Util {
                 al.add(s);
             }
             Log.d(Main.LOGTAG, "Load links completed");
-        } else {
-            Log.d(Main.LOGTAG, "Load links completed with error: " + hr.message());
-            throw new IOException(hr.message());
+        } catch (IOException ex) {
+            Log.d(Main.LOGTAG, "Load links completed with errors", ex);
+            throw ex;
         }
         return al;
+    }
+
+    private static String getUrl(String url) throws IOException {
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        Response response = httpClient.newCall(request).execute();
+        return response.body().string();
     }
 
 }

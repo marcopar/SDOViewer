@@ -9,8 +9,8 @@ android {
         applicationId "eu.flatworld.android.sdoviewer"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 10605
-        versionName "1.6.5"
+        versionCode 10606
+        versionName "1.6.6"
     }
 
     signingConfigs {
@@ -43,8 +43,8 @@ dependencies {
     compile 'com.android.support:support-v4:22.2.1'
     compile 'it.sephiroth.android.library.imagezoom:imagezoom:2.2.4'
     compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.github.kevinsawicki:http-request:6.0'
     compile 'org.jsoup:jsoup:1.10.2'
     compile 'com.google.firebase:firebase-crash:10.0.1'
-
+    compile 'com.google.android.apps.muzei:muzei-api:+'
+    compile 'com.squareup.okhttp3:okhttp:3.5.0'
 }
