@@ -1,0 +1,9 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <ListPreference
+        android:defaultValue="60"
+        android:entries="@array/updateIntervals"
+        android:entryValues="@array/updateIntervalsValues"
+        android:key="muzeiUpdateInterval"
+        android:summary=""
+        android:title="@string/muzei_update_interval_title" />
+</PreferenceScreen>

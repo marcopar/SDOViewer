@@ -12,4 +12,22 @@
         <item>2048x2048 pixels</item>
         <item>4096x4096 pixels</item>
     </string-array>
+    <string-array name="updateIntervalsValues">
+        <item>60</item>
+        <item>120</item>
+        <item>180</item>
+        <item>240</item>
+        <item>360</item>
+        <item>720</item>
+        <item>1440</item>
+    </string-array>
+    <string-array name="updateIntervals">
+        <item>@string/muzei_settings_1_hour</item>
+        <item>@string/muzei_settings_2_hour</item>
+        <item>@string/muzei_settings_3_hour</item>
+        <item>@string/muzei_settings_4_hour</item>
+        <item>@string/muzei_settings_6_hour</item>
+        <item>@string/muzei_settings_12_hour</item>
+        <item>@string/muzei_settings_24_hour</item>
+    </string-array>
 </resources>
