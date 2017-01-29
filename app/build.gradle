@@ -47,4 +47,5 @@ dependencies {
     compile 'com.google.firebase:firebase-crash:10.0.1'
     compile 'com.google.android.apps.muzei:muzei-api:+'
     compile 'com.squareup.okhttp3:okhttp:3.5.0'
+    compile 'mobi.upod:time-duration-picker:1.1.1'
 }

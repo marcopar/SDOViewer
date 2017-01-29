@@ -1,4 +1,4 @@
-package eu.flatworld.android.sdoviewer;
+package eu.flatworld.android.sdoviewer.muzei;
 
 
 import android.content.Intent;
@@ -16,13 +16,18 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import eu.flatworld.android.sdoviewer.Main;
+import eu.flatworld.android.sdoviewer.R;
+import eu.flatworld.android.sdoviewer.SDOImageType;
+import eu.flatworld.android.sdoviewer.Util;
+
 /**
  * Created by marcopar on 26/01/17.
  */
 
 public class SDOMuzeiSource extends RemoteMuzeiArtSource {
     private static final String SOURCE_NAME = "NASA-SDO";
-    private static final int ROTATE_TIME_MILLIS = 1 * 60 * 60 * 1000;
+    private static final int ROTATE_TIME_MILLIS = 2 * 60 * 1000;
     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
 
 

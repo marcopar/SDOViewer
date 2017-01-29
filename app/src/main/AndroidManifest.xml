@@ -28,7 +28,7 @@
 
 
         <service
-            android:name=".SDOMuzeiSource"
+            android:name=".muzei.SDOMuzeiSource"
             android:description="@string/muzei_description"
             android:icon="@drawable/muzei"
             android:label="@string/muzei_label">
