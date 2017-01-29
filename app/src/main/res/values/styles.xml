@@ -16,12 +16,16 @@
 
 <resources>
 
-    <style name="Theme.SDO" parent="Base.Theme.SDO">
+    <style name="Theme.SDO.Splash" parent="Theme.SDO">
+        <item name="android:windowBackground">@drawable/splash</item>
     </style>
+
+    <style name="Theme.SDO" parent="Base.Theme.SDO"></style>
 
     <style name="Base.Theme.SDO" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">#fb8c00</item>
         <item name="colorPrimaryDark">#e65100</item>
         <item name="colorAccent">#3d5afe</item>
     </style>
+
 </resources>

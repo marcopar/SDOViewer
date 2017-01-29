@@ -14,6 +14,7 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -237,7 +238,7 @@ public class Util {
         Log.d(Main.LOGTAG, "Load links");
         ArrayList<String> al = new ArrayList<>();
         try {
-            String sb = getUrl(baseUrl);
+            String sb = getUrl(baseUrl).body().toString();
             Document doc = Jsoup.parse(sb, baseUrl);
             Elements elements = doc.select("a[href]");
             for (Element e : elements) {
@@ -252,13 +253,19 @@ public class Util {
         return al;
     }
 
-    private static String getUrl(String url) throws IOException {
+    public static Response getUrl(String url) throws IOException {
         Request request = new Request.Builder()
                 .url(url)
                 .build();
 
-        Response response = httpClient.newCall(request).execute();
-        return response.body().string();
+        return httpClient.newCall(request).execute();
+    }
+
+    public static Date getLastModified(String url) throws IOException {
+
+        Request request = new Request.Builder().url(url).head().build();
+
+        return httpClient.newCall(request).execute().headers().getDate("Last-Modified");
     }
 
 }

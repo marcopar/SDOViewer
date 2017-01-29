@@ -46,4 +46,8 @@
     <string name="select_day">Select day</string>
     <string name="timeout">timeout</string>
     <string name="loading___">Loading...</string>
+
+    <string name="muzei_label">NASA / SDO</string>
+    <string name="muzei_description">Images from the NASA Solar Dynamics Observatory</string>
+    <string name="muzei_byline">courtesy of NASA/SDO and the AIA, EVE, and HMI science teams</string>
 </resources>
