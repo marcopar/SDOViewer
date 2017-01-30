@@ -43,7 +43,7 @@
 
             <meta-data
                 android:name="color"
-                android:value="#fb8c00" />
+                android:value="#ffff00" />
             <meta-data
                 android:name="settingsActivity"
                 android:value=".muzei.MuzeiSettingsActivity" />

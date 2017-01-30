@@ -113,7 +113,7 @@ public class ImageDetailFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        int resolution = Integer.parseInt(pref.getString("resolution", "2048"));
+        int resolution = Integer.parseInt(pref.getString(SDOViewerConstants.PREFERENCES_RESOLUTION, "2048"));
         mImageView = (ImageViewTouch) view.findViewById(R.id.imageView);
         if (resolution > 2048) {
             //if bigger than 2048 performances are very bad with hardware acceleration so we disable it

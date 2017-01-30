@@ -97,7 +97,7 @@ public class BrowseDataFragment extends ListFragment {
             bar.setSubtitle(R.string.loading_years);
         }
 
-        Log.d(Main.LOGTAG, "Start AsyncTask");
+        Log.d(SDOViewerConstants.LOGTAG, "Start AsyncTask");
         task = new DownloadImageListTask();
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
@@ -106,7 +106,7 @@ public class BrowseDataFragment extends ListFragment {
     public void onPause() {
         super.onPause();
         if (task != null && !task.isCancelled()) {
-            Log.d(Main.LOGTAG, "Cancel AsyncTask");
+            Log.d(SDOViewerConstants.LOGTAG, "Cancel AsyncTask");
             task.cancel(true);
         }
     }
@@ -123,25 +123,24 @@ public class BrowseDataFragment extends ListFragment {
     }
 
 
-
     BrowseDataListAdapter createAdapter() throws IOException {
         if (type != null) {
-            Log.d(Main.LOGTAG, "Load images");
+            Log.d(SDOViewerConstants.LOGTAG, "Load images");
             return new BrowseDataListAdapter(getActivity(), Util.loadImages(year, month, day, links, type, resolution));
         } else if (day != -1) {
-            Log.d(Main.LOGTAG, "Load image types");
+            Log.d(SDOViewerConstants.LOGTAG, "Load image types");
             if (links == null) {
                 links = Util.loadLinks(year, month, day);
             }
             return new BrowseDataListAdapter(getActivity(), Util.loadImageTypes());
         } else if (month != -1) {
-            Log.d(Main.LOGTAG, "Load days");
+            Log.d(SDOViewerConstants.LOGTAG, "Load days");
             return new BrowseDataListAdapter(getActivity(), Util.loadDays(year, month));
         } else if (year != -1) {
-            Log.d(Main.LOGTAG, "Load months");
+            Log.d(SDOViewerConstants.LOGTAG, "Load months");
             return new BrowseDataListAdapter(getActivity(), Util.loadMonths(year));
         } else {
-            Log.d(Main.LOGTAG, "Load years");
+            Log.d(SDOViewerConstants.LOGTAG, "Load years");
             return new BrowseDataListAdapter(getActivity(), Util.loadYears());
         }
     }
@@ -219,7 +218,7 @@ public class BrowseDataFragment extends ListFragment {
                 } else {
                     errorString = getString(R.string.error_getting_data) + ": " + e.getMessage();
                 }
-                Log.d(Main.LOGTAG, "AsyncTask completed with error: " + e.toString());
+                Log.d(SDOViewerConstants.LOGTAG, "AsyncTask completed with error: " + e.toString());
                 return null;
             }
         }
@@ -228,7 +227,7 @@ public class BrowseDataFragment extends ListFragment {
         protected void onPostExecute(BrowseDataListAdapter result) {
             task = null;
             if (result != null) {
-                Log.d(Main.LOGTAG, "AsyncTask completed");
+                Log.d(SDOViewerConstants.LOGTAG, "AsyncTask completed");
                 setListAdapter(result);
                 ActionBar bar = ((MainActivity) getActivity()).getSupportActionBar();
                 if (type != null) {
@@ -250,7 +249,7 @@ public class BrowseDataFragment extends ListFragment {
 
         @Override
         protected void onCancelled() {
-            Log.d(Main.LOGTAG, "AsyncTask cancelled");
+            Log.d(SDOViewerConstants.LOGTAG, "AsyncTask cancelled");
             super.onCancelled();
         }
     }

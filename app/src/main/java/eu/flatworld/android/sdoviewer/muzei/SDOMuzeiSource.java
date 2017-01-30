@@ -18,9 +18,9 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import eu.flatworld.android.sdoviewer.Main;
 import eu.flatworld.android.sdoviewer.R;
 import eu.flatworld.android.sdoviewer.SDOImageType;
+import eu.flatworld.android.sdoviewer.SDOViewerConstants;
 import eu.flatworld.android.sdoviewer.Util;
 
 /**
@@ -29,10 +29,11 @@ import eu.flatworld.android.sdoviewer.Util;
 
 public class SDOMuzeiSource extends RemoteMuzeiArtSource {
     private static final String SOURCE_NAME = "NASA-SDO";
-    private static final int ROTATE_TIME_MILLIS = 60 * 60 * 1000;
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
-    private static int IMAGE_SIZE = 2048;
     int updateInterval = 3600000;
+    int resolution = 2048;
+
+    String networkMode = SDOViewerConstants.PREFERENCES_MUZEINETWORKMODE_WIFI_MOBILE;
 
     public SDOMuzeiSource() {
         super(SOURCE_NAME);
@@ -44,12 +45,32 @@ public class SDOMuzeiSource extends RemoteMuzeiArtSource {
         setUserCommands(BUILTIN_COMMAND_ID_NEXT_ARTWORK);
 
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        updateInterval = Integer.parseInt(pref.getString("muzeiUpdateInterval", "60"));
-        Log.i(Main.LOGTAG, String.format("Update interval is set to %d", updateInterval));
+        updateInterval = Integer.parseInt(pref.getString(SDOViewerConstants.PREFERENCES_MUZEIUPDATEINTERVAL, "60"));
+        Log.i(SDOViewerConstants.LOGTAG, String.format("Update interval is set to %d", updateInterval));
+        networkMode = pref.getString(SDOViewerConstants.PREFERENCES_MUZEINETWORKMODE, SDOViewerConstants.PREFERENCES_MUZEINETWORKMODE_WIFI_MOBILE);
+        resolution = Integer.parseInt(pref.getString(SDOViewerConstants.PREFERENCES_RESOLUTION, "2048"));
     }
 
     @Override
     protected void onTryUpdate(int reason) throws RetryException {
+        Log.i(SDOViewerConstants.LOGTAG, String.format("Network mode: %s", networkMode));
+        switch (networkMode) {
+            case SDOViewerConstants.PREFERENCES_MUZEINETWORKMODE_WIFI:
+                if (!Util.isWifiConnected(this)) {
+                    Log.i(SDOViewerConstants.LOGTAG, "No WIFI, skipping publish");
+                    scheduleNextUpdate();
+                    return;
+                }
+                break;
+            case SDOViewerConstants.PREFERENCES_MUZEINETWORKMODE_WIFI_MOBILE:
+                if (Util.isMobileConnected(this) && Util.isRoaming(this)) {
+                    Log.i(SDOViewerConstants.LOGTAG, "Roaming is active, skipping publish");
+                    scheduleNextUpdate();
+                    return;
+                }
+                break;
+        }
+
         List<SDOImageType> lTypes = new ArrayList<>(Arrays.asList(SDOImageType.AIA_193, SDOImageType.AIA_304, SDOImageType.AIA_171, SDOImageType.AIA_211, SDOImageType.AIA_131, SDOImageType.AIA_335, SDOImageType.AIA_094));
         if (getCurrentArtwork() != null && getCurrentArtwork().getToken() != null) {
             try {
@@ -62,12 +83,12 @@ public class SDOMuzeiSource extends RemoteMuzeiArtSource {
         Collections.shuffle(lTypes);
         SDOImageType type = lTypes.get(0);
 
-        String url = Util.getLatestURL(type, IMAGE_SIZE, false);
+        String url = Util.getLatestURL(type, resolution, false);
         Date lastModified = null;
         try {
             lastModified = Util.getLastModified(url);
         } catch (IOException ex) {
-            Log.e(Main.LOGTAG, "Error retrieving last modified header", ex);
+            Log.e(SDOViewerConstants.LOGTAG, "Error retrieving last modified header", ex);
             throw new RetryException();
         }
         //muzei caches images by uri, if we use the same uri (like it happens for the "latest" images, muzei never updates
@@ -75,7 +96,7 @@ public class SDOMuzeiSource extends RemoteMuzeiArtSource {
         //this way we force muzei to update but we force it only when a different image is effectively online
         Uri uri = Uri.parse(String.format("%s?Last-Modified=%s", url, sdf.format(lastModified)));
         String token = type.name();
-        Log.i(Main.LOGTAG, String.format("Publish artwork token[%s] url[%s]", token, uri.toString()));
+        Log.i(SDOViewerConstants.LOGTAG, String.format("Publish artwork token[%s] url[%s]", token, uri.toString()));
         publishArtwork(new Artwork.Builder()
                 .title(type.toString())
                 .byline(getResources().getString(R.string.muzei_byline))
@@ -85,6 +106,10 @@ public class SDOMuzeiSource extends RemoteMuzeiArtSource {
                 .build());
 
 
+        scheduleNextUpdate();
+    }
+
+    void scheduleNextUpdate() {
         scheduleUpdate(System.currentTimeMillis() + (updateInterval * 60 * 1000));
     }
 }

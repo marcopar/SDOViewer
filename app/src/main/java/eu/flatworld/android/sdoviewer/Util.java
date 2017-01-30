@@ -1,6 +1,8 @@
 package eu.flatworld.android.sdoviewer;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.provider.Settings;
 import android.util.Log;
 
@@ -41,9 +43,27 @@ public class Util {
         String android_id = Settings.Secure.getString(ctx.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
         String s = String.format("ID: %s, MSG: %s", android_id, text);
-        Log.e(Main.LOGTAG, s, ex);
+        Log.e(SDOViewerConstants.LOGTAG, s, ex);
         FirebaseCrash.log(s);
         FirebaseCrash.report(ex);
+    }
+
+    public static boolean isWifiConnected(Context context) {
+        ConnectivityManager connManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo info = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        return info.isConnected();
+    }
+
+    public static boolean isMobileConnected(Context context) {
+        ConnectivityManager connManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo info = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        return info.isConnected();
+    }
+
+    public static boolean isRoaming(Context context) {
+        ConnectivityManager connManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo info = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        return info.isRoaming();
     }
 
     public static String getLatestURL(SDOImageType si, int size, boolean pfss) {
@@ -206,7 +226,7 @@ public class Util {
         List<BrowseDataListItem> l = new ArrayList<>();
         String regex = String.format("%d%02d%02d_\\d\\d\\d\\d\\d\\d_%d_%s.jpg", year, month, day, resolution, type.getShortCode());
         Pattern p = Pattern.compile(regex);
-        Log.d(Main.LOGTAG, "Parse links");
+        Log.d(SDOViewerConstants.LOGTAG, "Parse links");
         for (String link : links) {
             String url = link.substring(link.lastIndexOf('/') + 1);
             if (p.matcher(url).matches()) {
@@ -215,13 +235,13 @@ public class Util {
                 l.add(new BrowseDataListItem(text, fullUrl));
             }
         }
-        Log.d(Main.LOGTAG, "Parse links complete");
+        Log.d(SDOViewerConstants.LOGTAG, "Parse links complete");
         return l;
     }
 
     public static ArrayList<String> loadLinks2(int year, int month, int day) throws IOException {
         String baseUrl = String.format("%s/%d/%02d/%02d/", BASE_URL_BROWSE, year, month, day);
-        Log.d(Main.LOGTAG, "Load links");
+        Log.d(SDOViewerConstants.LOGTAG, "Load links");
         Document doc = Jsoup.connect(baseUrl).maxBodySize(0).get();
         Elements elements = doc.select("a[href]");
         ArrayList<String> al = new ArrayList<>();
@@ -229,13 +249,13 @@ public class Util {
             String s = e.attr("abs:href");
             al.add(s);
         }
-        Log.d(Main.LOGTAG, "Load links completed");
+        Log.d(SDOViewerConstants.LOGTAG, "Load links completed");
         return al;
     }
 
     public static ArrayList<String> loadLinks(int year, int month, int day) throws IOException {
         String baseUrl = String.format("%s/%d/%02d/%02d/", BASE_URL_BROWSE, year, month, day);
-        Log.d(Main.LOGTAG, "Load links");
+        Log.d(SDOViewerConstants.LOGTAG, "Load links");
         ArrayList<String> al = new ArrayList<>();
         try {
             String sb = getUrl(baseUrl).body().toString();
@@ -245,9 +265,9 @@ public class Util {
                 String s = e.attr("abs:href");
                 al.add(s);
             }
-            Log.d(Main.LOGTAG, "Load links completed");
+            Log.d(SDOViewerConstants.LOGTAG, "Load links completed");
         } catch (IOException ex) {
-            Log.d(Main.LOGTAG, "Load links completed with errors", ex);
+            Log.d(SDOViewerConstants.LOGTAG, "Load links completed with errors", ex);
             throw ex;
         }
         return al;
