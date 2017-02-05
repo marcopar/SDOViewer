@@ -17,7 +17,7 @@
         android:defaultValue="2048"
         android:entries="@array/resolutions"
         android:entryValues="@array/resolutionsValues"
-        android:key="resolution"
+        android:key="muzeiResolution"
         android:summary=""
         android:title="@string/muzei_resolution_title" />
 </PreferenceScreen>

@@ -1,16 +1,16 @@
 package eu.flatworld.android.sdoviewer;
 
 import android.app.Fragment;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 
-public class AboutFragment extends Fragment implements View.OnClickListener {
+public class AboutFragment extends Fragment {
 
 
     public AboutFragment() {
@@ -36,38 +36,20 @@ public class AboutFragment extends Fragment implements View.OnClickListener {
 
         super.onCreate(savedInstanceState);
 
-        TextView tv = (TextView) view.findViewById(R.id.aboutTVName);
-        try {
-            tv.setText(getResources().getString(R.string.app_name) + " " + version + "\nwww.flatworld.eu");
-        } catch (Exception e) {
-            tv.setText(getResources().getString(R.string.app_name) + "\nwww.flatworld.eu");
-        }
-
+        TextView tv;
         tv = (TextView) view.findViewById(R.id.aboutTVName);
-        tv.setOnClickListener(this);
+        tv.setText(Html.fromHtml(getString(R.string.flatworld_website).replaceAll("###VERSION###", version).replaceAll("###APPNAME###", getString(R.string.app_name))));
+        tv.setMovementMethod(new LinkMovementMethod());
         tv = (TextView) view.findViewById(R.id.aboutTVSDO);
-        tv.setOnClickListener(this);
+        tv.setText(Html.fromHtml(getString(R.string.sdo_website)));
+        tv.setMovementMethod(new LinkMovementMethod());
 
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(R.string.about);
         ((MainActivity) getActivity()).getSupportActionBar().setSubtitle(null);
+
+        TextView aboutCredits = (TextView) view.findViewById(R.id.aboutCredits);
+        aboutCredits.setText(Html.fromHtml(getString(R.string.aboutCredits)));
+        aboutCredits.setMovementMethod(new LinkMovementMethod());
     }
 
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.aboutTVName) {
-            Uri webpage = Uri.parse("http://www.flatworld.eu");
-            Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
-            if (intent != null) {
-                startActivity(intent);
-            }
-        }
-        if (v.getId() == R.id.aboutTVSDO) {
-            Uri webpage = Uri.parse("http://sdo.gsfc.nasa.gov/");
-            Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
-            if (intent != null) {
-                startActivity(intent);
-            }
-        }
-
-    }
 }

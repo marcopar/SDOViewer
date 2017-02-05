@@ -1,11 +1,10 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <!--PreferenceCategory android:title="@string/general"-->
-        <ListPreference
-            android:defaultValue="2048"
-            android:entries="@array/resolutions"
-            android:entryValues="@array/resolutionsValues"
-            android:key="resolution"
-            android:summary=""
-            android:title="@string/preferences_resolution_title" />
-    <!--/PreferenceCategory-->
+    <PreferenceCategory android:title="@string/general" />
+    <ListPreference
+        android:defaultValue="2048"
+        android:entries="@array/resolutions"
+        android:entryValues="@array/resolutionsValues"
+        android:key="resolution"
+        android:summary=""
+        android:title="@string/preferences_resolution_title" />
 </PreferenceScreen>

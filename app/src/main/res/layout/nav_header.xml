@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:gravity="right"
         android:padding="16dp"
-        android:text="SDO Viewer"
+        android:text="@string/app_name"
         android:textColor="#FFFFFF"
         android:textSize="24dp" />
 

@@ -23,6 +23,12 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
 
+        PreferenceCategory pc = new PreferenceCategory(getActivity());
+        pc.setTitle(R.string.muzei_settings_main_app);
+        getPreferenceScreen().addPreference(pc);
+        addPreferencesFromResource(R.xml.muzei_preferences);
+
+
         for (int i = 0; i < getPreferenceScreen().getPreferenceCount(); i++) {
             initSummary(getPreferenceScreen().getPreference(i));
         }
