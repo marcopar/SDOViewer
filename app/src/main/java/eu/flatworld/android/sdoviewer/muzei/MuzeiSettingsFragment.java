@@ -1,5 +1,7 @@
 package eu.flatworld.android.sdoviewer.muzei;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
@@ -11,6 +13,7 @@ import android.preference.PreferenceScreen;
 import android.view.View;
 
 import eu.flatworld.android.sdoviewer.R;
+import eu.flatworld.android.sdoviewer.SDOViewerConstants;
 
 /**
  * Created by marcopar on 03/07/15.
@@ -34,7 +37,9 @@ public class MuzeiSettingsFragment extends PreferenceFragment implements SharedP
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ((MuzeiSettingsActivity) getActivity()).getSupportActionBar().setTitle(R.string.muzei_settings);
     }
+
 
     @Override
     public void onResume() {
@@ -87,6 +92,22 @@ public class MuzeiSettingsFragment extends PreferenceFragment implements SharedP
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        updatePrefSummary(findPreference(key));
+        Preference pref = findPreference(key);
+        if (pref.getKey().equals(SDOViewerConstants.PREFERENCES_MUZEINETWORKMODE)) {
+            ListPreference lp = (ListPreference) pref;
+            if (lp.getValue().equals(SDOViewerConstants.PREFERENCES_MUZEINETWORKMODE_WIFI_MOBILE_ROAMING)) {
+                new AlertDialog.Builder(getActivity())
+                        .setTitle("Warning")
+                        .setMessage("Downloading images when roaming may cause significant charges")
+                        .setCancelable(true)
+                        .setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        }).create().show();
+            }
+        }
+        updatePrefSummary(pref);
     }
 }

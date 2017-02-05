@@ -58,15 +58,14 @@ public class SDOMuzeiSource extends RemoteMuzeiArtSource {
             case SDOViewerConstants.PREFERENCES_MUZEINETWORKMODE_WIFI:
                 if (!Util.isWifiConnected(this)) {
                     Log.i(SDOViewerConstants.LOGTAG, "No WIFI, skipping publish");
-                    scheduleNextUpdate();
-                    return;
+                    throw new RetryException();
                 }
                 break;
             case SDOViewerConstants.PREFERENCES_MUZEINETWORKMODE_WIFI_MOBILE:
                 if (Util.isMobileConnected(this) && Util.isRoaming(this)) {
                     Log.i(SDOViewerConstants.LOGTAG, "Roaming is active, skipping publish");
                     scheduleNextUpdate();
-                    return;
+                    throw new RetryException();
                 }
                 break;
         }
