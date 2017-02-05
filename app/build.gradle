@@ -7,10 +7,10 @@ android {
 
     defaultConfig {
         applicationId "eu.flatworld.android.sdoviewer"
-        minSdkVersion 15
+        minSdkVersion 19
         targetSdkVersion 22
-        versionCode 10607
-        versionName "1.6.7"
+        versionCode 10700
+        versionName "1.7.0"
     }
 
     signingConfigs {
@@ -47,4 +47,5 @@ dependencies {
     compile 'com.google.firebase:firebase-crash:10.0.1'
     compile 'com.google.android.apps.muzei:muzei-api:+'
     compile 'com.squareup.okhttp3:okhttp:3.5.0'
+    compile 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0'
 }

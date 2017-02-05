@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -104,6 +105,7 @@ public class ImageDetailFragment extends Fragment {
         picasso = picassoBuilder.listener(new Picasso.Listener() {
             @Override
             public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
+                Log.e(SDOViewerConstants.LOGTAG, "Picasso error", exception);
                 //Util.firebaseLog(getActivity(), "Picasso error ImageDetailFragment", exception);
             }
         }).build();

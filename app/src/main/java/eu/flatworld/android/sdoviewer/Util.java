@@ -258,14 +258,14 @@ public class Util {
         Log.d(SDOViewerConstants.LOGTAG, "Load links");
         ArrayList<String> al = new ArrayList<>();
         try {
-            String sb = getUrl(baseUrl).body().toString();
+            String sb = getUrl(baseUrl).body().string();
             Document doc = Jsoup.parse(sb, baseUrl);
             Elements elements = doc.select("a[href]");
             for (Element e : elements) {
                 String s = e.attr("abs:href");
                 al.add(s);
             }
-            Log.d(SDOViewerConstants.LOGTAG, "Load links completed");
+            Log.d(SDOViewerConstants.LOGTAG, "Load links completed " + baseUrl + " " + al.size());
         } catch (IOException ex) {
             Log.d(SDOViewerConstants.LOGTAG, "Load links completed with errors", ex);
             throw ex;

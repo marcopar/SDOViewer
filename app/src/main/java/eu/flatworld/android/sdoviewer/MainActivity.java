@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.Theme_SDO);
-        
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
