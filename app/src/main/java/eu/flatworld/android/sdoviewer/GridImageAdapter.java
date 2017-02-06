@@ -1,16 +1,12 @@
 package eu.flatworld.android.sdoviewer;
 
 import android.content.Context;
-import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +17,6 @@ import java.util.List;
 public class GridImageAdapter extends BaseAdapter {
     private final List<SDOImageType> mItems;
     private final LayoutInflater mInflater;
-    Picasso picasso;
 
     private Context mContext;
 
@@ -32,21 +27,13 @@ public class GridImageAdapter extends BaseAdapter {
         for (SDOImageType i : SDOImageType.values()) {
             mItems.add(i);
         }
-        Picasso.Builder picassoBuilder = new Picasso.Builder(mContext);
-        picasso = picassoBuilder.listener(new Picasso.Listener() {
-            @Override
-            public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
-                Log.e(SDOViewerConstants.LOGTAG, "Picasso error", exception);
-                //Util.firebaseLog(mContext, "Picasso error GridImageAdapter", exception);
-            }
-        }).build();
     }
 
     public void invalidateCache() {
         for (SDOImageType i : mItems) {
-            picasso.invalidate(Util.getLatestURL(i, 512, false));
+            PicassoInstance.getPicasso(mContext).invalidate(Util.getLatestURL(i, 512, false));
             if (Util.getLatestURL(i, 512, true) != null) {
-                picasso.invalidate(Util.getLatestURL(i, 512, true));
+                PicassoInstance.getPicasso(mContext).invalidate(Util.getLatestURL(i, 512, true));
             }
         }
     }
@@ -81,7 +68,7 @@ public class GridImageAdapter extends BaseAdapter {
         picture = (ImageView) v.getTag(R.id.picture);
         name = (TextView) v.getTag(R.id.text);
 
-        picasso.load(Util.getLatestURL(mItems.get(position), 512, false)).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(picture);
+        PicassoInstance.getPicasso(mContext).load(Util.getLatestURL(mItems.get(position), 512, false)).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(picture);
         name.setText(mItems.get(position).toString());
 
         return v;

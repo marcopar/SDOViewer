@@ -15,7 +15,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -34,8 +34,6 @@ import it.sephiroth.android.library.imagezoom.ImageViewTouch;
  * A simple {@link Fragment} subclass.
  */
 public class ImageDetailFragment extends Fragment {
-
-    Picasso picasso;
     private ImageViewTouch mImageView;
     private ProgressDialog progressDialog;
     Target targetSetWallpaper = new Target() {
@@ -101,14 +99,6 @@ public class ImageDetailFragment extends Fragment {
         if (savedInstanceState != null) {
             pfssVisible = savedInstanceState.getBoolean("pfssVisible");
         }
-        Picasso.Builder picassoBuilder = new Picasso.Builder(getActivity());
-        picasso = picassoBuilder.listener(new Picasso.Listener() {
-            @Override
-            public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
-                Log.e(SDOViewerConstants.LOGTAG, "Picasso error", exception);
-                //Util.firebaseLog(getActivity(), "Picasso error ImageDetailFragment", exception);
-            }
-        }).build();
     }
 
     @Override
@@ -167,9 +157,9 @@ public class ImageDetailFragment extends Fragment {
                             progressDialog.setMessage(getString(R.string.setting_wallpaper_));
                             progressDialog.show();
                             if (pfssVisible) {
-                                picasso.load(pfssUrl).into(targetSetWallpaper);
+                                PicassoInstance.getPicasso(getActivity().getBaseContext()).load(pfssUrl).memoryPolicy(MemoryPolicy.NO_CACHE).into(targetSetWallpaper);
                             } else {
-                                picasso.load(imageUrl).into(targetSetWallpaper);
+                                PicassoInstance.getPicasso(getActivity().getBaseContext()).load(imageUrl).memoryPolicy(MemoryPolicy.NO_CACHE).into(targetSetWallpaper);
                             }
                         }
                     })
@@ -274,9 +264,9 @@ public class ImageDetailFragment extends Fragment {
             }
         }
         if (pfssVisible) {
-            picasso.load(pfssUrl).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(mImageView);
+            PicassoInstance.getPicasso(getActivity().getBaseContext()).load(pfssUrl).memoryPolicy(MemoryPolicy.NO_CACHE).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(mImageView);
         } else {
-            picasso.load(imageUrl).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(mImageView);
+            PicassoInstance.getPicasso(getActivity().getBaseContext()).load(imageUrl).memoryPolicy(MemoryPolicy.NO_CACHE).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(mImageView);
         }
     }
 
