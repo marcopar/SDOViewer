@@ -48,7 +48,7 @@ public class SDOMuzeiSource extends RemoteMuzeiArtSource {
         updateInterval = Integer.parseInt(pref.getString(SDOViewerConstants.PREFERENCES_MUZEIUPDATEINTERVAL, "60"));
         Log.i(SDOViewerConstants.LOGTAG, String.format("Update interval is set to %d", updateInterval));
         networkMode = pref.getString(SDOViewerConstants.PREFERENCES_MUZEINETWORKMODE, SDOViewerConstants.PREFERENCES_MUZEINETWORKMODE_WIFI_MOBILE);
-        resolution = Integer.parseInt(pref.getString(SDOViewerConstants.PREFERENCES_RESOLUTION, "2048"));
+        resolution = Integer.parseInt(pref.getString(SDOViewerConstants.PREFERENCES_MUZEIRESOLUTION, "2048"));
     }
 
     @Override

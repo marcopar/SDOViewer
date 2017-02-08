@@ -1,8 +1,11 @@
 package eu.flatworld.android.sdoviewer;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
 
@@ -286,6 +289,20 @@ public class Util {
         Request request = new Request.Builder().url(url).head().build();
 
         return httpClient.newCall(request).execute().headers().getDate("Last-Modified");
+    }
+
+
+    public static boolean getHttpModeEnabled(Context ctx) {
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(ctx);
+        boolean defaultHttpMode = false;
+        if (Build.VERSION.SDK_INT >= 16 && Build.VERSION.SDK_INT < 22) {
+            defaultHttpMode = true;
+        }
+        if (pref.getBoolean(SDOViewerConstants.PREFERENCES_FIRSTRUN, false)) {
+            pref.edit().putBoolean(SDOViewerConstants.PREFERENCES_HTTPCOMPATIBILITYMODE, defaultHttpMode)
+                    .putBoolean(SDOViewerConstants.PREFERENCES_FIRSTRUN, false).commit();
+        }
+        return pref.getBoolean(SDOViewerConstants.PREFERENCES_HTTPCOMPATIBILITYMODE, defaultHttpMode);
     }
 
 }

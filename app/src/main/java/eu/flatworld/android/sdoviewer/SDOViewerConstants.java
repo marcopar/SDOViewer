@@ -6,6 +6,8 @@ package eu.flatworld.android.sdoviewer;
 public interface SDOViewerConstants {
     String LOGTAG = "SDOVIEWER";
     String PREFERENCES_RESOLUTION = "resolution";
+    String PREFERENCES_HTTPCOMPATIBILITYMODE = "httpCompatibilityMode";
+    String PREFERENCES_FIRSTRUN = "firstRun";
     String PREFERENCES_MUZEIUPDATEINTERVAL = "muzeiUpdateInterval";
     String PREFERENCES_MUZEINETWORKMODE = "muzeiNetworkMode";
     String PREFERENCES_MUZEINETWORKMODE_WIFI = "WIFI";

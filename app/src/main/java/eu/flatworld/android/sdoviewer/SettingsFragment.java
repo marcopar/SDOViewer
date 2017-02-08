@@ -22,6 +22,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
+        getPreferenceScreen().removePreference(getPreferenceScreen().findPreference(SDOViewerConstants.PREFERENCES_FIRSTRUN));
 
         PreferenceCategory pc = new PreferenceCategory(getActivity());
         pc.setTitle(R.string.muzei_settings_main_app);
@@ -93,5 +94,8 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         updatePrefSummary(findPreference(key));
+        if (key.equals(SDOViewerConstants.PREFERENCES_HTTPCOMPATIBILITYMODE)) {
+            PicassoInstance.reset();
+        }
     }
 }

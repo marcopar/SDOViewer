@@ -7,4 +7,15 @@
         android:key="resolution"
         android:summary=""
         android:title="@string/preferences_resolution_title" />
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="httpCompatibilityMode"
+        android:summary="Change this option if images do not load correctly"
+        android:title="HTTPS compatibility mode" />
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="firstRun"
+        android:summary="Tracks first run"
+        android:title="Tracks first run" />
+
 </PreferenceScreen>
