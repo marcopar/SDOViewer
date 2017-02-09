@@ -292,13 +292,13 @@ public class Util {
     }
 
 
-    public static boolean getHttpModeEnabled(Context ctx) {
+    public static synchronized boolean getHttpModeEnabled(Context ctx) {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(ctx);
         boolean defaultHttpMode = false;
         if (Build.VERSION.SDK_INT >= 16 && Build.VERSION.SDK_INT < 22) {
             defaultHttpMode = true;
         }
-        if (pref.getBoolean(SDOViewerConstants.PREFERENCES_FIRSTRUN, false)) {
+        if (pref.getBoolean(SDOViewerConstants.PREFERENCES_FIRSTRUN, true)) {
             pref.edit().putBoolean(SDOViewerConstants.PREFERENCES_HTTPCOMPATIBILITYMODE, defaultHttpMode)
                     .putBoolean(SDOViewerConstants.PREFERENCES_FIRSTRUN, false).commit();
         }
