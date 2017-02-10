@@ -22,6 +22,7 @@ import eu.flatworld.android.sdoviewer.R;
 import eu.flatworld.android.sdoviewer.SDOImageType;
 import eu.flatworld.android.sdoviewer.SDOViewerConstants;
 import eu.flatworld.android.sdoviewer.Util;
+import okhttp3.OkHttpClient;
 
 /**
  * Created by marcopar on 26/01/17.
@@ -33,6 +34,8 @@ public class SDOMuzeiSource extends RemoteMuzeiArtSource {
     int updateInterval = 3600000;
     int resolution = 2048;
 
+    OkHttpClient httpClient;
+
     String networkMode = SDOViewerConstants.PREFERENCES_MUZEINETWORKMODE_WIFI_MOBILE;
 
     public SDOMuzeiSource() {
@@ -42,6 +45,9 @@ public class SDOMuzeiSource extends RemoteMuzeiArtSource {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        httpClient = Util.getNewHttpClient(this);
+
         setUserCommands(BUILTIN_COMMAND_ID_NEXT_ARTWORK);
 
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -85,7 +91,7 @@ public class SDOMuzeiSource extends RemoteMuzeiArtSource {
         String url = Util.getLatestURL(type, resolution, false);
         Date lastModified = null;
         try {
-            lastModified = Util.getLastModified(url);
+            lastModified = Util.getLastModified(httpClient, url);
         } catch (IOException ex) {
             Log.e(SDOViewerConstants.LOGTAG, "Error retrieving last modified header", ex);
             throw new RetryException();

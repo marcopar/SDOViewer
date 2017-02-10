@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 
+import okhttp3.OkHttpClient;
+
 /**
  * Created by marcopar on 31/05/15.
  */
@@ -28,7 +30,7 @@ public class BrowseDataFragment extends ListFragment {
     ArrayList<String> links = null;
 
     DownloadImageListTask task = null;
-
+    OkHttpClient httpClient;
     private int resolution;
 
     public BrowseDataFragment() {
@@ -59,6 +61,7 @@ public class BrowseDataFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        httpClient = Util.getNewHttpClient(getActivity());
         if (savedInstanceState != null) {
             day = savedInstanceState.getInt("day", -1);
             month = savedInstanceState.getInt("month", -1);
@@ -130,7 +133,7 @@ public class BrowseDataFragment extends ListFragment {
         } else if (day != -1) {
             Log.d(SDOViewerConstants.LOGTAG, "Load image types");
             if (links == null) {
-                links = Util.loadLinks(year, month, day);
+                links = Util.loadLinks(httpClient, year, month, day);
             }
             return new BrowseDataListAdapter(getActivity(), Util.loadImageTypes());
         } else if (month != -1) {
