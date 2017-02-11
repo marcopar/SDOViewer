@@ -61,7 +61,7 @@ public class BrowseDataFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        httpClient = Util.getNewHttpClient(getActivity());
+        httpClient = OkHttpClientFactory.getNewHttpsSafeOkHttpClient(Util.getHttpModeEnabled(getActivity()));
         if (savedInstanceState != null) {
             day = savedInstanceState.getInt("day", -1);
             month = savedInstanceState.getInt("month", -1);

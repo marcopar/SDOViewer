@@ -15,6 +15,7 @@ public class PicassoInstance {
     private static Picasso picasso = null;
 
     public static synchronized Picasso getPicasso(Context ctx) {
+        boolean httpCompat = Util.getHttpModeEnabled(ctx);
         if (picasso == null) {
             Picasso.Builder picassoBuilder = new Picasso.Builder(ctx);
             picasso = picassoBuilder.listener(new Picasso.Listener() {
@@ -23,14 +24,16 @@ public class PicassoInstance {
                     Log.e(SDOViewerConstants.LOGTAG, "Picasso error", exception);
                     //Util.firebaseLog(getActivity(), "Picasso error", exception);
                 }
-            }).downloader(new OkHttp3Downloader(Util.getNewHttpClient(ctx))).build();
+            }).downloader(new OkHttp3Downloader(OkHttpClientFactory.getNewHttpsSafeOkHttpClient(httpCompat))).build();
         }
         return picasso;
     }
 
     public static void reset() {
-        picasso.shutdown();
-        picasso = null;
+        if (picasso != null) {
+            picasso.shutdown();
+            picasso = null;
+        }
     }
 
 

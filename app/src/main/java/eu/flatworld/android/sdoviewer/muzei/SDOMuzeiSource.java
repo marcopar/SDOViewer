@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import eu.flatworld.android.sdoviewer.OkHttpClientFactory;
 import eu.flatworld.android.sdoviewer.R;
 import eu.flatworld.android.sdoviewer.SDOImageType;
 import eu.flatworld.android.sdoviewer.SDOViewerConstants;
@@ -46,7 +47,7 @@ public class SDOMuzeiSource extends RemoteMuzeiArtSource {
     public void onCreate() {
         super.onCreate();
 
-        httpClient = Util.getNewHttpClient(this);
+        httpClient = OkHttpClientFactory.getNewHttpsSafeOkHttpClient(Util.getHttpModeEnabled(this));
 
         setUserCommands(BUILTIN_COMMAND_ID_NEXT_ARTWORK);
 
