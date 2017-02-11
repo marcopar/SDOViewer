@@ -24,7 +24,7 @@ public class PicassoInstance {
                     Log.e(SDOViewerConstants.LOGTAG, "Picasso error", exception);
                     //Util.firebaseLog(getActivity(), "Picasso error", exception);
                 }
-            }).downloader(new OkHttp3Downloader(OkHttpClientFactory.getNewHttpsSafeOkHttpClient(httpCompat))).build();
+            }).downloader(new OkHttp3Downloader(OkHttpClientFactory.getNewOkHttpClient(httpCompat))).build();
         }
         return picasso;
     }

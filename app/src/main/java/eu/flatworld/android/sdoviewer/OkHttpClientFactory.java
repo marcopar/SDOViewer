@@ -32,7 +32,7 @@ public class OkHttpClientFactory {
     /**
      * Creates an OkHttpClient optionally enabling TLS
      */
-    public static OkHttpClient getNewHttpsSafeOkHttpClient(boolean enableTLS) {
+    public static OkHttpClient getNewOkHttpClient(boolean enableTLS) {
         OkHttpClient.Builder client = new OkHttpClient.Builder()
                 .followRedirects(true)
                 .followSslRedirects(true)
@@ -51,15 +51,7 @@ public class OkHttpClientFactory {
      * Creates a new OkHttpClient
      */
     public static OkHttpClient getNewOkHttpClient() {
-        OkHttpClient.Builder client = new OkHttpClient.Builder()
-                .followRedirects(true)
-                .followSslRedirects(true)
-                .retryOnConnectionFailure(true)
-                .cache(null)
-                .connectTimeout(10, TimeUnit.SECONDS)
-                .writeTimeout(120, TimeUnit.SECONDS)
-                .readTimeout(120, TimeUnit.SECONDS);
-        return client.build();
+        return getNewOkHttpClient(false);
     }
 
     /**
