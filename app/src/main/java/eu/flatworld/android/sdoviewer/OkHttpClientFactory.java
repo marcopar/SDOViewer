@@ -25,11 +25,14 @@ import okhttp3.OkHttpClient;
 import okhttp3.TlsVersion;
 
 /**
- * Created by marcopar on 11/02/17.
+ * Factory for OkHttpClient, supports the creation of clients enabling TLS on devices where it's not enabled by default (mainly pre lollipop)
  */
 
 public class OkHttpClientFactory {
-    public static OkHttpClient getNewHttpsSafeOkHttpClient(boolean enableHttpCompat) {
+    /**
+     * Creates an OkHttpClient optionally enabling TLS
+     */
+    public static OkHttpClient getNewHttpsSafeOkHttpClient(boolean enableTLS) {
         OkHttpClient.Builder client = new OkHttpClient.Builder()
                 .followRedirects(true)
                 .followSslRedirects(true)
@@ -38,12 +41,15 @@ public class OkHttpClientFactory {
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .writeTimeout(120, TimeUnit.SECONDS)
                 .readTimeout(120, TimeUnit.SECONDS);
-        if (enableHttpCompat) {
+        if (enableTLS) {
             client = enableTls12(client);
         }
         return client.build();
     }
 
+    /**
+     * Creates a new OkHttpClient
+     */
     public static OkHttpClient getNewOkHttpClient() {
         OkHttpClient.Builder client = new OkHttpClient.Builder()
                 .followRedirects(true)
@@ -56,7 +62,10 @@ public class OkHttpClientFactory {
         return client.build();
     }
 
-    public static boolean isHttpCompatModeNeeded() {
+    /**
+     * True if enabling TLS is needed on current device
+     */
+    public static boolean isTLSEnableNeeded() {
         if (Build.VERSION.SDK_INT >= 16 && Build.VERSION.SDK_INT < 22) {
             return true;
         }
@@ -64,6 +73,9 @@ public class OkHttpClientFactory {
     }
 
 
+    /**
+     * Enable TLS on the OKHttp builder by setting a custom SocketFactory
+     */
     private static OkHttpClient.Builder enableTls12(OkHttpClient.Builder client) {
         Log.i(SDOViewerConstants.LOGTAG, "Enabling HTTPS compatibility mode");
         try {
@@ -99,7 +111,7 @@ public class OkHttpClientFactory {
     }
 
     /**
-     * Socket factory enabling TLS on devices where it's not enabled by default
+     * Socket factory enabling TLS
      */
     private static class Tls12SocketFactory extends SSLSocketFactory {
         private static final String[] TLS = {"TLSv1.2"};
