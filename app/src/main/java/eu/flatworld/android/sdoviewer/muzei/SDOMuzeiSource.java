@@ -47,7 +47,7 @@ public class SDOMuzeiSource extends RemoteMuzeiArtSource {
     public void onCreate() {
         super.onCreate();
 
-        httpClient = OkHttpClientFactory.getNewOkHttpClient(Util.getHttpModeEnabled(this));
+        httpClient = OkHttpClientFactory.getNewOkHttpsSafeClient();
 
         setUserCommands(BUILTIN_COMMAND_ID_NEXT_ARTWORK);
 

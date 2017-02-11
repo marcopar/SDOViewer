@@ -55,6 +55,13 @@ public class OkHttpClientFactory {
     }
 
     /**
+     * Creates a new OkHttpClient detecting if TLS needs to be enabled
+     */
+    public static OkHttpClient getNewOkHttpsSafeClient() {
+        return getNewOkHttpClient(isTLSEnableNeeded());
+    }
+
+    /**
      * True if enabling TLS is needed on current device
      */
     public static boolean isTLSEnableNeeded() {
