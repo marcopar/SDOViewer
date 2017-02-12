@@ -1,5 +1,5 @@
 # The Sun Now - SDOViewer
-Access the images published by NASA Solar Dynamics Observatory (SDO)
+Browse images published by the NASA Solar Dynamics Observatory (SDO)
 
 Current features:
 - View the latest published images (JPG updated every 15 minutes)
