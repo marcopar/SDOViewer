@@ -37,7 +37,6 @@ public class AboutFragment extends Fragment {
             ex.printStackTrace();
         }
 
-        super.onCreate(savedInstanceState);
 
         TextView tv;
         tv = (TextView) view.findViewById(R.id.aboutTVName);
