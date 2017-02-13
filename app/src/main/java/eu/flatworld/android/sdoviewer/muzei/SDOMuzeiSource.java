@@ -18,11 +18,11 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import eu.flatworld.android.sdoviewer.OkHttpClientFactory;
 import eu.flatworld.android.sdoviewer.R;
 import eu.flatworld.android.sdoviewer.SDOImageType;
 import eu.flatworld.android.sdoviewer.SDOViewerConstants;
 import eu.flatworld.android.sdoviewer.Util;
+import eu.flatworld.android.sdoviewer.io.OkHttpClientFactory;
 import okhttp3.OkHttpClient;
 
 /**
@@ -89,7 +89,7 @@ public class SDOMuzeiSource extends RemoteMuzeiArtSource {
         Collections.shuffle(lTypes);
         SDOImageType type = lTypes.get(0);
 
-        String url = Util.getLatestURL(type, resolution, false);
+        String url = SDOImageType.getLatestURL(type, resolution, false);
         Date lastModified = null;
         try {
             lastModified = Util.getLastModified(httpClient, url);

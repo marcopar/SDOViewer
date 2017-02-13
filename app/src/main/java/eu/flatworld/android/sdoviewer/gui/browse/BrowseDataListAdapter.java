@@ -1,4 +1,4 @@
-package eu.flatworld.android.sdoviewer;
+package eu.flatworld.android.sdoviewer.gui.browse;
 
 import android.content.Context;
 import android.widget.ArrayAdapter;

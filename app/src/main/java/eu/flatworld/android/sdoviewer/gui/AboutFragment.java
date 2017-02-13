@@ -1,4 +1,4 @@
-package eu.flatworld.android.sdoviewer;
+package eu.flatworld.android.sdoviewer.gui;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -8,6 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import eu.flatworld.android.sdoviewer.MainActivity;
+import eu.flatworld.android.sdoviewer.R;
 
 
 public class AboutFragment extends Fragment {

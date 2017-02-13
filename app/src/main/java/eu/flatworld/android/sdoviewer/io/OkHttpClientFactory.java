@@ -1,4 +1,4 @@
-package eu.flatworld.android.sdoviewer;
+package eu.flatworld.android.sdoviewer.io;
 
 import android.os.Build;
 import android.util.Log;
@@ -13,6 +13,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
+import eu.flatworld.android.sdoviewer.SDOViewerConstants;
 import okhttp3.ConnectionSpec;
 import okhttp3.OkHttpClient;
 import okhttp3.TlsVersion;
@@ -58,7 +59,7 @@ public class OkHttpClientFactory {
      * True if enabling TLS is needed on current device (SDK version >= 16 and < 22)
      */
     public static boolean isTLSEnableNeeded() {
-        if (Build.VERSION.SDK_INT >= 16 && Build.VERSION.SDK_INT < 22) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
             return true;
         }
         return false;

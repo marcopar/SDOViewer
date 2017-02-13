@@ -4,22 +4,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <eu.flatworld.android.sdoviewer.SquareImageView
+    <eu.flatworld.android.sdoviewer.gui.thesunnow.SquareImageView
         android:id="@+id/picture"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"/>
+        android:scaleType="centerCrop" />
 
     <TextView
         android:id="@+id/text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="#55000000"
+        android:paddingBottom="5dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:layout_gravity="bottom"
-        android:textColor="@android:color/white"
-        android:background="#55000000"/>
+        android:textColor="@android:color/white" />
 
 </FrameLayout>

@@ -1,4 +1,4 @@
-package eu.flatworld.android.sdoviewer;
+package eu.flatworld.android.sdoviewer.gui.browse;
 
 import android.app.ListFragment;
 import android.content.SharedPreferences;
@@ -17,6 +17,13 @@ import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 
+import eu.flatworld.android.sdoviewer.MainActivity;
+import eu.flatworld.android.sdoviewer.R;
+import eu.flatworld.android.sdoviewer.SDOImageType;
+import eu.flatworld.android.sdoviewer.SDOViewerConstants;
+import eu.flatworld.android.sdoviewer.Util;
+import eu.flatworld.android.sdoviewer.gui.ImageDetailFragment;
+import eu.flatworld.android.sdoviewer.io.OkHttpClientFactory;
 import okhttp3.OkHttpClient;
 
 /**
@@ -156,7 +163,7 @@ public class BrowseDataFragment extends ListFragment {
             Bundle bundle = new Bundle();
             bundle.putSerializable("imageType", type);
             bundle.putString("imageUrl", bdli.getUrl());
-            bundle.putString("description", Util.getDescription(type));
+            bundle.putString("description", SDOImageType.getDescription(type));
             ImageDetailFragment f = new ImageDetailFragment();
             f.setArguments(bundle);
             getFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack(null).commit();

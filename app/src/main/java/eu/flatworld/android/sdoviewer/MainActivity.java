@@ -10,6 +10,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import eu.flatworld.android.sdoviewer.gui.AboutFragment;
+import eu.flatworld.android.sdoviewer.gui.SettingsFragment;
+import eu.flatworld.android.sdoviewer.gui.browse.BrowseDataFragment;
+import eu.flatworld.android.sdoviewer.gui.thesunnow.TheSunNowFragment;
+
 
 public class MainActivity extends AppCompatActivity {
     DrawerLayout mDrawerLayout;

@@ -1,4 +1,4 @@
-package eu.flatworld.android.sdoviewer;
+package eu.flatworld.android.sdoviewer.gui.thesunnow;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,6 +10,10 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import eu.flatworld.android.sdoviewer.R;
+import eu.flatworld.android.sdoviewer.SDOImageType;
+import eu.flatworld.android.sdoviewer.io.PicassoInstance;
 
 /**
  * Created by marcopar on 20/02/15.
@@ -31,9 +35,9 @@ public class GridImageAdapter extends BaseAdapter {
 
     public void invalidateCache() {
         for (SDOImageType i : mItems) {
-            PicassoInstance.getPicasso(mContext).invalidate(Util.getLatestURL(i, 512, false));
-            if (Util.getLatestURL(i, 512, true) != null) {
-                PicassoInstance.getPicasso(mContext).invalidate(Util.getLatestURL(i, 512, true));
+            PicassoInstance.getPicasso(mContext).invalidate(SDOImageType.getLatestURL(i, 512, false));
+            if (SDOImageType.getLatestURL(i, 512, true) != null) {
+                PicassoInstance.getPicasso(mContext).invalidate(SDOImageType.getLatestURL(i, 512, true));
             }
         }
     }
@@ -68,7 +72,7 @@ public class GridImageAdapter extends BaseAdapter {
         picture = (ImageView) v.getTag(R.id.picture);
         name = (TextView) v.getTag(R.id.text);
 
-        PicassoInstance.getPicasso(mContext).load(Util.getLatestURL(mItems.get(position), 512, false)).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(picture);
+        PicassoInstance.getPicasso(mContext).load(SDOImageType.getLatestURL(mItems.get(position), 512, false)).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(picture);
         name.setText(mItems.get(position).toString());
 
         return v;

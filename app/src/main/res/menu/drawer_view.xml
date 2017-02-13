@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group android:id="@+id/group1">
+    <group android:id="@+id/group1TheSunNow">
         <item
             android:id="@+id/nav_the_sun_now"
             android:title="@string/the_sun_now" />
@@ -8,12 +8,12 @@
             android:id="@+id/nav_browse_data"
             android:title="@string/browse_data" />
     </group>
-    <group android:id="@+id/group2">
+    <group android:id="@+id/groupSettings">
         <item
             android:id="@+id/action_settings"
             android:title="@string/settings" />
     </group>
-    <group android:id="@+id/group3">
+    <group android:id="@+id/groupAbout">
         <item
             android:id="@+id/action_about"
             android:title="@string/about" />

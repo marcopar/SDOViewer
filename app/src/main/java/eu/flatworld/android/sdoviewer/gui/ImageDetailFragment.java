@@ -1,4 +1,4 @@
-package eu.flatworld.android.sdoviewer;
+package eu.flatworld.android.sdoviewer.gui;
 
 
 import android.app.AlertDialog;
@@ -27,6 +27,11 @@ import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import eu.flatworld.android.sdoviewer.MainActivity;
+import eu.flatworld.android.sdoviewer.R;
+import eu.flatworld.android.sdoviewer.SDOImageType;
+import eu.flatworld.android.sdoviewer.SDOViewerConstants;
+import eu.flatworld.android.sdoviewer.io.PicassoInstance;
 import it.sephiroth.android.library.imagezoom.ImageViewTouch;
 
 

@@ -1,4 +1,4 @@
-package eu.flatworld.android.sdoviewer;
+package eu.flatworld.android.sdoviewer.io;
 
 import android.content.Context;
 import android.net.Uri;
@@ -6,6 +6,9 @@ import android.util.Log;
 
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
+
+import eu.flatworld.android.sdoviewer.SDOViewerConstants;
+import eu.flatworld.android.sdoviewer.Util;
 
 /**
  * Created by marcopar on 06/02/17.

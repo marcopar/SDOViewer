@@ -1,4 +1,4 @@
-package eu.flatworld.android.sdoviewer;
+package eu.flatworld.android.sdoviewer.gui;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,6 +9,11 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 import android.view.View;
+
+import eu.flatworld.android.sdoviewer.MainActivity;
+import eu.flatworld.android.sdoviewer.R;
+import eu.flatworld.android.sdoviewer.SDOViewerConstants;
+import eu.flatworld.android.sdoviewer.io.PicassoInstance;
 
 /**
  * Created by marcopar on 03/07/15.

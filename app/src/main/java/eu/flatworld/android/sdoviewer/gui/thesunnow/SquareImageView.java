@@ -1,4 +1,4 @@
-package eu.flatworld.android.sdoviewer;
+package eu.flatworld.android.sdoviewer.gui.thesunnow;
 
 import android.content.Context;
 import android.util.AttributeSet;
