@@ -12,6 +12,7 @@ import android.view.MenuItem;
 
 import eu.flatworld.android.sdoviewer.gui.AboutFragment;
 import eu.flatworld.android.sdoviewer.gui.SettingsFragment;
+import eu.flatworld.android.sdoviewer.gui.SolarWindFragment;
 import eu.flatworld.android.sdoviewer.gui.browse.BrowseDataFragment;
 import eu.flatworld.android.sdoviewer.gui.thesunnow.TheSunNowFragment;
 
@@ -63,6 +64,10 @@ public class MainActivity extends AppCompatActivity {
                             if (menuItem.getItemId() == R.id.nav_browse_data) {
                                 BrowseDataFragment bdfy = new BrowseDataFragment();
                                 getFragmentManager().beginTransaction().replace(R.id.content_frame, bdfy).addToBackStack("year").commit();
+                            }
+                            if (menuItem.getItemId() == R.id.nav_weather) {
+                                SolarWindFragment bdfy = new SolarWindFragment();
+                                getFragmentManager().beginTransaction().replace(R.id.content_frame, bdfy).addToBackStack("solarwind").commit();
                             }
                             if (menuItem.getItemId() == R.id.action_settings) {
                                 SettingsFragment f = new SettingsFragment();

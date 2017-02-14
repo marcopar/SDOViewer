@@ -77,5 +77,9 @@
     <string name="muzei_resolution_title">Image resolution</string>
     <string name="muzei_settings">The Sun Now Settings</string>
     <string name="muzei_settings_main_app">Muzei Settings</string>
+    <string name="speed_">Speed:</string>
+    <string name="magnetic_fields_">Magnetic Fields:</string>
+    <string name="radio_flux_">Radio Flux:</string>
+    <string name="solar_wind">Solar Wind</string>
 
 </resources>
