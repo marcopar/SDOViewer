@@ -12,14 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.flatworld.android.sdoviewer.R;
-import eu.flatworld.android.sdoviewer.SDOImageType;
+import eu.flatworld.android.sdoviewer.SDO;
 import eu.flatworld.android.sdoviewer.io.PicassoInstance;
 
 /**
  * Created by marcopar on 20/02/15.
  */
 public class GridImageAdapter extends BaseAdapter {
-    private final List<SDOImageType> mItems;
+    private final List<SDO> mItems;
     private final LayoutInflater mInflater;
 
     private Context mContext;
@@ -27,17 +27,17 @@ public class GridImageAdapter extends BaseAdapter {
     public GridImageAdapter(Context c) {
         mInflater = LayoutInflater.from(c);
         mContext = c;
-        mItems = new ArrayList<SDOImageType>();
-        for (SDOImageType i : SDOImageType.values()) {
+        mItems = new ArrayList<SDO>();
+        for (SDO i : SDO.values()) {
             mItems.add(i);
         }
     }
 
     public void invalidateCache() {
-        for (SDOImageType i : mItems) {
-            PicassoInstance.getPicasso(mContext).invalidate(SDOImageType.getLatestURL(i, 512, false));
-            if (SDOImageType.getLatestURL(i, 512, true) != null) {
-                PicassoInstance.getPicasso(mContext).invalidate(SDOImageType.getLatestURL(i, 512, true));
+        for (SDO i : mItems) {
+            PicassoInstance.getPicasso(mContext).invalidate(SDO.getLatestURL(i, 512, false));
+            if (SDO.getLatestURL(i, 512, true) != null) {
+                PicassoInstance.getPicasso(mContext).invalidate(SDO.getLatestURL(i, 512, true));
             }
         }
     }
@@ -48,7 +48,7 @@ public class GridImageAdapter extends BaseAdapter {
     }
 
     @Override
-    public SDOImageType getItem(int position) {
+    public SDO getItem(int position) {
         return mItems.get(position);
     }
 
@@ -72,7 +72,7 @@ public class GridImageAdapter extends BaseAdapter {
         picture = (ImageView) v.getTag(R.id.picture);
         name = (TextView) v.getTag(R.id.text);
 
-        PicassoInstance.getPicasso(mContext).load(SDOImageType.getLatestURL(mItems.get(position), 512, false)).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(picture);
+        PicassoInstance.getPicasso(mContext).load(SDO.getLatestURL(mItems.get(position), 512, false)).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(picture);
         name.setText(mItems.get(position).toString());
 
         return v;

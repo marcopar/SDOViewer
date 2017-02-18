@@ -33,15 +33,12 @@ import okhttp3.Response;
  * Created by marcopar on 22/02/15.
  */
 public class Util {
-    public static final String SDO_URL = "https://sdo.gsfc.nasa.gov/";
-    public static final String BASE_URL_LATEST = SDO_URL + "assets/img/latest/";
-    public static final String BASE_URL_BROWSE = SDO_URL + "assets/img/browse/";
 
     public static void firebaseLog(Context ctx, String text, Throwable ex) {
         String android_id = Settings.Secure.getString(ctx.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
         String s = String.format("ID: %s, MSG: %s", android_id, text);
-        Log.e(SDOViewerConstants.LOGTAG, s, ex);
+        Log.e(GlobalConstants.LOGTAG, s, ex);
         FirebaseCrash.log(s);
         FirebaseCrash.report(ex);
     }
@@ -107,32 +104,32 @@ public class Util {
 
     public static List<BrowseDataListItem> loadImageTypes() {
         List<BrowseDataListItem> l = new ArrayList<>();
-        for (SDOImageType t : SDOImageType.values()) {
+        for (SDO t : SDO.values()) {
             l.add(new BrowseDataListItem(String.format("%s (%s)", t.toString(), t.getShortCode()), t.name()));
         }
         return l;
     }
 
-    public static List<BrowseDataListItem> loadImages(int year, int month, int day, ArrayList<String> links, SDOImageType type, int resolution) throws IOException {
+    public static List<BrowseDataListItem> loadImages(int year, int month, int day, ArrayList<String> links, SDO type, int resolution) throws IOException {
         List<BrowseDataListItem> l = new ArrayList<>();
         String regex = String.format("%d%02d%02d_\\d\\d\\d\\d\\d\\d_%d_%s.jpg", year, month, day, resolution, type.getShortCode());
         Pattern p = Pattern.compile(regex);
-        Log.d(SDOViewerConstants.LOGTAG, "Parse links");
+        Log.d(GlobalConstants.LOGTAG, "Parse links");
         for (String link : links) {
             String url = link.substring(link.lastIndexOf('/') + 1);
             if (p.matcher(url).matches()) {
                 String text = String.format("%s:%s:%s", url.substring(9, 11), url.substring(11, 13), url.substring(13, 15));
-                String fullUrl = String.format("%s/%d/%02d/%02d/%s", BASE_URL_BROWSE, year, month, day, url);
+                String fullUrl = String.format("%s/%d/%02d/%02d/%s", SDO.URL_BROWSE, year, month, day, url);
                 l.add(new BrowseDataListItem(text, fullUrl));
             }
         }
-        Log.d(SDOViewerConstants.LOGTAG, "Parse links complete");
+        Log.d(GlobalConstants.LOGTAG, "Parse links complete");
         return l;
     }
 
     public static ArrayList<String> loadLinks(OkHttpClient httpClient, int year, int month, int day) throws IOException {
-        String baseUrl = String.format("%s/%d/%02d/%02d/", BASE_URL_BROWSE, year, month, day);
-        Log.d(SDOViewerConstants.LOGTAG, "Load links");
+        String baseUrl = String.format("%s/%d/%02d/%02d/", SDO.URL_BROWSE, year, month, day);
+        Log.d(GlobalConstants.LOGTAG, "Load links");
         ArrayList<String> al = new ArrayList<>();
         try {
             String sb = getUrl(httpClient, baseUrl).body().string();
@@ -142,9 +139,9 @@ public class Util {
                 String s = e.attr("abs:href");
                 al.add(s);
             }
-            Log.d(SDOViewerConstants.LOGTAG, "Load links completed " + baseUrl + " " + al.size());
+            Log.d(GlobalConstants.LOGTAG, "Load links completed " + baseUrl + " " + al.size());
         } catch (IOException ex) {
-            Log.d(SDOViewerConstants.LOGTAG, "Load links completed with errors", ex);
+            Log.d(GlobalConstants.LOGTAG, "Load links completed with errors", ex);
             throw ex;
         }
         return al;
@@ -166,17 +163,17 @@ public class Util {
     }
 
 
-    public static synchronized boolean getHttpModeEnabled(Context ctx) {
+    public static synchronized boolean getHttpsSafeModeEnabled(Context ctx) {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(ctx);
         boolean defaultHttpMode = false;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
             defaultHttpMode = true;
         }
-        if (pref.getBoolean(SDOViewerConstants.PREFERENCES_FIRSTRUN, true)) {
-            pref.edit().putBoolean(SDOViewerConstants.PREFERENCES_HTTPCOMPATIBILITYMODE, defaultHttpMode)
-                    .putBoolean(SDOViewerConstants.PREFERENCES_FIRSTRUN, false).commit();
+        if (pref.getBoolean(GlobalConstants.PREFERENCES_FIRSTRUN, true)) {
+            pref.edit().putBoolean(GlobalConstants.PREFERENCES_HTTPCOMPATIBILITYMODE, defaultHttpMode)
+                    .putBoolean(GlobalConstants.PREFERENCES_FIRSTRUN, false).commit();
         }
-        return pref.getBoolean(SDOViewerConstants.PREFERENCES_HTTPCOMPATIBILITYMODE, defaultHttpMode);
+        return pref.getBoolean(GlobalConstants.PREFERENCES_HTTPCOMPATIBILITYMODE, defaultHttpMode);
     }
 
 }

@@ -17,10 +17,10 @@ import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 
+import eu.flatworld.android.sdoviewer.GlobalConstants;
 import eu.flatworld.android.sdoviewer.MainActivity;
 import eu.flatworld.android.sdoviewer.R;
-import eu.flatworld.android.sdoviewer.SDOImageType;
-import eu.flatworld.android.sdoviewer.SDOViewerConstants;
+import eu.flatworld.android.sdoviewer.SDO;
 import eu.flatworld.android.sdoviewer.Util;
 import eu.flatworld.android.sdoviewer.gui.ImageDetailFragment;
 import eu.flatworld.android.sdoviewer.io.OkHttpClientFactory;
@@ -33,7 +33,7 @@ public class BrowseDataFragment extends ListFragment {
     int year = -1;
     int month = -1;
     int day = -1;
-    SDOImageType type = null;
+    SDO type = null;
     ArrayList<String> links = null;
 
     DownloadImageListTask task = null;
@@ -61,19 +61,19 @@ public class BrowseDataFragment extends ListFragment {
         this.day = day;
     }
 
-    public void setType(SDOImageType type) {
+    public void setType(SDO type) {
         this.type = type;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        httpClient = OkHttpClientFactory.getNewOkHttpClient(Util.getHttpModeEnabled(getActivity()));
+        httpClient = OkHttpClientFactory.getNewOkHttpClient(Util.getHttpsSafeModeEnabled(getActivity()));
         if (savedInstanceState != null) {
             day = savedInstanceState.getInt("day", -1);
             month = savedInstanceState.getInt("month", -1);
             year = savedInstanceState.getInt("year", -1);
-            type = (SDOImageType) savedInstanceState.getSerializable("type");
+            type = (SDO) savedInstanceState.getSerializable("type");
             links = (ArrayList<String>) savedInstanceState.getSerializable("links");
         }
     }
@@ -107,7 +107,7 @@ public class BrowseDataFragment extends ListFragment {
             bar.setSubtitle(R.string.loading_years);
         }
 
-        Log.d(SDOViewerConstants.LOGTAG, "Start AsyncTask");
+        Log.d(GlobalConstants.LOGTAG, "Start AsyncTask");
         task = new DownloadImageListTask();
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
@@ -116,7 +116,7 @@ public class BrowseDataFragment extends ListFragment {
     public void onPause() {
         super.onPause();
         if (task != null && !task.isCancelled()) {
-            Log.d(SDOViewerConstants.LOGTAG, "Cancel AsyncTask");
+            Log.d(GlobalConstants.LOGTAG, "Cancel AsyncTask");
             task.cancel(true);
         }
     }
@@ -135,22 +135,22 @@ public class BrowseDataFragment extends ListFragment {
 
     BrowseDataListAdapter createAdapter() throws IOException {
         if (type != null) {
-            Log.d(SDOViewerConstants.LOGTAG, "Load images");
+            Log.d(GlobalConstants.LOGTAG, "Load images");
             return new BrowseDataListAdapter(getActivity(), Util.loadImages(year, month, day, links, type, resolution));
         } else if (day != -1) {
-            Log.d(SDOViewerConstants.LOGTAG, "Load image types");
+            Log.d(GlobalConstants.LOGTAG, "Load image types");
             if (links == null) {
                 links = Util.loadLinks(httpClient, year, month, day);
             }
             return new BrowseDataListAdapter(getActivity(), Util.loadImageTypes());
         } else if (month != -1) {
-            Log.d(SDOViewerConstants.LOGTAG, "Load days");
+            Log.d(GlobalConstants.LOGTAG, "Load days");
             return new BrowseDataListAdapter(getActivity(), Util.loadDays(year, month));
         } else if (year != -1) {
-            Log.d(SDOViewerConstants.LOGTAG, "Load months");
+            Log.d(GlobalConstants.LOGTAG, "Load months");
             return new BrowseDataListAdapter(getActivity(), Util.loadMonths(year));
         } else {
-            Log.d(SDOViewerConstants.LOGTAG, "Load years");
+            Log.d(GlobalConstants.LOGTAG, "Load years");
             return new BrowseDataListAdapter(getActivity(), Util.loadYears());
         }
     }
@@ -163,12 +163,12 @@ public class BrowseDataFragment extends ListFragment {
             Bundle bundle = new Bundle();
             bundle.putSerializable("imageType", type);
             bundle.putString("imageUrl", bdli.getUrl());
-            bundle.putString("description", SDOImageType.getDescription(type));
+            bundle.putString("description", SDO.getDescription(type));
             ImageDetailFragment f = new ImageDetailFragment();
             f.setArguments(bundle);
             getFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack(null).commit();
         } else if (day != -1) {
-            SDOImageType type = SDOImageType.valueOf(bdli.getUrl());
+            SDO type = SDO.valueOf(bdli.getUrl());
             BrowseDataFragment bdf = new BrowseDataFragment();
             bdf.setYear(year);
             bdf.setMonth(month);
@@ -228,7 +228,7 @@ public class BrowseDataFragment extends ListFragment {
                 } else {
                     errorString = getString(R.string.error_getting_data) + ": " + e.getMessage();
                 }
-                Log.d(SDOViewerConstants.LOGTAG, "AsyncTask completed with error: " + e.toString());
+                Log.d(GlobalConstants.LOGTAG, "AsyncTask completed with error: " + e.toString());
                 return null;
             }
         }
@@ -237,7 +237,7 @@ public class BrowseDataFragment extends ListFragment {
         protected void onPostExecute(BrowseDataListAdapter result) {
             task = null;
             if (result != null) {
-                Log.d(SDOViewerConstants.LOGTAG, "AsyncTask completed");
+                Log.d(GlobalConstants.LOGTAG, "AsyncTask completed");
                 setListAdapter(result);
                 ActionBar bar = ((MainActivity) getActivity()).getSupportActionBar();
                 if (type != null) {
@@ -259,7 +259,7 @@ public class BrowseDataFragment extends ListFragment {
 
         @Override
         protected void onCancelled() {
-            Log.d(SDOViewerConstants.LOGTAG, "AsyncTask cancelled");
+            Log.d(GlobalConstants.LOGTAG, "AsyncTask cancelled");
             super.onCancelled();
         }
     }

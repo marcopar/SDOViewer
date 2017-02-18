@@ -12,8 +12,8 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 import android.view.View;
 
+import eu.flatworld.android.sdoviewer.GlobalConstants;
 import eu.flatworld.android.sdoviewer.R;
-import eu.flatworld.android.sdoviewer.SDOViewerConstants;
 
 /**
  * Created by marcopar on 03/07/15.
@@ -93,9 +93,9 @@ public class MuzeiSettingsFragment extends PreferenceFragment implements SharedP
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         Preference pref = findPreference(key);
-        if (pref.getKey().equals(SDOViewerConstants.PREFERENCES_MUZEINETWORKMODE)) {
+        if (pref.getKey().equals(GlobalConstants.PREFERENCES_MUZEINETWORKMODE)) {
             ListPreference lp = (ListPreference) pref;
-            if (lp.getValue().equals(SDOViewerConstants.PREFERENCES_MUZEINETWORKMODE_WIFI_MOBILE_ROAMING)) {
+            if (lp.getValue().equals(GlobalConstants.PREFERENCES_MUZEINETWORKMODE_WIFI_MOBILE_ROAMING)) {
                 new AlertDialog.Builder(getActivity())
                         .setTitle("Warning")
                         .setMessage("Downloading images when roaming may cause significant charges")

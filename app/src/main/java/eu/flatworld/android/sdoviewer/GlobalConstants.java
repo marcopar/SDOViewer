@@ -3,7 +3,7 @@ package eu.flatworld.android.sdoviewer;
 /**
  * Created by marcopar on 03/06/2015.
  */
-public interface SDOViewerConstants {
+public interface GlobalConstants {
     String LOGTAG = "SDOVIEWER";
     String PREFERENCES_RESOLUTION = "resolution";
     String PREFERENCES_HTTPCOMPATIBILITYMODE = "httpCompatibilityMode";

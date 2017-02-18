@@ -3,7 +3,7 @@ package eu.flatworld.android.sdoviewer;
 /**
  * Created by marcopar on 22/02/15.
  */
-public enum SDOImageType {
+public enum SDO {
     AIA_193,
     AIA_304,
     AIA_171,
@@ -24,7 +24,11 @@ public enum SDOImageType {
     HMI_Intensitygram,
     HMI_Dopplergram;
 
-    public static String getDescription(SDOImageType si) {
+    public static final String BASE_URL = "https://sdo.gsfc.nasa.gov/";
+    public static final String URL_BROWSE = BASE_URL + "assets/img/browse/";
+    public static final String URL_LATEST = BASE_URL + "assets/img/latest/";
+
+    public static String getDescription(SDO si) {
         switch (si) {
             case AIA_193:
                 return "<p>This channel highlights the outer atmosphere of the Sun - called the corona - as well as hot flare plasma. Hot active regions, solar flares, and coronal mass ejections will appear bright here. The dark areas - called coronal holes - are places where very little radiation is emitted, yet are the main source of solar wind particles.</p><p><strong>Where:</strong> Corona and hot flare plasma<br><strong>Wavelength:</strong>  193 angstroms (0.0000000193 m) = Extreme Ultraviolet<br><strong>Primary ions seen:</strong> 11 times ionized iron (Fe XII)<br><strong>Characteristic temperature:</strong> 1.25 million K (2.25 million F)</p>";
@@ -68,65 +72,65 @@ public enum SDOImageType {
         return null;
     }
 
-    public static String getLatestURL(SDOImageType si, int size, boolean pfss) {
+    public static String getLatestURL(SDO si, int size, boolean pfss) {
         String pfssString = "";
         if (pfss) {
             pfssString = "pfss";
         }
         switch (si) {
             case AIA_193:
-                return String.format(Util.BASE_URL_LATEST + "latest_%d_0193%s.jpg", size, pfssString);
+                return String.format(URL_LATEST + "latest_%d_0193%s.jpg", size, pfssString);
             case AIA_304:
-                return String.format(Util.BASE_URL_LATEST + "latest_%d_0304%s.jpg", size, pfssString);
+                return String.format(URL_LATEST + "latest_%d_0304%s.jpg", size, pfssString);
             case AIA_171:
-                return String.format(Util.BASE_URL_LATEST + "latest_%d_0171%s.jpg", size, pfssString);
+                return String.format(URL_LATEST + "latest_%d_0171%s.jpg", size, pfssString);
             case AIA_211:
-                return String.format(Util.BASE_URL_LATEST + "latest_%d_0211%s.jpg", size, pfssString);
+                return String.format(URL_LATEST + "latest_%d_0211%s.jpg", size, pfssString);
             case AIA_131:
-                return String.format(Util.BASE_URL_LATEST + "latest_%d_0131%s.jpg", size, pfssString);
+                return String.format(URL_LATEST + "latest_%d_0131%s.jpg", size, pfssString);
             case AIA_335:
-                return String.format(Util.BASE_URL_LATEST + "latest_%d_0335%s.jpg", size, pfssString);
+                return String.format(URL_LATEST + "latest_%d_0335%s.jpg", size, pfssString);
             case AIA_094:
-                return String.format(Util.BASE_URL_LATEST + "latest_%d_0094%s.jpg", size, pfssString);
+                return String.format(URL_LATEST + "latest_%d_0094%s.jpg", size, pfssString);
             case AIA_1600:
-                return String.format(Util.BASE_URL_LATEST + "latest_%d_1600%s.jpg", size, pfssString);
+                return String.format(URL_LATEST + "latest_%d_1600%s.jpg", size, pfssString);
             case AIA_1700:
-                return String.format(Util.BASE_URL_LATEST + "latest_%d_1700%s.jpg", size, pfssString);
+                return String.format(URL_LATEST + "latest_%d_1700%s.jpg", size, pfssString);
             case AIA_211_193_171:
-                return String.format(Util.BASE_URL_LATEST + "f_211_193_171%s_%d.jpg", pfssString, size);
+                return String.format(URL_LATEST + "f_211_193_171%s_%d.jpg", pfssString, size);
             case AIA_304_211_171:
-                return String.format(Util.BASE_URL_LATEST + "f_304_211_171%s_%d.jpg", pfssString, size);
+                return String.format(URL_LATEST + "f_304_211_171%s_%d.jpg", pfssString, size);
             case AIA_094_335_193:
-                return String.format(Util.BASE_URL_LATEST + "f_094_335_193%s_%d.jpg", pfssString, size);
+                return String.format(URL_LATEST + "f_094_335_193%s_%d.jpg", pfssString, size);
             case AIA_171_HMIB:
-                return String.format(Util.BASE_URL_LATEST + "f_HMImag_171%s_%d.jpg", pfssString, size);
+                return String.format(URL_LATEST + "f_HMImag_171%s_%d.jpg", pfssString, size);
             case HMI_Magnetogram:
-                return String.format(Util.BASE_URL_LATEST + "latest_%d_HMIB%s.jpg", size, pfssString);
+                return String.format(URL_LATEST + "latest_%d_HMIB%s.jpg", size, pfssString);
             case HMI_Colorized_Magnetogram:
                 if (pfss) {
                     return null;
                 }
-                return String.format(Util.BASE_URL_LATEST + "latest_%d_HMIBC.jpg", size);
+                return String.format(URL_LATEST + "latest_%d_HMIBC.jpg", size);
             case HMI_Intensitygram_Colored:
                 if (pfss) {
                     return null;
                 }
-                return String.format(Util.BASE_URL_LATEST + "latest_%d_HMIIC.jpg", size);
+                return String.format(URL_LATEST + "latest_%d_HMIIC.jpg", size);
             case HMI_Intensitygram_Flattened:
                 if (pfss) {
                     return null;
                 }
-                return String.format(Util.BASE_URL_LATEST + "latest_%d_HMIIF.jpg", size);
+                return String.format(URL_LATEST + "latest_%d_HMIIF.jpg", size);
             case HMI_Intensitygram:
                 if (pfss) {
                     return null;
                 }
-                return String.format(Util.BASE_URL_LATEST + "latest_%d_HMII.jpg", size);
+                return String.format(URL_LATEST + "latest_%d_HMII.jpg", size);
             case HMI_Dopplergram:
                 if (pfss) {
                     return null;
                 }
-                return String.format(Util.BASE_URL_LATEST + "latest_%d_HMID.jpg", size);
+                return String.format(URL_LATEST + "latest_%d_HMID.jpg", size);
         }
         return null;
     }

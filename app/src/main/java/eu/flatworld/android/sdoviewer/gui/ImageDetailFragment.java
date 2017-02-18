@@ -27,10 +27,10 @@ import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import eu.flatworld.android.sdoviewer.GlobalConstants;
 import eu.flatworld.android.sdoviewer.MainActivity;
 import eu.flatworld.android.sdoviewer.R;
-import eu.flatworld.android.sdoviewer.SDOImageType;
-import eu.flatworld.android.sdoviewer.SDOViewerConstants;
+import eu.flatworld.android.sdoviewer.SDO;
 import eu.flatworld.android.sdoviewer.io.PicassoInstance;
 import it.sephiroth.android.library.imagezoom.ImageViewTouch;
 
@@ -110,13 +110,13 @@ public class ImageDetailFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        int resolution = Integer.parseInt(pref.getString(SDOViewerConstants.PREFERENCES_RESOLUTION, "2048"));
+        int resolution = Integer.parseInt(pref.getString(GlobalConstants.PREFERENCES_RESOLUTION, "2048"));
         mImageView = (ImageViewTouch) view.findViewById(R.id.imageView);
         if (resolution > 2048) {
             //if bigger than 2048 performances are very bad with hardware acceleration so we disable it
             mImageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
-        SDOImageType imageType = (SDOImageType) getArguments().getSerializable("imageType");
+        SDO imageType = (SDO) getArguments().getSerializable("imageType");
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(imageType.toString());
         ((MainActivity) getActivity()).getSupportActionBar().setSubtitle(null);
     }
@@ -148,7 +148,7 @@ public class ImageDetailFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        final SDOImageType imageType = (SDOImageType) getArguments().getSerializable("imageType");
+        final SDO imageType = (SDO) getArguments().getSerializable("imageType");
         final String pfssUrl = (String) getArguments().getSerializable("pfssUrl");
         final String imageUrl = (String) getArguments().getSerializable("imageUrl");
         final String description = (String) getArguments().getSerializable("description");
@@ -224,7 +224,7 @@ public class ImageDetailFragment extends Fragment {
         } catch (final Exception ex) {
             getActivity().runOnUiThread(new Runnable() {
                 public void run() {
-                    Toast.makeText(getActivity(), getString(R.string.error_shareing_the_image_) + ex.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getString(R.string.error_sharing_the_image_) + ex.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
         } finally {
@@ -259,7 +259,7 @@ public class ImageDetailFragment extends Fragment {
 
     void loadImage(boolean invalidateCache) {
         mImageView.setImageResource(R.drawable.ic_sun);
-        final SDOImageType imageType = (SDOImageType) getArguments().getSerializable("imageType");
+        final SDO imageType = (SDO) getArguments().getSerializable("imageType");
         final String pfssUrl = (String) getArguments().getSerializable("pfssUrl");
         final String imageUrl = (String) getArguments().getSerializable("imageUrl");
         if (invalidateCache) {

@@ -13,7 +13,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
-import eu.flatworld.android.sdoviewer.SDOViewerConstants;
+import eu.flatworld.android.sdoviewer.GlobalConstants;
 import okhttp3.ConnectionSpec;
 import okhttp3.OkHttpClient;
 import okhttp3.TlsVersion;
@@ -70,7 +70,7 @@ public class OkHttpClientFactory {
      * Enable TLS on the OKHttp builder by setting a custom SocketFactory
      */
     private static OkHttpClient.Builder enableTls12(OkHttpClient.Builder client) {
-        Log.i(SDOViewerConstants.LOGTAG, "Enabling HTTPS compatibility mode");
+        Log.i(GlobalConstants.LOGTAG, "Enabling HTTPS compatibility mode");
         try {
             TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(
                     TrustManagerFactory.getDefaultAlgorithm());
@@ -95,7 +95,7 @@ public class OkHttpClientFactory {
 
             client.connectionSpecs(specs);
         } catch (Exception exc) {
-            Log.e(SDOViewerConstants.LOGTAG, "Error while setting TLS", exc);
+            Log.e(GlobalConstants.LOGTAG, "Error while setting TLS", exc);
         }
 
         return client;

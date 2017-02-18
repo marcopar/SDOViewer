@@ -10,9 +10,9 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 import android.view.View;
 
+import eu.flatworld.android.sdoviewer.GlobalConstants;
 import eu.flatworld.android.sdoviewer.MainActivity;
 import eu.flatworld.android.sdoviewer.R;
-import eu.flatworld.android.sdoviewer.SDOViewerConstants;
 import eu.flatworld.android.sdoviewer.io.PicassoInstance;
 
 /**
@@ -27,7 +27,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
-        getPreferenceScreen().removePreference(getPreferenceScreen().findPreference(SDOViewerConstants.PREFERENCES_FIRSTRUN));
+        getPreferenceScreen().removePreference(getPreferenceScreen().findPreference(GlobalConstants.PREFERENCES_FIRSTRUN));
 
         PreferenceCategory pc = new PreferenceCategory(getActivity());
         pc.setTitle(R.string.muzei_settings_main_app);
@@ -99,7 +99,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         updatePrefSummary(findPreference(key));
-        if (key.equals(SDOViewerConstants.PREFERENCES_HTTPCOMPATIBILITYMODE)) {
+        if (key.equals(GlobalConstants.PREFERENCES_HTTPCOMPATIBILITYMODE)) {
             PicassoInstance.reset();
         }
     }

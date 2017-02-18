@@ -19,7 +19,7 @@ import android.widget.GridView;
 
 import eu.flatworld.android.sdoviewer.MainActivity;
 import eu.flatworld.android.sdoviewer.R;
-import eu.flatworld.android.sdoviewer.SDOImageType;
+import eu.flatworld.android.sdoviewer.SDO;
 import eu.flatworld.android.sdoviewer.gui.ImageDetailFragment;
 
 
@@ -63,11 +63,11 @@ public class TheSunNowFragment extends Fragment implements SwipeRefreshLayout.On
                 SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
                 int resolution = Integer.parseInt(pref.getString("resolution", "2048"));
                 Bundle bundle = new Bundle();
-                SDOImageType imageType = a.getItem(position);
+                SDO imageType = a.getItem(position);
                 bundle.putSerializable("imageType", imageType);
-                bundle.putString("imageUrl", SDOImageType.getLatestURL(imageType, resolution, false));
-                bundle.putString("pfssUrl", SDOImageType.getLatestURL(imageType, resolution, true));
-                bundle.putString("description", SDOImageType.getDescription(imageType));
+                bundle.putString("imageUrl", SDO.getLatestURL(imageType, resolution, false));
+                bundle.putString("pfssUrl", SDO.getLatestURL(imageType, resolution, true));
+                bundle.putString("description", SDO.getDescription(imageType));
                 ImageDetailFragment f = new ImageDetailFragment();
                 f.setArguments(bundle);
                 getFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack(null).commit();
