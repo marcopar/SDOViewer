@@ -1,4 +1,4 @@
-package eu.flatworld.android.sdoviewer.gui;
+package eu.flatworld.android.sdoviewer.gui.solarwind;
 
 /**
  * Created by marcopar on 18/02/17.

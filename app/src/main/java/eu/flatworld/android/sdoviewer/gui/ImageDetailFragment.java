@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -57,7 +58,7 @@ public class ImageDetailFragment extends Fragment {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    setFitWallpaper(bitmap);
+                    setWallpaper(bitmap);
                 }
             }).start();
         }
@@ -119,6 +120,11 @@ public class ImageDetailFragment extends Fragment {
         SDO imageType = (SDO) getArguments().getSerializable("imageType");
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(imageType.toString());
         ((MainActivity) getActivity()).getSupportActionBar().setSubtitle(null);
+
+        Bundle b = new Bundle();
+        b.putString(FirebaseAnalytics.Param.ITEM_ID, "image_detail");
+        b.putString(FirebaseAnalytics.Param.VALUE, imageType.name());
+        ((MainActivity) getActivity()).getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, b);
     }
 
     @Override
@@ -154,6 +160,7 @@ public class ImageDetailFragment extends Fragment {
         final String description = (String) getArguments().getSerializable("description");
         int id = item.getItemId();
         if (id == R.id.action_set_wallpaper) {
+            ((MainActivity) getActivity()).getFirebaseAnalytics().logEvent(GlobalConstants.ANALYTICS_SET_WALLPAPER, Bundle.EMPTY);
             new AlertDialog.Builder(getActivity())
                     .setTitle(R.string.set_wallpaper)
                     .setMessage(getString(R.string.do_you_want_to_set))
@@ -172,6 +179,9 @@ public class ImageDetailFragment extends Fragment {
             return true;
         }
         if (id == R.id.action_about_this_image) {
+            Bundle b = new Bundle();
+            b.putString(FirebaseAnalytics.Param.ITEM_ID, "about");
+            ((MainActivity) getActivity()).getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, b);
             new AlertDialog.Builder(getActivity())
                     .setTitle(imageType.toString())
                     .setMessage(Html.fromHtml(description))
@@ -189,6 +199,7 @@ public class ImageDetailFragment extends Fragment {
             return true;
         }
         if (id == R.id.action_share) {
+            ((MainActivity) getActivity()).getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.SHARE, Bundle.EMPTY);
             progressDialog.setMessage(getString(R.string.preparing_the_image_));
             progressDialog.show();
             if (pfssVisible) {
@@ -199,6 +210,9 @@ public class ImageDetailFragment extends Fragment {
             return true;
         }
         if (id == R.id.action_pfss) {
+            Bundle b = new Bundle();
+            b.putString(FirebaseAnalytics.Param.ITEM_ID, "pfss");
+            ((MainActivity) getActivity()).getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, b);
             pfssVisible = !pfssVisible;
             item.setChecked(pfssVisible);
             if (pfssVisible) {
@@ -232,7 +246,7 @@ public class ImageDetailFragment extends Fragment {
         }
     }
 
-    void setFitWallpaper(Bitmap source) {
+    void setWallpaper(Bitmap source) {
         try {
             WallpaperManager wallpaperManager = WallpaperManager.getInstance(getActivity());
             int screenWidth = wallpaperManager.getDesiredMinimumWidth();

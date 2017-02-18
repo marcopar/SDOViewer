@@ -160,6 +160,7 @@ public class BrowseDataFragment extends ListFragment {
         super.onListItemClick(l, v, position, id);
         BrowseDataListItem bdli = (BrowseDataListItem) getListAdapter().getItem(position);
         if (type != null) {
+            ((MainActivity) getActivity()).getFirebaseAnalytics().logEvent(GlobalConstants.ANALYTICS_BROWSE_COMPLETED, Bundle.EMPTY);
             Bundle bundle = new Bundle();
             bundle.putSerializable("imageType", type);
             bundle.putString("imageUrl", bdli.getUrl());

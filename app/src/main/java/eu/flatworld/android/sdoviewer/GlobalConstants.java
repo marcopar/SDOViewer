@@ -14,4 +14,7 @@ public interface GlobalConstants {
     String PREFERENCES_MUZEINETWORKMODE_WIFI_MOBILE = "WIFI_MOBILE";
     String PREFERENCES_MUZEINETWORKMODE_WIFI_MOBILE_ROAMING = "WIFI_MOBILE_ROAMING";
     String PREFERENCES_MUZEIRESOLUTION = "muzeiResolution";
+
+    String ANALYTICS_SET_WALLPAPER = "set_wallpaper";
+    String ANALYTICS_BROWSE_COMPLETED = "browse_completed";
 }

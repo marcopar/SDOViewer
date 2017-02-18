@@ -1,4 +1,4 @@
-package eu.flatworld.android.sdoviewer.gui;
+package eu.flatworld.android.sdoviewer.gui.solarwind;
 
 import android.app.Fragment;
 import android.content.res.Resources;

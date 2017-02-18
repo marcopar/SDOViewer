@@ -1,22 +1,22 @@
-package eu.flatworld.android.sdoviewer.gui;
+package eu.flatworld.android.sdoviewer.gui.solarwind;
 
 /**
  * Created by marcopar on 18/02/17.
  */
-public class Speed {
+public class Flux {
 
-    private int WindSpeed;
+    private int Flux;
     private String TimeStamp;
 
-    public Speed() {
+    public Flux() {
     }
 
-    public int getWindSpeed() {
-        return this.WindSpeed;
+    public int getFlux() {
+        return this.Flux;
     }
 
-    public void setWindSpeed(int windSpeed) {
-        this.WindSpeed = windSpeed;
+    public void setFlux(int flux) {
+        this.Flux = flux;
     }
 
     public String getTimeStamp() {
