@@ -13,98 +13,102 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:orientation="horizontal">
+                android:layout_margin="8dp">
 
                 <TextView
-                    android:layout_width="150dp"
+                    android:id="@+id/tvSpeedLabel"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="4dp"
-                    android:gravity="center|right"
+                    android:layout_marginBottom="16dp"
+                    android:gravity="center"
                     android:text="@string/speed_"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp" />
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvSpeedValue"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:layout_weight="1"
+                    android:layout_below="@id/tvSpeedLabel"
+                    android:gravity="center"
                     android:text="@string/speed_value_error"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp" />
+                    android:textSize="32sp" />
 
-            </LinearLayout>
+            </RelativeLayout>
 
             <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
+                android:layout_margin="8dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/tvLabelMagneticFields"
-                    android:layout_width="150dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="4dp"
-                    android:gravity="center|right"
+                    android:layout_marginBottom="16dp"
+                    android:gravity="center"
                     android:text="@string/magnetic_fields_"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp" />
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvValueBt"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:layout_toRightOf="@id/tvLabelMagneticFields"
+                    android:layout_below="@id/tvLabelMagneticFields"
+                    android:layout_marginRight="4dp"
+                    android:gravity="center"
                     android:text="@string/t_magneticfield_value_error"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp" />
+                    android:textSize="32sp" />
 
                 <TextView
                     android:id="@+id/tvValueBz"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tvValueBt"
                     android:layout_marginLeft="4dp"
-                    android:layout_toRightOf="@id/tvLabelMagneticFields"
+                    android:gravity="center"
                     android:text="@string/z_magneticfield_value_error"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp" />
+                    android:textSize="32sp" />
 
             </RelativeLayout>
 
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:orientation="horizontal">
+                android:layout_margin="8dp">
 
                 <TextView
-                    android:layout_width="150dp"
+                    android:id="@+id/tvFluxLabel"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="4dp"
-                    android:gravity="center|right"
+                    android:layout_marginBottom="16dp"
+                    android:gravity="center"
                     android:text="@string/radio_flux_"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp" />
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvFluxValue"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:layout_weight="1"
+                    android:layout_below="@id/tvFluxLabel"
+                    android:gravity="center"
                     android:text="@string/flux_value_error"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp" />
+                    android:textSize="32sp" />
 
-            </LinearLayout>
+            </RelativeLayout>
 
 
         </LinearLayout>
