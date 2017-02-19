@@ -1,5 +1,6 @@
 package eu.flatworld.android.sdoviewer.gui.solarwind;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.res.Resources;
 import android.os.AsyncTask;
@@ -91,10 +92,11 @@ public class SolarWindFragment extends Fragment implements SwipeRefreshLayout.On
         final Speed fS = s;
         final Flux fF = f;
         final MagneticField fMf = mf;
-        getActivity().runOnUiThread(new Runnable() {
+        final Activity activity = getActivity();
+        activity.runOnUiThread(new Runnable() {
             public void run() {
                 if (fErrors) {
-                    Toast.makeText(getActivity(), getString(R.string.error_getting_data), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, getString(R.string.error_getting_data), Toast.LENGTH_SHORT).show();
                 }
                 setGUIValues(fS, fF, fMf);
             }

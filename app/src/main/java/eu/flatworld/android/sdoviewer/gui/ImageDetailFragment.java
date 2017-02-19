@@ -1,6 +1,7 @@
 package eu.flatworld.android.sdoviewer.gui;
 
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
@@ -227,6 +228,7 @@ public class ImageDetailFragment extends Fragment {
     }
 
     public void share(Bitmap b) {
+        final Activity activity = getActivity();
         try {
             String path = MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), b, "x", "x");
             Uri uri = Uri.parse(path);
@@ -236,9 +238,9 @@ public class ImageDetailFragment extends Fragment {
             shareIntent.setType("image/*");
             startActivity(Intent.createChooser(shareIntent, getString(R.string.share_the_image_using_)));
         } catch (final Exception ex) {
-            getActivity().runOnUiThread(new Runnable() {
+            activity.runOnUiThread(new Runnable() {
                 public void run() {
-                    Toast.makeText(getActivity(), getString(R.string.error_sharing_the_image_) + ex.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, getString(R.string.error_sharing_the_image_) + ex.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
         } finally {
@@ -247,6 +249,7 @@ public class ImageDetailFragment extends Fragment {
     }
 
     void setWallpaper(Bitmap source) {
+        final Activity activity = getActivity();
         try {
             WallpaperManager wallpaperManager = WallpaperManager.getInstance(getActivity());
             int screenWidth = wallpaperManager.getDesiredMinimumWidth();
@@ -255,15 +258,15 @@ public class ImageDetailFragment extends Fragment {
             float scale = screenHeight * 1f / source.getHeight();
             target = Bitmap.createScaledBitmap(source, (int) (source.getWidth() * scale), (int) (source.getHeight() * scale), true);
             wallpaperManager.setBitmap(target);
-            getActivity().runOnUiThread(new Runnable() {
+            activity.runOnUiThread(new Runnable() {
                 public void run() {
-                    Toast.makeText(getActivity(), getString(R.string.wallpaper_is_set), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, getString(R.string.wallpaper_is_set), Toast.LENGTH_SHORT).show();
                 }
             });
         } catch (final Exception ex) {
-            getActivity().runOnUiThread(new Runnable() {
+            activity.runOnUiThread(new Runnable() {
                 public void run() {
-                    Toast.makeText(getActivity(), getString(R.string.error_setting_the_wallpaper_) + ex.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, getString(R.string.error_setting_the_wallpaper_) + ex.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
         } finally {
