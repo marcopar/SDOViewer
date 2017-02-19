@@ -4,11 +4,13 @@ package eu.flatworld.android.sdoviewer.muzei;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.google.android.apps.muzei.api.Artwork;
 import com.google.android.apps.muzei.api.RemoteMuzeiArtSource;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -34,10 +36,9 @@ public class SDOMuzeiSource extends RemoteMuzeiArtSource {
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
     int updateInterval = 3600000;
     int resolution = 2048;
-
     OkHttpClient httpClient;
-
     String networkMode = GlobalConstants.PREFERENCES_MUZEINETWORKMODE_WIFI_MOBILE;
+    private FirebaseAnalytics firebaseAnalytics;
 
     public SDOMuzeiSource() {
         super(SOURCE_NAME);
@@ -56,7 +57,20 @@ public class SDOMuzeiSource extends RemoteMuzeiArtSource {
         Log.i(GlobalConstants.LOGTAG, String.format("Update interval is set to %d", updateInterval));
         networkMode = pref.getString(GlobalConstants.PREFERENCES_MUZEINETWORKMODE, GlobalConstants.PREFERENCES_MUZEINETWORKMODE_WIFI_MOBILE);
         resolution = Integer.parseInt(pref.getString(GlobalConstants.PREFERENCES_MUZEIRESOLUTION, "2048"));
+
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
     }
+
+    @Override
+    public void onEnabled() {
+        firebaseAnalytics.logEvent(GlobalConstants.ANALYTICS_MUZEI_ENABLED, Bundle.EMPTY);
+    }
+
+    @Override
+    public void onDisabled() {
+        firebaseAnalytics.logEvent(GlobalConstants.ANALYTICS_MUZEI_DISABLED, Bundle.EMPTY);
+    }
+
 
     @Override
     protected void onTryUpdate(int reason) throws RetryException {

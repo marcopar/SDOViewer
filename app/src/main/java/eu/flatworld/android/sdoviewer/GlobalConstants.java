@@ -17,4 +17,6 @@ public interface GlobalConstants {
 
     String ANALYTICS_SET_WALLPAPER = "set_wallpaper";
     String ANALYTICS_BROWSE_COMPLETED = "browse_completed";
+    String ANALYTICS_MUZEI_ENABLED = "muzei_enabled";
+    String ANALYTICS_MUZEI_DISABLED = "muzei_disabled";
 }
