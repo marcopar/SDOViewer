@@ -180,7 +180,7 @@ public class ImageDetailFragment extends Fragment {
         }
         if (id == R.id.action_about_this_image) {
             Bundle b = new Bundle();
-            b.putString(FirebaseAnalytics.Param.ITEM_ID, "about");
+            b.putString(FirebaseAnalytics.Param.ITEM_ID, "about_image");
             ((MainActivity) getActivity()).getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, b);
             new AlertDialog.Builder(getActivity())
                     .setTitle(imageType.toString())
