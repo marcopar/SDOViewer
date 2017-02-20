@@ -90,5 +90,6 @@
     <string name="t_magneticfield_value_format">Bt %d nT</string>
     <string name="z_magneticfield_value_format">Bz %d nT</string>
     <string name="flux_value_format">%d sfu</string>
+    <string name="no_data">No data</string>
 
 </resources>

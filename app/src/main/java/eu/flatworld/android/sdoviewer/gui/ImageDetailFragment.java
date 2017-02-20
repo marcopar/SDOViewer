@@ -123,9 +123,9 @@ public class ImageDetailFragment extends Fragment {
         ((MainActivity) getActivity()).getSupportActionBar().setSubtitle(null);
 
         Bundle b = new Bundle();
-        b.putString(FirebaseAnalytics.Param.ITEM_ID, "image_detail");
-        b.putString(FirebaseAnalytics.Param.VALUE, imageType.name());
-        ((MainActivity) getActivity()).getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, b);
+        b.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "image_detail");
+        b.putString(FirebaseAnalytics.Param.ITEM_ID, imageType.name());
+        ((MainActivity) getActivity()).getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.VIEW_ITEM, b);
     }
 
     @Override
@@ -161,7 +161,10 @@ public class ImageDetailFragment extends Fragment {
         final String description = (String) getArguments().getSerializable("description");
         int id = item.getItemId();
         if (id == R.id.action_set_wallpaper) {
-            ((MainActivity) getActivity()).getFirebaseAnalytics().logEvent(GlobalConstants.ANALYTICS_SET_WALLPAPER, Bundle.EMPTY);
+            Bundle b = new Bundle();
+            b.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "set_wallpaper");
+            b.putString(FirebaseAnalytics.Param.ITEM_ID, imageType.name());
+            ((MainActivity) getActivity()).getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.SHARE, b);
             new AlertDialog.Builder(getActivity())
                     .setTitle(R.string.set_wallpaper)
                     .setMessage(getString(R.string.do_you_want_to_set))
@@ -181,8 +184,9 @@ public class ImageDetailFragment extends Fragment {
         }
         if (id == R.id.action_about_this_image) {
             Bundle b = new Bundle();
-            b.putString(FirebaseAnalytics.Param.ITEM_ID, "about_image");
-            ((MainActivity) getActivity()).getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, b);
+            b.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "about_image");
+            b.putString(FirebaseAnalytics.Param.ITEM_ID, imageType.name());
+            ((MainActivity) getActivity()).getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.VIEW_ITEM, b);
             new AlertDialog.Builder(getActivity())
                     .setTitle(imageType.toString())
                     .setMessage(Html.fromHtml(description))
@@ -200,7 +204,10 @@ public class ImageDetailFragment extends Fragment {
             return true;
         }
         if (id == R.id.action_share) {
-            ((MainActivity) getActivity()).getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.SHARE, Bundle.EMPTY);
+            Bundle b = new Bundle();
+            b.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "share");
+            b.putString(FirebaseAnalytics.Param.ITEM_ID, imageType.name());
+            ((MainActivity) getActivity()).getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.SHARE, b);
             progressDialog.setMessage(getString(R.string.preparing_the_image_));
             progressDialog.show();
             if (pfssVisible) {
@@ -212,8 +219,9 @@ public class ImageDetailFragment extends Fragment {
         }
         if (id == R.id.action_pfss) {
             Bundle b = new Bundle();
-            b.putString(FirebaseAnalytics.Param.ITEM_ID, "pfss");
-            ((MainActivity) getActivity()).getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, b);
+            b.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "pfss");
+            b.putString(FirebaseAnalytics.Param.ITEM_ID, imageType.name());
+            ((MainActivity) getActivity()).getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.VIEW_ITEM, b);
             pfssVisible = !pfssVisible;
             item.setChecked(pfssVisible);
             if (pfssVisible) {

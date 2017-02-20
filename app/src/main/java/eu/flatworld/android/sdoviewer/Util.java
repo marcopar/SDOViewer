@@ -128,7 +128,7 @@ public class Util {
     }
 
     public static ArrayList<String> loadLinks(OkHttpClient httpClient, int year, int month, int day) throws IOException {
-        String baseUrl = String.format("%s/%d/%02d/%02d/", SDO.URL_BROWSE, year, month, day);
+        String baseUrl = String.format("%s%d/%02d/%02d/", SDO.URL_BROWSE, year, month, day);
         Log.d(GlobalConstants.LOGTAG, "Load links");
         ArrayList<String> al = new ArrayList<>();
         try {

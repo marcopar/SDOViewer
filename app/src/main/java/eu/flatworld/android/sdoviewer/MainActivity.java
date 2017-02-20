@@ -64,36 +64,36 @@ public class MainActivity extends AppCompatActivity {
                         public boolean onNavigationItemSelected(MenuItem menuItem) {
                             if (menuItem.getItemId() == R.id.nav_the_sun_now) {
                                 Bundle b = new Bundle();
-                                b.putString(FirebaseAnalytics.Param.ITEM_ID, "the_sun_now");
-                                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, b);
+                                b.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "the_sun_now");
+                                getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, b);
                                 getFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                                 getFragmentManager().beginTransaction().replace(R.id.content_frame, new TheSunNowFragment()).commit();
                             }
                             if (menuItem.getItemId() == R.id.nav_browse_data) {
                                 Bundle b = new Bundle();
-                                b.putString(FirebaseAnalytics.Param.ITEM_ID, "browse");
-                                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, b);
+                                b.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "browse");
+                                getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, b);
                                 BrowseDataFragment bdfy = new BrowseDataFragment();
                                 getFragmentManager().beginTransaction().replace(R.id.content_frame, bdfy).addToBackStack("year").commit();
                             }
                             if (menuItem.getItemId() == R.id.nav_solar_wind) {
                                 Bundle b = new Bundle();
-                                b.putString(FirebaseAnalytics.Param.ITEM_ID, "solar_wind");
-                                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, b);
+                                b.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "solar_wind");
+                                getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, b);
                                 SolarWindFragment bdfy = new SolarWindFragment();
                                 getFragmentManager().beginTransaction().replace(R.id.content_frame, bdfy).addToBackStack("solarwind").commit();
                             }
                             if (menuItem.getItemId() == R.id.action_settings) {
                                 Bundle b = new Bundle();
-                                b.putString(FirebaseAnalytics.Param.ITEM_ID, "settings");
-                                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, b);
+                                b.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "settings");
+                                getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, b);
                                 SettingsFragment f = new SettingsFragment();
                                 getFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack("settings").commit();
                             }
                             if (menuItem.getItemId() == R.id.action_about) {
                                 Bundle b = new Bundle();
-                                b.putString(FirebaseAnalytics.Param.ITEM_ID, "about");
-                                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, b);
+                                b.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "about");
+                                getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, b);
                                 AboutFragment f = new AboutFragment();
                                 getFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack("about").commit();
                             }

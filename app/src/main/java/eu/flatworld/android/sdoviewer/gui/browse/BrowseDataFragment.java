@@ -238,19 +238,24 @@ public class BrowseDataFragment extends ListFragment {
         protected void onPostExecute(BrowseDataListAdapter result) {
             task = null;
             if (result != null) {
-                Log.d(GlobalConstants.LOGTAG, "AsyncTask completed");
-                setListAdapter(result);
-                ActionBar bar = ((MainActivity) getActivity()).getSupportActionBar();
-                if (type != null) {
-                    bar.setSubtitle(String.format("%d/%d/%d/%s : %s", year, month, day, type.getShortCode(), getString(R.string.select_hour)));
-                } else if (day != -1) {
-                    bar.setSubtitle(String.format("%d/%d/%d: %s", year, month, day, getString(R.string.select_image)));
-                } else if (month != -1) {
-                    bar.setSubtitle(String.format("%d/%d: %s", year, month, getString(R.string.select_day)));
-                } else if (year != -1) {
-                    bar.setSubtitle(String.format("%d: %s", year, getString(R.string.select_month)));
+                if (!result.isEmpty()) {
+                    Log.d(GlobalConstants.LOGTAG, "AsyncTask completed");
+                    setListAdapter(result);
+                    ActionBar bar = ((MainActivity) getActivity()).getSupportActionBar();
+                    if (type != null) {
+                        bar.setSubtitle(String.format("%d/%d/%d/%s : %s", year, month, day, type.getShortCode(), getString(R.string.select_hour)));
+                    } else if (day != -1) {
+                        bar.setSubtitle(String.format("%d/%d/%d: %s", year, month, day, getString(R.string.select_image)));
+                    } else if (month != -1) {
+                        bar.setSubtitle(String.format("%d/%d: %s", year, month, getString(R.string.select_day)));
+                    } else if (year != -1) {
+                        bar.setSubtitle(String.format("%d: %s", year, getString(R.string.select_month)));
+                    } else {
+                        bar.setSubtitle(getString(R.string.select_year));
+                    }
                 } else {
-                    bar.setSubtitle(getString(R.string.select_year));
+                    setEmptyText(getString(R.string.no_data));
+                    setListAdapter(null);
                 }
             } else {
                 setEmptyText(errorString);
