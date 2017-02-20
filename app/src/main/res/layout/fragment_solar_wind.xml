@@ -16,7 +16,7 @@
             <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp">
+                android:layout_margin="16dp">
 
                 <TextView
                     android:id="@+id/tvSpeedLabel"
@@ -44,7 +44,7 @@
             <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
+                android:layout_margin="16dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -85,7 +85,7 @@
             <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp">
+                android:layout_margin="16dp">
 
                 <TextView
                     android:id="@+id/tvFluxLabel"

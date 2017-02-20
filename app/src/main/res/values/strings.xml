@@ -7,6 +7,7 @@
     <string name="action_settings">Settings</string>
     <string name="aboutCredits"><![CDATA[
         <p>Images and descriptions are courtesy of NASA/SDO and the AIA, EVE, and HMI science teams.</p>
+        <p>Solar Weather Data is provided by <a href="http://www.swpc.noaa.gov/">NOAA Space Weather Prediction Center</a></p>
         <p>
         Many thanks to these open source projects:<br>
         &bull; <b><a href="http://square.github.io/okhttp/">OkHttp</a></b> by Square<br/>
