@@ -63,6 +63,7 @@ public class SolarWindFragment extends Fragment implements SwipeRefreshLayout.On
     }
 
     boolean refresh() {
+        final Activity activity = getActivity();
         Log.i(GlobalConstants.LOGTAG, "Loading solar wind data");
         OkHttpClient client = OkHttpClientFactory.getNewOkHttpClient(Util.getHttpsSafeModeEnabled(getActivity()));
         Speed s = null;
@@ -92,7 +93,6 @@ public class SolarWindFragment extends Fragment implements SwipeRefreshLayout.On
         final Speed fS = s;
         final Flux fF = f;
         final MagneticField fMf = mf;
-        final Activity activity = getActivity();
         activity.runOnUiThread(new Runnable() {
             public void run() {
                 if (fErrors) {
