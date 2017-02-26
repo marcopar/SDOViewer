@@ -78,6 +78,15 @@ public class TheSunNowFragment extends Fragment implements SwipeRefreshLayout.On
     }
 
     @Override
+    public void onDestroyView() {
+        //to avoid overlapping fragment when going back during refresh
+        //https://code.google.com/p/android/issues/detail?id=78062
+        swipeLayout.setRefreshing(false);
+        swipeLayout.clearAnimation();
+        super.onDestroyView();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         ActionBar bar = ((MainActivity) getActivity()).getSupportActionBar();

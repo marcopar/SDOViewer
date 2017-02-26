@@ -47,6 +47,15 @@ public class SolarWindFragment extends Fragment implements SwipeRefreshLayout.On
     }
 
     @Override
+    public void onDestroyView() {
+        //to avoid overlapping fragment when going back during refresh
+        //https://code.google.com/p/android/issues/detail?id=78062
+        swipeLayout.setRefreshing(false);
+        swipeLayout.clearAnimation();
+        super.onDestroyView();
+    }
+
+    @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -59,11 +68,10 @@ public class SolarWindFragment extends Fragment implements SwipeRefreshLayout.On
         tvSpeed = (TextView) view.findViewById(R.id.tvSpeedValue);
 
         swipeLayout.setRefreshing(true);
-        new RefreshTask().execute("");
+        new RefreshTask(getActivity()).execute("");
     }
 
-    boolean refresh() {
-        final Activity activity = getActivity();
+    boolean refresh(Activity activity) {
         Log.i(GlobalConstants.LOGTAG, "Loading solar wind data");
         OkHttpClient client = OkHttpClientFactory.getNewOkHttpClient(Util.getHttpsSafeModeEnabled(getActivity()));
         Speed s = null;
@@ -93,20 +101,21 @@ public class SolarWindFragment extends Fragment implements SwipeRefreshLayout.On
         final Speed fS = s;
         final Flux fF = f;
         final MagneticField fMf = mf;
+        final Activity fActivity = activity;
         activity.runOnUiThread(new Runnable() {
             public void run() {
                 if (fErrors) {
-                    Toast.makeText(activity, getString(R.string.error_getting_data), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(fActivity, getString(R.string.error_getting_data), Toast.LENGTH_SHORT).show();
                 }
-                setGUIValues(fS, fF, fMf);
+                setGUIValues(fActivity, fS, fF, fMf);
             }
         });
 
         return errors;
     }
 
-    void setGUIValues(Speed speed, Flux flux, MagneticField magneticField) {
-        Resources r = getActivity().getResources();
+    void setGUIValues(Activity activity, Speed speed, Flux flux, MagneticField magneticField) {
+        Resources r = activity.getResources();
         String sbt = r.getText(R.string.t_magneticfield_value_error).toString();
         String sbz = r.getText(R.string.z_magneticfield_value_error).toString();
         String sflux = r.getText(R.string.flux_value_error).toString();
@@ -129,12 +138,18 @@ public class SolarWindFragment extends Fragment implements SwipeRefreshLayout.On
 
     @Override
     public void onRefresh() {
-        new RefreshTask().execute("");
+        new RefreshTask(getActivity()).execute("");
     }
 
     private class RefreshTask extends AsyncTask<String, Integer, Boolean> {
+        Activity activity;
+
+        public RefreshTask(Activity activity) {
+            this.activity = activity;
+        }
+
         protected Boolean doInBackground(String... none) {
-            return refresh();
+            return refresh(activity);
         }
 
         protected void onProgressUpdate(Integer... none) {
