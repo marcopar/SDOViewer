@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.flatworld.android.sdoviewer.R;
-import eu.flatworld.android.sdoviewer.SDO;
+import eu.flatworld.android.sdoviewer.data.SDO;
 import eu.flatworld.android.sdoviewer.io.PicassoInstance;
 
 /**

@@ -20,8 +20,9 @@ import java.util.ArrayList;
 import eu.flatworld.android.sdoviewer.GlobalConstants;
 import eu.flatworld.android.sdoviewer.MainActivity;
 import eu.flatworld.android.sdoviewer.R;
-import eu.flatworld.android.sdoviewer.SDO;
-import eu.flatworld.android.sdoviewer.Util;
+import eu.flatworld.android.sdoviewer.data.SDO;
+import eu.flatworld.android.sdoviewer.data.SDOUtil;
+import eu.flatworld.android.sdoviewer.data.Util;
 import eu.flatworld.android.sdoviewer.gui.ImageDetailFragment;
 import eu.flatworld.android.sdoviewer.io.OkHttpClientFactory;
 import okhttp3.OkHttpClient;
@@ -136,22 +137,22 @@ public class BrowseDataFragment extends ListFragment {
     BrowseDataListAdapter createAdapter() throws IOException {
         if (type != null) {
             Log.d(GlobalConstants.LOGTAG, "Load images");
-            return new BrowseDataListAdapter(getActivity(), Util.loadImages(year, month, day, links, type, resolution));
+            return new BrowseDataListAdapter(getActivity(), SDOUtil.loadImages(year, month, day, links, type, resolution));
         } else if (day != -1) {
             Log.d(GlobalConstants.LOGTAG, "Load image types");
             if (links == null) {
-                links = Util.loadLinks(httpClient, year, month, day);
+                links = SDOUtil.loadLinks(httpClient, year, month, day);
             }
-            return new BrowseDataListAdapter(getActivity(), Util.loadImageTypes());
+            return new BrowseDataListAdapter(getActivity(), SDOUtil.loadImageTypes());
         } else if (month != -1) {
             Log.d(GlobalConstants.LOGTAG, "Load days");
-            return new BrowseDataListAdapter(getActivity(), Util.loadDays(year, month));
+            return new BrowseDataListAdapter(getActivity(), SDOUtil.loadDays(year, month));
         } else if (year != -1) {
             Log.d(GlobalConstants.LOGTAG, "Load months");
-            return new BrowseDataListAdapter(getActivity(), Util.loadMonths(year));
+            return new BrowseDataListAdapter(getActivity(), SDOUtil.loadMonths(year));
         } else {
             Log.d(GlobalConstants.LOGTAG, "Load years");
-            return new BrowseDataListAdapter(getActivity(), Util.loadYears());
+            return new BrowseDataListAdapter(getActivity(), SDOUtil.loadYears());
         }
     }
 

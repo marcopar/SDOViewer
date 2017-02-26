@@ -1,4 +1,4 @@
-package eu.flatworld.android.sdoviewer;
+package eu.flatworld.android.sdoviewer.data;
 
 /**
  * Created by marcopar on 22/02/15.

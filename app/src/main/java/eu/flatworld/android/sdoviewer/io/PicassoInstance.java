@@ -8,7 +8,7 @@ import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 
 import eu.flatworld.android.sdoviewer.GlobalConstants;
-import eu.flatworld.android.sdoviewer.Util;
+import eu.flatworld.android.sdoviewer.data.Util;
 
 /**
  * Created by marcopar on 06/02/17.
@@ -25,7 +25,7 @@ public class PicassoInstance {
                 @Override
                 public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
                     Log.e(GlobalConstants.LOGTAG, "Picasso error", exception);
-                    //Util.firebaseLog(getActivity(), "Picasso error", exception);
+                    //SDOUtil.firebaseLog(getActivity(), "Picasso error", exception);
                 }
             }).downloader(new OkHttp3Downloader(OkHttpClientFactory.getNewOkHttpClient(httpCompat))).build();
         }

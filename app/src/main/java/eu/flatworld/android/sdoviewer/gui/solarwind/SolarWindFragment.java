@@ -19,8 +19,8 @@ import com.google.gson.GsonBuilder;
 import eu.flatworld.android.sdoviewer.GlobalConstants;
 import eu.flatworld.android.sdoviewer.MainActivity;
 import eu.flatworld.android.sdoviewer.R;
-import eu.flatworld.android.sdoviewer.SolarWind;
-import eu.flatworld.android.sdoviewer.Util;
+import eu.flatworld.android.sdoviewer.data.SolarWind;
+import eu.flatworld.android.sdoviewer.data.Util;
 import eu.flatworld.android.sdoviewer.io.OkHttpClientFactory;
 import okhttp3.OkHttpClient;
 

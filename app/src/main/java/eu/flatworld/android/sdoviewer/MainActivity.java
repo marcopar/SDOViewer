@@ -12,6 +12,7 @@ import android.view.MenuItem;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 
+import eu.flatworld.android.sdoviewer.data.Util;
 import eu.flatworld.android.sdoviewer.gui.AboutFragment;
 import eu.flatworld.android.sdoviewer.gui.SettingsFragment;
 import eu.flatworld.android.sdoviewer.gui.browse.BrowseDataFragment;

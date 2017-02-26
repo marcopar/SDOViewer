@@ -22,8 +22,8 @@ import java.util.List;
 
 import eu.flatworld.android.sdoviewer.GlobalConstants;
 import eu.flatworld.android.sdoviewer.R;
-import eu.flatworld.android.sdoviewer.SDO;
-import eu.flatworld.android.sdoviewer.Util;
+import eu.flatworld.android.sdoviewer.data.SDO;
+import eu.flatworld.android.sdoviewer.data.Util;
 import eu.flatworld.android.sdoviewer.io.OkHttpClientFactory;
 import okhttp3.OkHttpClient;
 
