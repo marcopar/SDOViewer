@@ -52,6 +52,10 @@ public class TheSunNowFragment extends Fragment implements SwipeRefreshLayout.On
                              Bundle savedInstanceState) {
         swipeLayout = (SwipeRefreshLayout) inflater.inflate(R.layout.fragment_thesunnow, container, false);
         swipeLayout.setOnRefreshListener(this);
+        swipeLayout.setColorSchemeResources(
+                R.color.colorAccent,
+                R.color.colorPrimary,
+                R.color.colorPrimaryDark);
 
         final GridView gridview = (GridView) swipeLayout.findViewById(R.id.gridView);
         gridAdapter = new GridImageAdapter(getActivity());

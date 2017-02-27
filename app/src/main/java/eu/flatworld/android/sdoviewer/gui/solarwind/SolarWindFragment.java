@@ -42,7 +42,10 @@ public class SolarWindFragment extends Fragment implements SwipeRefreshLayout.On
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         swipeLayout = (SwipeRefreshLayout) inflater.inflate(R.layout.fragment_solar_wind, container, false);
         swipeLayout.setOnRefreshListener(this);
-
+        swipeLayout.setColorSchemeResources(
+                R.color.colorAccent,
+                R.color.colorPrimary,
+                R.color.colorPrimaryDark);
         return swipeLayout;
     }
 
