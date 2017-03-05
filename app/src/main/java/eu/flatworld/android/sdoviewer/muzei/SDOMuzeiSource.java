@@ -91,7 +91,7 @@ public class SDOMuzeiSource extends RemoteMuzeiArtSource {
                 break;
         }
 
-        List<SDO> lTypes = new ArrayList<>(Arrays.asList(SDO.AIA_193, SDO.AIA_304, SDO.AIA_171, SDO.AIA_211, SDO.AIA_131, SDO.AIA_335, SDO.AIA_094));
+        List<SDO> lTypes = new ArrayList<>(Arrays.asList(SDO.AIA_193, SDO.AIA_304, SDO.AIA_171, SDO.AIA_211, SDO.AIA_131, SDO.AIA_335, SDO.AIA_094, SDO.AIA_211_193_171, SDO.AIA_304_211_171, SDO.AIA_094_335_193));
         if (getCurrentArtwork() != null && getCurrentArtwork().getToken() != null) {
             try {
                 //remove the last loaded type so the image changes type every time

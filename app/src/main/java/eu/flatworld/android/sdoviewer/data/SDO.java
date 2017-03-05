@@ -13,6 +13,7 @@ public enum SDO {
     AIA_094,
     AIA_1600,
     AIA_1700,
+    AIA_4500,
     AIA_211_193_171,
     AIA_304_211_171,
     AIA_094_335_193,
@@ -48,6 +49,8 @@ public enum SDO {
                 return "<p>This channel (as well as AIA 1700) often shows a web-like pattern of bright areas that highlight places where bundles of magnetic fields lines are concentrated. However, small areas with a lot of field lines will appear black, usually near sunspots and active regions.</p><p><strong>Where:</strong> Transition region and upper photosphere<br><strong>Wavelength:</strong>  1600 angstroms (0.00000016 m) = Far Ultraviolet<br><strong>Primary ions seen:</strong>  thrice ionized carbon (C IV) and Continuum<br><strong>Characteristic temperatures:</strong> 6,000 K (11,000 F), and 100,000 K (180,000 F)</p>";
             case AIA_1700:
                 return "<p>This channel (as well as AIA 1600) often shows a web-like pattern of bright areas that highlight places where bundles of magnetic fields lines are concentrated. However, small areas with a lot of field lines will appear black, usually near sunspots and active regions.</p><p><strong>Where:</strong> Temperature minimum and photosphere<br><strong>Wavelength:</strong> 1700 angstroms (0.00000017 m) = Far Ultraviolet<br><strong>Primary ions seen:</strong> Continuum<br /><strong>Characteristic temperature:</strong> 6,000 K (11,000 F)</p>";
+            case AIA_4500:
+                return "<p>This channel shows the features that our eyes would see if we dim the Sun's intensely bright light. This wavelength of light is visible to people as blue-indigo, although here it is shown in yellow. Sunspots stand out sharply here, and you can also see that the edge of the Sun appears darker a well-known effect called limb darkening.</p><p><strong>Where:</strong> Photosphere<br /><strong>Wavelength:</strong> 4500 angstroms (0.00000045 m) = Visible (blue-indigo)<br /><strong>Primary ions seen:</strong> Continuum<br /><strong>Characteristic temperature:</strong> 6,000 K (11,000 F)</p>";
             case AIA_211_193_171:
                 return "<p>This image combines three images with different, but very similar, temperatures. The colors are assigned differently than in the single images. Here AIA 211 is red, AIA 193 is green, and AIA 171 is blue.  Each highlights a different part of the corona.</p>";
             case AIA_304_211_171:
@@ -96,6 +99,11 @@ public enum SDO {
                 return String.format(URL_LATEST + "latest_%d_1600%s.jpg", size, pfssString);
             case AIA_1700:
                 return String.format(URL_LATEST + "latest_%d_1700%s.jpg", size, pfssString);
+            case AIA_4500:
+                if (pfss) {
+                    return null;
+                }
+                return String.format(URL_LATEST + "latest_%d_4500%s.jpg", size, pfssString);
             case AIA_211_193_171:
                 return String.format(URL_LATEST + "f_211_193_171%s_%d.jpg", pfssString, size);
             case AIA_304_211_171:
@@ -160,6 +168,8 @@ public enum SDO {
                 return "1600";
             case AIA_1700:
                 return "1700";
+            case AIA_4500:
+                return "4500";
             case AIA_211_193_171:
                 return "211_193_171";
             case AIA_304_211_171:
