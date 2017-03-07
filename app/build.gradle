@@ -9,8 +9,8 @@ android {
         applicationId "eu.flatworld.android.sdoviewer"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 10903
-        versionName "1.9.3"
+        versionCode 10904
+        versionName "1.9.4"
     }
 
     signingConfigs {
