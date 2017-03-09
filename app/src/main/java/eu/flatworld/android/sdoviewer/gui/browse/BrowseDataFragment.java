@@ -1,5 +1,6 @@
 package eu.flatworld.android.sdoviewer.gui.browse;
 
+import android.app.Activity;
 import android.app.ListFragment;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -135,33 +136,35 @@ public class BrowseDataFragment extends ListFragment {
 
 
     BrowseDataListAdapter createAdapter() throws IOException {
+        final Activity activity = getActivity();
         if (type != null) {
             Log.d(GlobalConstants.LOGTAG, "Load images");
-            return new BrowseDataListAdapter(getActivity(), SDOUtil.loadImages(year, month, day, links, type, resolution));
+            return new BrowseDataListAdapter(activity, SDOUtil.loadImages(year, month, day, links, type, resolution));
         } else if (day != -1) {
             Log.d(GlobalConstants.LOGTAG, "Load image types");
             if (links == null) {
                 links = SDOUtil.loadLinks(httpClient, year, month, day);
             }
-            return new BrowseDataListAdapter(getActivity(), SDOUtil.loadImageTypes());
+            return new BrowseDataListAdapter(activity, SDOUtil.loadImageTypes());
         } else if (month != -1) {
             Log.d(GlobalConstants.LOGTAG, "Load days");
-            return new BrowseDataListAdapter(getActivity(), SDOUtil.loadDays(year, month));
+            return new BrowseDataListAdapter(activity, SDOUtil.loadDays(year, month));
         } else if (year != -1) {
             Log.d(GlobalConstants.LOGTAG, "Load months");
-            return new BrowseDataListAdapter(getActivity(), SDOUtil.loadMonths(year));
+            return new BrowseDataListAdapter(activity, SDOUtil.loadMonths(year));
         } else {
             Log.d(GlobalConstants.LOGTAG, "Load years");
-            return new BrowseDataListAdapter(getActivity(), SDOUtil.loadYears());
+            return new BrowseDataListAdapter(activity, SDOUtil.loadYears());
         }
     }
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
+        final Activity activity = getActivity();
         BrowseDataListItem bdli = (BrowseDataListItem) getListAdapter().getItem(position);
         if (type != null) {
-            ((MainActivity) getActivity()).getFirebaseAnalytics().logEvent(GlobalConstants.ANALYTICS_BROWSE_COMPLETED, Bundle.EMPTY);
+            ((MainActivity) activity).getFirebaseAnalytics().logEvent(GlobalConstants.ANALYTICS_BROWSE_COMPLETED, Bundle.EMPTY);
             Bundle bundle = new Bundle();
             bundle.putSerializable("imageType", type);
             bundle.putString("imageUrl", bdli.getUrl());
@@ -177,25 +180,25 @@ public class BrowseDataFragment extends ListFragment {
             bdf.setDay(day);
             bdf.setType(type);
             bdf.setLinks(links);
-            getActivity().getFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("hour").commit();
+            activity.getFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("hour").commit();
         } else if (month != -1) {
             int day = Integer.valueOf(bdli.getUrl());
             BrowseDataFragment bdf = new BrowseDataFragment();
             bdf.setYear(year);
             bdf.setMonth(month);
             bdf.setDay(day);
-            getActivity().getFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("type").commit();
+            activity.getFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("type").commit();
         } else if (year != -1) {
             int month = Integer.valueOf(bdli.getUrl());
             BrowseDataFragment bdf = new BrowseDataFragment();
             bdf.setYear(year);
             bdf.setMonth(month);
-            getActivity().getFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("day").commit();
+            activity.getFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("day").commit();
         } else {
             int year = Integer.valueOf(bdli.getUrl());
             BrowseDataFragment bdf = new BrowseDataFragment();
             bdf.setYear(year);
-            getActivity().getFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("month").commit();
+            activity.getFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("month").commit();
         }
     }
 
@@ -238,11 +241,17 @@ public class BrowseDataFragment extends ListFragment {
         @Override
         protected void onPostExecute(BrowseDataListAdapter result) {
             task = null;
+            final Activity activity = getActivity();
+            if (activity == null) {
+                setEmptyText(errorString);
+                setListAdapter(null);
+                return;
+            }
             if (result != null) {
                 if (!result.isEmpty()) {
                     Log.d(GlobalConstants.LOGTAG, "AsyncTask completed");
                     setListAdapter(result);
-                    ActionBar bar = ((MainActivity) getActivity()).getSupportActionBar();
+                    ActionBar bar = ((MainActivity) activity).getSupportActionBar();
                     if (type != null) {
                         bar.setSubtitle(String.format("%d/%d/%d/%s : %s", year, month, day, type.getShortCode(), getString(R.string.select_hour)));
                     } else if (day != -1) {

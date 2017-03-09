@@ -111,7 +111,8 @@ public class ImageDetailFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        final Activity activity = getActivity();
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(activity);
         int resolution = Integer.parseInt(pref.getString(GlobalConstants.PREFERENCES_RESOLUTION, "2048"));
         mImageView = (ImageViewTouch) view.findViewById(R.id.imageView);
         if (resolution > 2048) {
@@ -119,13 +120,13 @@ public class ImageDetailFragment extends Fragment {
             mImageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
         SDO imageType = (SDO) getArguments().getSerializable("imageType");
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle(imageType.toString());
-        ((MainActivity) getActivity()).getSupportActionBar().setSubtitle(null);
+        ((MainActivity) activity).getSupportActionBar().setTitle(imageType.toString());
+        ((MainActivity) activity).getSupportActionBar().setSubtitle(null);
 
         Bundle b = new Bundle();
         b.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "image_detail");
         b.putString(FirebaseAnalytics.Param.ITEM_ID, imageType.name());
-        ((MainActivity) getActivity()).getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.VIEW_ITEM, b);
+        ((MainActivity) activity).getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.VIEW_ITEM, b);
     }
 
     @Override
@@ -159,13 +160,14 @@ public class ImageDetailFragment extends Fragment {
         final String pfssUrl = (String) getArguments().getSerializable("pfssUrl");
         final String imageUrl = (String) getArguments().getSerializable("imageUrl");
         final String description = (String) getArguments().getSerializable("description");
+        final Activity activity = getActivity();
         int id = item.getItemId();
         if (id == R.id.action_set_wallpaper) {
             Bundle b = new Bundle();
             b.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "set_wallpaper");
             b.putString(FirebaseAnalytics.Param.ITEM_ID, imageType.name());
-            ((MainActivity) getActivity()).getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.SHARE, b);
-            new AlertDialog.Builder(getActivity())
+            ((MainActivity) activity).getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.SHARE, b);
+            new AlertDialog.Builder(activity)
                     .setTitle(R.string.set_wallpaper)
                     .setMessage(getString(R.string.do_you_want_to_set))
                     .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
@@ -173,9 +175,9 @@ public class ImageDetailFragment extends Fragment {
                             progressDialog.setMessage(getString(R.string.setting_wallpaper_));
                             progressDialog.show();
                             if (pfssVisible) {
-                                PicassoInstance.getPicasso(getActivity().getBaseContext()).load(pfssUrl).memoryPolicy(MemoryPolicy.NO_CACHE).into(targetSetWallpaper);
+                                PicassoInstance.getPicasso(activity.getBaseContext()).load(pfssUrl).memoryPolicy(MemoryPolicy.NO_CACHE).into(targetSetWallpaper);
                             } else {
-                                PicassoInstance.getPicasso(getActivity().getBaseContext()).load(imageUrl).memoryPolicy(MemoryPolicy.NO_CACHE).into(targetSetWallpaper);
+                                PicassoInstance.getPicasso(activity.getBaseContext()).load(imageUrl).memoryPolicy(MemoryPolicy.NO_CACHE).into(targetSetWallpaper);
                             }
                         }
                     })
@@ -186,8 +188,8 @@ public class ImageDetailFragment extends Fragment {
             Bundle b = new Bundle();
             b.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "about_image");
             b.putString(FirebaseAnalytics.Param.ITEM_ID, imageType.name());
-            ((MainActivity) getActivity()).getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.VIEW_ITEM, b);
-            new AlertDialog.Builder(getActivity())
+            ((MainActivity) activity).getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.VIEW_ITEM, b);
+            new AlertDialog.Builder(activity)
                     .setTitle(imageType.toString())
                     .setMessage(Html.fromHtml(description))
                     .setCancelable(true)
@@ -207,13 +209,13 @@ public class ImageDetailFragment extends Fragment {
             Bundle b = new Bundle();
             b.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "share");
             b.putString(FirebaseAnalytics.Param.ITEM_ID, imageType.name());
-            ((MainActivity) getActivity()).getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.SHARE, b);
+            ((MainActivity) activity).getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.SHARE, b);
             progressDialog.setMessage(getString(R.string.preparing_the_image_));
             progressDialog.show();
             if (pfssVisible) {
-                Picasso.with(getActivity()).load(pfssUrl).into(targetShare);
+                Picasso.with(activity).load(pfssUrl).into(targetShare);
             } else {
-                Picasso.with(getActivity()).load(imageUrl).into(targetShare);
+                Picasso.with(activity).load(imageUrl).into(targetShare);
             }
             return true;
         }
@@ -221,7 +223,7 @@ public class ImageDetailFragment extends Fragment {
             Bundle b = new Bundle();
             b.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "pfss");
             b.putString(FirebaseAnalytics.Param.ITEM_ID, imageType.name());
-            ((MainActivity) getActivity()).getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.VIEW_ITEM, b);
+            ((MainActivity) activity).getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.VIEW_ITEM, b);
             pfssVisible = !pfssVisible;
             item.setChecked(pfssVisible);
             if (pfssVisible) {
@@ -237,8 +239,11 @@ public class ImageDetailFragment extends Fragment {
 
     public void share(Bitmap b) {
         final Activity activity = getActivity();
+        if (activity == null) {
+            return;
+        }
         try {
-            String path = MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), b, "x", "x");
+            String path = MediaStore.Images.Media.insertImage(activity.getContentResolver(), b, "x", "x");
             Uri uri = Uri.parse(path);
             Intent shareIntent = new Intent();
             shareIntent.setAction(Intent.ACTION_SEND);
@@ -258,8 +263,11 @@ public class ImageDetailFragment extends Fragment {
 
     void setWallpaper(Bitmap source) {
         final Activity activity = getActivity();
+        if (activity == null) {
+            return;
+        }
         try {
-            WallpaperManager wallpaperManager = WallpaperManager.getInstance(getActivity());
+            WallpaperManager wallpaperManager = WallpaperManager.getInstance(activity);
             int screenWidth = wallpaperManager.getDesiredMinimumWidth();
             int screenHeight = wallpaperManager.getDesiredMinimumHeight();
             Bitmap target;
@@ -283,20 +291,21 @@ public class ImageDetailFragment extends Fragment {
     }
 
     void loadImage(boolean invalidateCache) {
+        final Activity activity = getActivity();
         mImageView.setImageResource(R.drawable.ic_sun);
         final SDO imageType = (SDO) getArguments().getSerializable("imageType");
         final String pfssUrl = (String) getArguments().getSerializable("pfssUrl");
         final String imageUrl = (String) getArguments().getSerializable("imageUrl");
         if (invalidateCache) {
-            Picasso.with(getActivity()).invalidate(imageUrl);
+            Picasso.with(activity).invalidate(imageUrl);
             if (pfssUrl != null) {
-                Picasso.with(getActivity()).invalidate(pfssUrl);
+                Picasso.with(activity).invalidate(pfssUrl);
             }
         }
         if (pfssVisible) {
-            PicassoInstance.getPicasso(getActivity().getBaseContext()).load(pfssUrl).memoryPolicy(MemoryPolicy.NO_CACHE).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(mImageView);
+            PicassoInstance.getPicasso(activity.getBaseContext()).load(pfssUrl).memoryPolicy(MemoryPolicy.NO_CACHE).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(mImageView);
         } else {
-            PicassoInstance.getPicasso(getActivity().getBaseContext()).load(imageUrl).memoryPolicy(MemoryPolicy.NO_CACHE).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(mImageView);
+            PicassoInstance.getPicasso(activity.getBaseContext()).load(imageUrl).memoryPolicy(MemoryPolicy.NO_CACHE).placeholder(R.drawable.ic_sun).error(R.drawable.ic_broken_sun).into(mImageView);
         }
     }
 

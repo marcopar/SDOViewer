@@ -1,5 +1,6 @@
 package eu.flatworld.android.sdoviewer.gui;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.text.Html;
@@ -29,9 +30,10 @@ public class AboutFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        final Activity activity = getActivity();
         String version;
         try {
-            version = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0).versionName;
+            version = activity.getPackageManager().getPackageInfo(activity.getPackageName(), 0).versionName;
         } catch (Exception ex) {
             version = "-";
             ex.printStackTrace();
@@ -46,8 +48,8 @@ public class AboutFragment extends Fragment {
         tv.setText(Html.fromHtml(getString(R.string.sdo_website)));
         tv.setMovementMethod(new LinkMovementMethod());
 
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle(R.string.about);
-        ((MainActivity) getActivity()).getSupportActionBar().setSubtitle(null);
+        ((MainActivity) activity).getSupportActionBar().setTitle(R.string.about);
+        ((MainActivity) activity).getSupportActionBar().setSubtitle(null);
 
         TextView aboutCredits = (TextView) view.findViewById(R.id.aboutCredits);
         aboutCredits.setText(Html.fromHtml(getString(R.string.aboutCredits)));

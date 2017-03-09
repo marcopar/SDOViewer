@@ -61,9 +61,12 @@ public class SolarWindFragment extends Fragment implements SwipeRefreshLayout.On
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle(R.string.solar_wind);
-        ((MainActivity) getActivity()).getSupportActionBar().setSubtitle(null);
+        final Activity activity = getActivity();
+        if (activity == null) {
+            return;
+        }
+        ((MainActivity) activity).getSupportActionBar().setTitle(R.string.solar_wind);
+        ((MainActivity) activity).getSupportActionBar().setSubtitle(null);
 
         tvBt = (TextView) view.findViewById(R.id.tvValueBt);
         tvBz = (TextView) view.findViewById(R.id.tvValueBz);
@@ -71,7 +74,7 @@ public class SolarWindFragment extends Fragment implements SwipeRefreshLayout.On
         tvSpeed = (TextView) view.findViewById(R.id.tvSpeedValue);
 
         swipeLayout.setRefreshing(true);
-        new RefreshTask(getActivity()).execute("");
+        new RefreshTask(activity).execute("");
     }
 
     boolean refresh(Activity activity) {

@@ -1,5 +1,6 @@
 package eu.flatworld.android.sdoviewer.gui;
 
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
@@ -43,8 +44,9 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle(R.string.settings);
-        ((MainActivity) getActivity()).getSupportActionBar().setSubtitle(null);
+        final Activity activity = getActivity();
+        ((MainActivity) activity).getSupportActionBar().setTitle(R.string.settings);
+        ((MainActivity) activity).getSupportActionBar().setSubtitle(null);
     }
 
     @Override
