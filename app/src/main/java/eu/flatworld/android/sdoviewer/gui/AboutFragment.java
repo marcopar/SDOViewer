@@ -31,6 +31,9 @@ public class AboutFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         final Activity activity = getActivity();
+        if (activity == null) {
+            return;
+        }
         String version;
         try {
             version = activity.getPackageManager().getPackageInfo(activity.getPackageName(), 0).versionName;

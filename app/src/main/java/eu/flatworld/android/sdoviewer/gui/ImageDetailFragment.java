@@ -112,6 +112,9 @@ public class ImageDetailFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         final Activity activity = getActivity();
+        if (activity == null) {
+            return;
+        }
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(activity);
         int resolution = Integer.parseInt(pref.getString(GlobalConstants.PREFERENCES_RESOLUTION, "2048"));
         mImageView = (ImageViewTouch) view.findViewById(R.id.imageView);
@@ -161,6 +164,9 @@ public class ImageDetailFragment extends Fragment {
         final String imageUrl = (String) getArguments().getSerializable("imageUrl");
         final String description = (String) getArguments().getSerializable("description");
         final Activity activity = getActivity();
+        if (activity == null) {
+            return false;
+        }
         int id = item.getItemId();
         if (id == R.id.action_set_wallpaper) {
             Bundle b = new Bundle();
@@ -292,6 +298,9 @@ public class ImageDetailFragment extends Fragment {
 
     void loadImage(boolean invalidateCache) {
         final Activity activity = getActivity();
+        if (activity == null) {
+            return;
+        }
         mImageView.setImageResource(R.drawable.ic_sun);
         final SDO imageType = (SDO) getArguments().getSerializable("imageType");
         final String pfssUrl = (String) getArguments().getSerializable("pfssUrl");

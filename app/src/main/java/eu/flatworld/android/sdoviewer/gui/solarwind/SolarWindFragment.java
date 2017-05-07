@@ -74,10 +74,14 @@ public class SolarWindFragment extends Fragment implements SwipeRefreshLayout.On
         tvSpeed = (TextView) view.findViewById(R.id.tvSpeedValue);
 
         swipeLayout.setRefreshing(true);
-        new RefreshTask(activity).execute("");
+        new RefreshTask().execute("");
     }
 
-    boolean refresh(Activity activity) {
+    boolean refresh() {
+        final Activity activity = getActivity();
+        if (activity == null) {
+            return true;
+        }
         Log.i(GlobalConstants.LOGTAG, "Loading solar wind data");
         OkHttpClient client = OkHttpClientFactory.getNewOkHttpClient(Util.getHttpsSafeModeEnabled(activity));
         Speed s = null;
@@ -144,18 +148,16 @@ public class SolarWindFragment extends Fragment implements SwipeRefreshLayout.On
 
     @Override
     public void onRefresh() {
-        new RefreshTask(getActivity()).execute("");
+        new RefreshTask().execute("");
     }
 
     private class RefreshTask extends AsyncTask<String, Integer, Boolean> {
-        Activity activity;
+        public RefreshTask() {
 
-        public RefreshTask(Activity activity) {
-            this.activity = activity;
         }
 
         protected Boolean doInBackground(String... none) {
-            return refresh(activity);
+            return refresh();
         }
 
         protected void onProgressUpdate(Integer... none) {

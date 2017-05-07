@@ -36,18 +36,27 @@ public class Util {
     public static boolean isWifiConnected(Context context) {
         ConnectivityManager connManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo info = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        if (info == null) {
+            return false;
+        }
         return info.isConnected();
     }
 
     public static boolean isMobileConnected(Context context) {
         ConnectivityManager connManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo info = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        if (info == null) {
+            return false;
+        }
         return info.isConnected();
     }
 
     public static boolean isRoaming(Context context) {
         ConnectivityManager connManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo info = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        if (info == null) {
+            return false;
+        }
         return info.isRoaming();
     }
 

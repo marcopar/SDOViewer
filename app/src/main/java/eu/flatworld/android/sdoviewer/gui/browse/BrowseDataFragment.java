@@ -162,6 +162,9 @@ public class BrowseDataFragment extends ListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         final Activity activity = getActivity();
+        if (activity == null) {
+            return;
+        }
         BrowseDataListItem bdli = (BrowseDataListItem) getListAdapter().getItem(position);
         if (type != null) {
             ((MainActivity) activity).getFirebaseAnalytics().logEvent(GlobalConstants.ANALYTICS_BROWSE_COMPLETED, Bundle.EMPTY);
