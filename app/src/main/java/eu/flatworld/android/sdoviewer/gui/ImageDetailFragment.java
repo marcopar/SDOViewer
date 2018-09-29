@@ -14,7 +14,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,6 +28,9 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+
+import java.io.File;
+import java.io.FileOutputStream;
 
 import eu.flatworld.android.sdoviewer.GlobalConstants;
 import eu.flatworld.android.sdoviewer.MainActivity;
@@ -249,13 +252,29 @@ public class ImageDetailFragment extends Fragment {
             return;
         }
         try {
-            String path = MediaStore.Images.Media.insertImage(activity.getContentResolver(), b, "x", "x");
-            Uri uri = Uri.parse(path);
-            Intent shareIntent = new Intent();
-            shareIntent.setAction(Intent.ACTION_SEND);
-            shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
-            shareIntent.setType("image/*");
-            startActivity(Intent.createChooser(shareIntent, getString(R.string.share_the_image_using_)));
+            File cachePath = new File(activity.getCacheDir(), "images");
+            if (cachePath.exists()) {
+                for (File f : cachePath.listFiles()) {
+                    f.delete();
+                }
+                cachePath.delete();
+            }
+            cachePath.mkdirs();
+            String fileName = cachePath + "/image" + System.currentTimeMillis() + ".png";
+            FileOutputStream stream = new FileOutputStream(fileName);
+            b.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            stream.close();
+
+            File newFile = new File(fileName);
+            Uri contentUri = FileProvider.getUriForFile(activity, "eu.flatworld.android.sdoviewer.fileprovider", newFile);
+            if (contentUri != null) {
+                Intent shareIntent = new Intent();
+                shareIntent.setAction(Intent.ACTION_SEND);
+                shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // temp permission for receiving app to read this file
+                shareIntent.setDataAndType(contentUri, activity.getContentResolver().getType(contentUri));
+                shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
+                startActivity(Intent.createChooser(shareIntent, getString(R.string.share_the_image_using_)));
+            }
         } catch (final Exception ex) {
             activity.runOnUiThread(new Runnable() {
                 public void run() {
