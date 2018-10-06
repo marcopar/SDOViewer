@@ -9,10 +9,10 @@ android {
 
     defaultConfig {
         applicationId "eu.flatworld.android.sdoviewer"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 27
-        versionCode 10908
-        versionName "1.9.8"
+        versionCode 20000
+        versionName "2.0.0"
     }
 
     signingConfigs {
@@ -54,10 +54,12 @@ dependencies {
     implementation 'it.sephiroth.android.library.imagezoom:imagezoom:2.2.4'
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'org.jsoup:jsoup:1.10.2'
-    implementation 'com.google.android.apps.muzei:muzei-api:+'
+    implementation 'com.google.android.apps.muzei:muzei-api:2.+'
     implementation 'com.squareup.okhttp3:okhttp:3.5.0'
     implementation 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0'
     implementation 'com.google.code.gson:gson:2.8.0'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.9.5'
     implementation 'com.google.firebase:firebase-core:16.0.3'
+    implementation 'android.arch.work:work-runtime:1.0+'
+    implementation 'com.google.android.apps.muzei:muzei-api:3.0+'
 }

@@ -30,23 +30,6 @@
             android:label="@string/muzei_settings"
             android:theme="@style/Theme.SDO.Transparent" />
 
-        <service
-            android:name=".muzei.SDOMuzeiSource"
-            android:description="@string/muzei_description"
-            android:icon="@drawable/muzei"
-            android:label="@string/muzei_label">
-            <intent-filter>
-                <action android:name="com.google.android.apps.muzei.api.MuzeiArtSource" />
-            </intent-filter>
-
-            <meta-data
-                android:name="color"
-                android:value="#ffff00" />
-            <meta-data
-                android:name="settingsActivity"
-                android:value=".muzei.MuzeiSettingsActivity" />
-        </service>
-
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="eu.flatworld.android.sdoviewer.fileprovider"
@@ -55,6 +38,18 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/filepaths" />
+        </provider>
+
+        <provider
+            android:name=".muzei.SDOMuzeiArtProvider"
+            android:authorities="${applicationId}"
+            android:description="@string/muzei_description"
+            android:exported="true"
+            android:label="@string/muzei_label"
+            android:permission="com.google.android.apps.muzei.api.ACCESS_PROVIDER">
+            <intent-filter>
+                <action android:name="com.google.android.apps.muzei.api.MuzeiArtProvider" />
+            </intent-filter>
         </provider>
 
     </application>
