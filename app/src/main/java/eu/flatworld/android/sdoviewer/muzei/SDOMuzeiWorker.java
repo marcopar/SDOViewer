@@ -69,7 +69,8 @@ public class SDOMuzeiWorker extends Worker {
             Log.e(GlobalConstants.LOGTAG, "Error retrieving last modified header", ex);
             return Result.RETRY;
         }
-        //muzei caches images by uri, if we use the same uri (like it happens for the "latest" images, muzei never updates
+        //muzei caches images by token
+        //if we use as token the same uri (like it happens for the "latest" images) muzei uses already cached images
         //for this reason we add a parameter in the url containing the last modified date
         //this way we force muzei to update but we force it only when a different image is effectively online
         Uri uri = Uri.parse(String.format("%s?Last-Modified=%s", url, sdf.format(lastModified)));
@@ -79,7 +80,7 @@ public class SDOMuzeiWorker extends Worker {
 
         Artwork artwork = new Artwork.Builder()
                 .title(type.toString())
-                .byline(getApplicationContext().getResources().getString(R.string.muzei_byline))
+                .attribution(getApplicationContext().getResources().getString(R.string.muzei_byline))
                 .token(token)
                 .metadata(metadata)
                 .persistentUri(uri)
