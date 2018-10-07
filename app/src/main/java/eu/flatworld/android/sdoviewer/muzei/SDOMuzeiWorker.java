@@ -50,10 +50,10 @@ public class SDOMuzeiWorker extends Worker {
 
         List<SDO> lTypes = new ArrayList<>(Arrays.asList(SDO.AIA_193, SDO.AIA_304, SDO.AIA_171, SDO.AIA_211, SDO.AIA_131, SDO.AIA_335, SDO.AIA_094, SDO.AIA_211_193_171, SDO.AIA_304_211_171, SDO.AIA_094_335_193));
         Artwork lastArtwork = ProviderContract.Artwork.getLastAddedArtwork(getApplicationContext(), BuildConfig.APPLICATION_ID);
-        if (lastArtwork != null && lastArtwork.getToken() != null) {
+        if (lastArtwork != null && lastArtwork.getMetadata() != null) {
             try {
                 //remove the last loaded type so the image changes type every time
-                SDO currentType = SDO.valueOf(lastArtwork.getToken());
+                SDO currentType = SDO.valueOf(lastArtwork.getMetadata());
                 lTypes.remove(currentType);
             } catch (Exception ex) {
             }
@@ -73,15 +73,16 @@ public class SDOMuzeiWorker extends Worker {
         //for this reason we add a parameter in the url containing the last modified date
         //this way we force muzei to update but we force it only when a different image is effectively online
         Uri uri = Uri.parse(String.format("%s?Last-Modified=%s", url, sdf.format(lastModified)));
-        String token = type.name();
-        Log.i(GlobalConstants.LOGTAG, String.format("Publish artwork token[%s] url[%s]", token, uri.toString()));
+        String token = uri.toString();
+        String metadata = type.name();
+        Log.i(GlobalConstants.LOGTAG, String.format("Publish artwork metadata[%s] token[%s]", metadata, token));
 
         Artwork artwork = new Artwork.Builder()
                 .title(type.toString())
                 .byline(getApplicationContext().getResources().getString(R.string.muzei_byline))
                 .token(token)
+                .metadata(metadata)
                 .persistentUri(uri)
-                .webUri(uri)
                 .build();
 
         ProviderContract.Artwork.addArtwork(
