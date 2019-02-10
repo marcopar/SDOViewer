@@ -67,7 +67,7 @@ public class SDOMuzeiWorker extends Worker {
             lastModified = Util.getLastModified(httpClient, url);
         } catch (IOException ex) {
             Log.e(GlobalConstants.LOGTAG, "Error retrieving last modified header", ex);
-            return Result.RETRY;
+            return Result.retry();
         }
         //muzei caches images by token
         //if we use as token the same uri (like it happens for the "latest" images) muzei uses already cached images
@@ -90,6 +90,6 @@ public class SDOMuzeiWorker extends Worker {
                 getApplicationContext(),
                 BuildConfig.APPLICATION_ID,
                 artwork);
-        return Result.SUCCESS;
+        return Result.success();
     }
 }

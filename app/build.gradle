@@ -5,14 +5,13 @@ apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '28.0.2'
 
     defaultConfig {
         applicationId "eu.flatworld.android.sdoviewer"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 20002
-        versionName "2.0.2"
+        versionCode 20003
+        versionName "2.0.3"
     }
 
     signingConfigs {
@@ -24,6 +23,10 @@ android {
             keyPassword System.getenv("KEY_PASSWORD")
         }
         debug {
+            storeFile file('/home/marcopar/Dropbox/pc/keystore/androidkeystore')
+            storePassword System.getenv("KEYSTORE_PASSWORD")
+            keyAlias System.getenv("KEY_ALIAS")
+            keyPassword System.getenv("KEY_PASSWORD")
         }
     }
 
@@ -48,17 +51,17 @@ repositories {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:design:27+'
-    implementation 'com.android.support:appcompat-v7:27+'
-    implementation 'com.android.support:support-v4:27+'
+    implementation 'com.android.support:design:27.1.1'
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:support-v4:27.1.1'
     implementation 'it.sephiroth.android.library.imagezoom:imagezoom:2.2.4'
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'org.jsoup:jsoup:1.10.2'
-    implementation 'com.squareup.okhttp3:okhttp:3.5.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0'
-    implementation 'com.google.code.gson:gson:2.8.0'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.5'
-    implementation 'com.google.firebase:firebase-core:16.0.3'
-    implementation 'android.arch.work:work-runtime:1.0+'
-    implementation 'com.google.android.apps.muzei:muzei-api:+'
+    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.9'
+    implementation 'com.google.firebase:firebase-core:16.0.7'
+    implementation 'android.arch.work:work-runtime:1.0.0-beta05'
+    implementation 'com.google.android.apps.muzei:muzei-api:3.1.0'
 }
