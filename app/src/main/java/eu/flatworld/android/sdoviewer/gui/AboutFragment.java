@@ -50,6 +50,9 @@ public class AboutFragment extends Fragment {
         tv = (TextView) view.findViewById(R.id.aboutTVSDO);
         tv.setText(Html.fromHtml(getString(R.string.sdo_website)));
         tv.setMovementMethod(new LinkMovementMethod());
+        tv = (TextView) view.findViewById(R.id.tvPrivacyPolicy);
+        tv.setText(Html.fromHtml(getString(R.string.privacyPolicy)));
+        tv.setMovementMethod(new LinkMovementMethod());
 
         ((MainActivity) activity).getSupportActionBar().setTitle(R.string.about);
         ((MainActivity) activity).getSupportActionBar().setSubtitle(null);

@@ -9,8 +9,6 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
 
-import com.crashlytics.android.Crashlytics;
-
 import java.io.IOException;
 import java.util.Date;
 
@@ -29,8 +27,6 @@ public class Util {
                 Settings.Secure.ANDROID_ID);
         String s = String.format("ID: %s, MSG: %s", android_id, text);
         Log.e(GlobalConstants.LOGTAG, s, ex);
-        Crashlytics.log(s);
-        Crashlytics.logException(ex);
     }
 
     public static boolean isWifiConnected(Context context) {

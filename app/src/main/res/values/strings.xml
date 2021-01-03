@@ -80,5 +80,8 @@
     <string name="z_magneticfield_value_format">Bz %d nT</string>
     <string name="flux_value_format">%d sfu</string>
     <string name="no_data">No data</string>
+    <string name="privacyPolicy"><![CDATA[
+        <a href="https://www.flatworld.eu/privacy_policy.html">Privacy policy</a>
+        ]]></string>
 
 </resources>

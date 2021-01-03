@@ -10,8 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import com.google.firebase.analytics.FirebaseAnalytics;
-
 import eu.flatworld.android.sdoviewer.data.Util;
 import eu.flatworld.android.sdoviewer.gui.AboutFragment;
 import eu.flatworld.android.sdoviewer.gui.SettingsFragment;
@@ -22,7 +20,6 @@ import eu.flatworld.android.sdoviewer.gui.thesunnow.TheSunNowFragment;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
-    private FirebaseAnalytics firebaseAnalytics;
 
     public MainActivity() {
     }
@@ -43,8 +40,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
-
         //configure initial values for https compat mode
         Util.getHttpsSafeModeEnabled(this);
 
@@ -64,37 +59,22 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public boolean onNavigationItemSelected(MenuItem menuItem) {
                             if (menuItem.getItemId() == R.id.nav_the_sun_now) {
-                                Bundle b = new Bundle();
-                                b.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "the_sun_now");
-                                getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, b);
                                 getFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                                 getFragmentManager().beginTransaction().replace(R.id.content_frame, new TheSunNowFragment()).commit();
                             }
                             if (menuItem.getItemId() == R.id.nav_browse_data) {
-                                Bundle b = new Bundle();
-                                b.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "browse");
-                                getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, b);
                                 BrowseDataFragment bdfy = new BrowseDataFragment();
                                 getFragmentManager().beginTransaction().replace(R.id.content_frame, bdfy).addToBackStack("year").commit();
                             }
                             if (menuItem.getItemId() == R.id.nav_solar_wind) {
-                                Bundle b = new Bundle();
-                                b.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "solar_wind");
-                                getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, b);
                                 SolarWindFragment bdfy = new SolarWindFragment();
                                 getFragmentManager().beginTransaction().replace(R.id.content_frame, bdfy).addToBackStack("solarwind").commit();
                             }
                             if (menuItem.getItemId() == R.id.action_settings) {
-                                Bundle b = new Bundle();
-                                b.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "settings");
-                                getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, b);
                                 SettingsFragment f = new SettingsFragment();
                                 getFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack("settings").commit();
                             }
                             if (menuItem.getItemId() == R.id.action_about) {
-                                Bundle b = new Bundle();
-                                b.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "about");
-                                getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, b);
                                 AboutFragment f = new AboutFragment();
                                 getFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack("about").commit();
                             }
@@ -122,9 +102,5 @@ public class MainActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public FirebaseAnalytics getFirebaseAnalytics() {
-        return firebaseAnalytics;
     }
 }
