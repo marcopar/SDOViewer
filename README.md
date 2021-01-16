@@ -8,6 +8,3 @@ Current features:
 - Muzei artwork source
 
 https://play.google.com/store/apps/details?id=eu.flatworld.android.sdoviewer
-
-Code released under the Apache License Version 2.0
-
