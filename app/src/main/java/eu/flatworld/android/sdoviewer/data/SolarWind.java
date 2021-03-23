@@ -8,7 +8,7 @@ public enum SolarWind {
     MAGNETIC_FIELD,
     FLUX;
 
-    public static final String BASE_URL = "http://services.swpc.noaa.gov/";
+    public static final String BASE_URL = "https://services.swpc.noaa.gov/";
     public static final String URL_SOLARWIND_SPEED = BASE_URL + "products/summary/solar-wind-speed.json";
     public static final String URL_SOLARWIND_MAGNETICFIELD = BASE_URL + "products/summary/solar-wind-mag-field.json";
     public static final String URL_SOLARWIND_FLUX = BASE_URL + "products/summary/10cm-flux.json";
