@@ -14,6 +14,7 @@ import java.security.NoSuchAlgorithmException;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
 
 /**
  * Socket factory enabling TLS
@@ -23,9 +24,9 @@ import javax.net.ssl.SSLSocketFactory;
 public class TLSSocketFactory extends SSLSocketFactory {
     private SSLSocketFactory delegate;
 
-    public TLSSocketFactory() throws KeyManagementException, NoSuchAlgorithmException {
+    public TLSSocketFactory(TrustManager[] tm) throws KeyManagementException, NoSuchAlgorithmException {
         SSLContext context = SSLContext.getInstance("TLS");
-        context.init(null, null, null);
+        context.init(null, tm, null);
         delegate = context.getSocketFactory();
     }
 

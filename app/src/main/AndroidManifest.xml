@@ -16,6 +16,7 @@
         android:theme="@style/Theme.SDO.Splash">
         <activity
             android:name=".MainActivity"
+            android:exported="true"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,7 +32,7 @@
             android:theme="@style/Theme.SDO.Transparent" />
 
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="eu.flatworld.android.sdoviewer.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">

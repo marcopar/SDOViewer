@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.apps.muzei.api.provider.Artwork;
@@ -40,7 +40,7 @@ public class SDOMuzeiWorker extends Worker {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
         resolution = Integer.parseInt(pref.getString(GlobalConstants.PREFERENCES_MUZEIRESOLUTION, "2048"));
 
-        httpClient = OkHttpClientFactory.getNewOkHttpsSafeClient();
+        httpClient = OkHttpClientFactory.getNewOkHttpClient(Util.getHttpsSafeModeEnabled(context));
 
     }
 
