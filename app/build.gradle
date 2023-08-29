@@ -3,26 +3,26 @@ apply plugin: 'com.google.gms.google-services'
 
 
 android {
-    compileSdkVersion 31
+    compileSdk 33
 
     defaultConfig {
         applicationId "eu.flatworld.android.sdoviewer"
         minSdkVersion 19
-        targetSdkVersion 31
-        versionCode 20008
-        versionName "2.0.8"
+        targetSdkVersion 33
+        versionCode 20009
+        versionName "2.0.9"
+        multiDexEnabled true
     }
 
     signingConfigs {
         release {
-            storeFile file('c:/users/marcopar/Onedrive/pc/keystore/androidkeystore')
-            // storeFile file('/home/marcopar/Dropbox/pc/keystore/androidkeystore')
+            storeFile file('c:/dev/keystore/androidkeystore')
             storePassword System.getenv("KEYSTORE_PASSWORD")
             keyAlias System.getenv("KEY_ALIAS")
             keyPassword System.getenv("KEY_PASSWORD")
         }
         debug {
-            storeFile file('/home/marcopar/Onedrive/pc/keystore/androidkeystore')
+            storeFile file('c:/dev/keystore/androidkeystore')
             storePassword System.getenv("KEYSTORE_PASSWORD")
             keyAlias System.getenv("KEY_ALIAS")
             keyPassword System.getenv("KEY_PASSWORD")
@@ -42,6 +42,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    namespace 'eu.flatworld.android.sdoviewer'
 }
 
 repositories {
@@ -50,15 +51,16 @@ repositories {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.google.android.material:material:1.4.0'
-    implementation 'androidx.appcompat:appcompat:1.4.0'
+    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'it.sephiroth.android.library.imagezoom:imagezoom:2.2.4'
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'org.jsoup:jsoup:1.10.2'
-    implementation("com.squareup.okhttp3:okhttp:4.9.0")
+    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
     implementation 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0'
-    implementation 'com.google.code.gson:gson:2.8.6'
-    implementation 'androidx.work:work-runtime:2.7.1'
+    implementation 'com.google.code.gson:gson:2.8.9'
+    implementation 'androidx.work:work-runtime:2.8.1'
     implementation 'com.google.android.apps.muzei:muzei-api:3.1.0'
+    implementation "androidx.multidex:multidex:2.0.1"
 }
