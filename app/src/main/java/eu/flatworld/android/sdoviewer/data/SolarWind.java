@@ -37,6 +37,7 @@ public enum SolarWind {
         return null;
     }
 
+    @Override
     public String toString() {
         return name().replaceAll("_", " ");
     }

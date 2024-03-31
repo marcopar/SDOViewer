@@ -1,12 +1,13 @@
 package eu.flatworld.android.sdoviewer.gui.browse;
 
 import android.app.Activity;
-import android.app.ListFragment;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import androidx.appcompat.app.ActionBar;
+import androidx.fragment.app.ListFragment;
+import androidx.preference.PreferenceManager;
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -173,7 +174,7 @@ public class BrowseDataFragment extends ListFragment {
             bundle.putString("description", SDO.getDescription(type));
             ImageDetailFragment f = new ImageDetailFragment();
             f.setArguments(bundle);
-            getFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack(null).commit();
+            getParentFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack(null).commit();
         } else if (day != -1) {
             SDO type = SDO.valueOf(bdli.getUrl());
             BrowseDataFragment bdf = new BrowseDataFragment();
@@ -182,25 +183,25 @@ public class BrowseDataFragment extends ListFragment {
             bdf.setDay(day);
             bdf.setType(type);
             bdf.setLinks(links);
-            activity.getFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("hour").commit();
+            getParentFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("hour").commit();
         } else if (month != -1) {
             int day = Integer.valueOf(bdli.getUrl());
             BrowseDataFragment bdf = new BrowseDataFragment();
             bdf.setYear(year);
             bdf.setMonth(month);
             bdf.setDay(day);
-            activity.getFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("type").commit();
+            getParentFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("type").commit();
         } else if (year != -1) {
             int month = Integer.valueOf(bdli.getUrl());
             BrowseDataFragment bdf = new BrowseDataFragment();
             bdf.setYear(year);
             bdf.setMonth(month);
-            activity.getFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("day").commit();
+            getParentFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("day").commit();
         } else {
             int year = Integer.valueOf(bdli.getUrl());
             BrowseDataFragment bdf = new BrowseDataFragment();
             bdf.setYear(year);
-            activity.getFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("month").commit();
+            getParentFragmentManager().beginTransaction().replace(R.id.content_frame, bdf).addToBackStack("month").commit();
         }
     }
 

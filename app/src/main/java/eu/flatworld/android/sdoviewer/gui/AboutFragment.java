@@ -1,7 +1,6 @@
 package eu.flatworld.android.sdoviewer.gui;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -9,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
 
 import eu.flatworld.android.sdoviewer.MainActivity;
 import eu.flatworld.android.sdoviewer.R;
@@ -39,7 +40,6 @@ public class AboutFragment extends Fragment {
             version = activity.getPackageManager().getPackageInfo(activity.getPackageName(), 0).versionName;
         } catch (Exception ex) {
             version = "-";
-            ex.printStackTrace();
         }
 
 

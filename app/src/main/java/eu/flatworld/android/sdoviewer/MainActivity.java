@@ -26,8 +26,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (getFragmentManager().getBackStackEntryCount() != 0) {
-            getFragmentManager().popBackStack();
+        if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
+            getSupportFragmentManager().popBackStack();
         } else {
             super.onBackPressed();
         }
@@ -59,24 +59,24 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public boolean onNavigationItemSelected(MenuItem menuItem) {
                             if (menuItem.getItemId() == R.id.nav_the_sun_now) {
-                                getFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                                getFragmentManager().beginTransaction().replace(R.id.content_frame, new TheSunNowFragment()).commit();
+                                getSupportFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new TheSunNowFragment()).commit();
                             }
                             if (menuItem.getItemId() == R.id.nav_browse_data) {
                                 BrowseDataFragment bdfy = new BrowseDataFragment();
-                                getFragmentManager().beginTransaction().replace(R.id.content_frame, bdfy).addToBackStack("year").commit();
+                                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, bdfy).addToBackStack("year").commit();
                             }
                             if (menuItem.getItemId() == R.id.nav_solar_wind) {
                                 SolarWindFragment bdfy = new SolarWindFragment();
-                                getFragmentManager().beginTransaction().replace(R.id.content_frame, bdfy).addToBackStack("solarwind").commit();
+                                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, bdfy).addToBackStack("solarwind").commit();
                             }
                             if (menuItem.getItemId() == R.id.action_settings) {
                                 SettingsFragment f = new SettingsFragment();
-                                getFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack("settings").commit();
+                                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack("settings").commit();
                             }
                             if (menuItem.getItemId() == R.id.action_about) {
                                 AboutFragment f = new AboutFragment();
-                                getFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack("about").commit();
+                                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack("about").commit();
                             }
                             mDrawerLayout.closeDrawers();
                             return true;
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction().add(R.id.content_frame, new TheSunNowFragment(), "thesunnow").commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.content_frame, new TheSunNowFragment(), "thesunnow").commit();
         }
     }
 

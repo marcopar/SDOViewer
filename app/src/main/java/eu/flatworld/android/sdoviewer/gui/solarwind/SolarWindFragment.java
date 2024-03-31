@@ -1,10 +1,11 @@
 package eu.flatworld.android.sdoviewer.gui.solarwind;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,13 +31,12 @@ public class SolarWindFragment extends Fragment implements SwipeRefreshLayout.On
     TextView tvSpeed;
     TextView tvBt;
     TextView tvBz;
-    private Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss.SSS").create();
+    private final Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss.SSS").create();
     private SwipeRefreshLayout swipeLayout;
 
     public SolarWindFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

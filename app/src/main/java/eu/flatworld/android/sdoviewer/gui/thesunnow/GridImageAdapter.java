@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import eu.flatworld.android.sdoviewer.R;
@@ -27,10 +28,8 @@ public class GridImageAdapter extends BaseAdapter {
     public GridImageAdapter(Context c) {
         mInflater = LayoutInflater.from(c);
         mContext = c;
-        mItems = new ArrayList<SDO>();
-        for (SDO i : SDO.values()) {
-            mItems.add(i);
-        }
+        mItems = new ArrayList<>();
+        Collections.addAll(mItems, SDO.values());
     }
 
     public void invalidateCache() {

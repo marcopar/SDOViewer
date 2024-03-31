@@ -1,11 +1,13 @@
 package eu.flatworld.android.sdoviewer.gui.thesunnow;
 
 
-import android.app.Fragment;
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
+
+import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.app.ActionBar;
 import android.view.LayoutInflater;
@@ -14,7 +16,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.GridView;
 
 import eu.flatworld.android.sdoviewer.MainActivity;
@@ -61,21 +62,19 @@ public class TheSunNowFragment extends Fragment implements SwipeRefreshLayout.On
         gridAdapter = new GridImageAdapter(getActivity());
         gridview.setAdapter(gridAdapter);
 
-        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                GridImageAdapter a = (GridImageAdapter) gridview.getAdapter();
-                SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                int resolution = Integer.parseInt(pref.getString("resolution", "2048"));
-                Bundle bundle = new Bundle();
-                SDO imageType = a.getItem(position);
-                bundle.putSerializable("imageType", imageType);
-                bundle.putString("imageUrl", SDO.getLatestURL(imageType, resolution, false));
-                bundle.putString("pfssUrl", SDO.getLatestURL(imageType, resolution, true));
-                bundle.putString("description", SDO.getDescription(imageType));
-                ImageDetailFragment f = new ImageDetailFragment();
-                f.setArguments(bundle);
-                getFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack(null).commit();
-            }
+        gridview.setOnItemClickListener((parent, v, position, id) -> {
+            GridImageAdapter a = (GridImageAdapter) gridview.getAdapter();
+            SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            int resolution = Integer.parseInt(pref.getString("resolution", "2048"));
+            Bundle bundle = new Bundle();
+            SDO imageType = a.getItem(position);
+            bundle.putSerializable("imageType", imageType);
+            bundle.putString("imageUrl", SDO.getLatestURL(imageType, resolution, false));
+            bundle.putString("pfssUrl", SDO.getLatestURL(imageType, resolution, true));
+            bundle.putString("description", SDO.getDescription(imageType));
+            ImageDetailFragment f = new ImageDetailFragment();
+            f.setArguments(bundle);
+            getParentFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack(null).commit();
         });
 
         return swipeLayout;
@@ -108,11 +107,6 @@ public class TheSunNowFragment extends Fragment implements SwipeRefreshLayout.On
     public void onRefresh() {
         gridAdapter.invalidateCache();
         gridAdapter.notifyDataSetChanged();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                swipeLayout.setRefreshing(false);
-            }
-        }, 1000);
+        new Handler().postDelayed(() -> swipeLayout.setRefreshing(false), 1000);
     }
 }

@@ -2,12 +2,13 @@ package eu.flatworld.android.sdoviewer.gui.thesunnow;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.ImageView;
+
+import androidx.appcompat.widget.AppCompatImageView;
 
 /**
  * Created by marcopar on 22/02/15.
  */
-public class SquareImageView extends ImageView {
+public class SquareImageView extends AppCompatImageView {
     public SquareImageView(Context context) {
         super(context);
     }

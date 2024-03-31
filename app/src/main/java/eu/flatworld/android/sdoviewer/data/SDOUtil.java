@@ -72,7 +72,7 @@ public class SDOUtil {
         return l;
     }
 
-    public static List<BrowseDataListItem> loadImages(int year, int month, int day, ArrayList<String> links, SDO type, int resolution) throws IOException {
+    public static List<BrowseDataListItem> loadImages(int year, int month, int day, ArrayList<String> links, SDO type, int resolution) {
         List<BrowseDataListItem> l = new ArrayList<>();
         String regex = String.format("%d%02d%02d_\\d\\d\\d\\d\\d\\d_%d_%s.jpg", year, month, day, resolution, type.getShortCode());
         Pattern p = Pattern.compile(regex);

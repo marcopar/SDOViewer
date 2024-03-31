@@ -7,9 +7,6 @@ public class BrowseDataListItem {
     String text;
     String url;
 
-    public BrowseDataListItem() {
-    }
-
     public BrowseDataListItem(String text, String url) {
         this.text = text;
         this.url = url;

@@ -2,14 +2,17 @@ package eu.flatworld.android.sdoviewer.gui;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
-import android.preference.EditTextPreference;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceCategory;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceScreen;
 import android.view.View;
+
+import androidx.annotation.Nullable;
+import androidx.preference.EditTextPreference;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceCategory;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceScreen;
 
 import eu.flatworld.android.sdoviewer.GlobalConstants;
 import eu.flatworld.android.sdoviewer.MainActivity;
@@ -19,14 +22,13 @@ import eu.flatworld.android.sdoviewer.io.PicassoInstance;
 /**
  * Created by marcopar on 03/07/15.
  */
-public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class SettingsFragment extends PreferenceFragmentCompat implements OnSharedPreferenceChangeListener {
 
     public SettingsFragment() {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreatePreferences(@Nullable Bundle savedInstanceState, @Nullable String rootKey) {
         addPreferencesFromResource(R.xml.preferences);
         getPreferenceScreen().removePreference(getPreferenceScreen().findPreference(GlobalConstants.PREFERENCES_FIRSTRUN));
 
@@ -87,13 +89,13 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             ListPreference listPref = (ListPreference) p;
             String s = p.getSummary().toString();
             s = s.substring(0, s.indexOf(":") + 1);
-            p.setSummary(String.format("%s %s", s, String.valueOf(listPref.getEntry())));
+            p.setSummary(String.format("%s %s", s, listPref.getEntry()));
         }
         if (p instanceof EditTextPreference) {
             EditTextPreference editTextPref = (EditTextPreference) p;
             String s = p.getSummary().toString();
             s = s.substring(0, s.indexOf(":") + 1);
-            p.setSummary(String.format("%s %s", s, String.valueOf(editTextPref.getText())));
+            p.setSummary(String.format("%s %s", s, editTextPref.getText()));
         }
 
     }

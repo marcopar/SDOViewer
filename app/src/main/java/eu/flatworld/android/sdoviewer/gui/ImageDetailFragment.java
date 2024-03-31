@@ -3,7 +3,6 @@ package eu.flatworld.android.sdoviewer.gui;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.app.WallpaperManager;
 import android.content.DialogInterface;
@@ -13,8 +12,10 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
+
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -58,12 +59,7 @@ public class ImageDetailFragment extends Fragment {
 
         @Override
         public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    setWallpaper(bitmap);
-                }
-            }).start();
+            new Thread(() -> setWallpaper(bitmap)).start();
         }
     };
     Target targetShare = new Target() {
@@ -79,12 +75,7 @@ public class ImageDetailFragment extends Fragment {
 
         @Override
         public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    share(bitmap);
-                }
-            }).start();
+            new Thread(() -> share(bitmap)).start();
         }
     };
     private boolean pfssVisible = false;
@@ -169,15 +160,13 @@ public class ImageDetailFragment extends Fragment {
             new AlertDialog.Builder(activity)
                     .setTitle(R.string.set_wallpaper)
                     .setMessage(getString(R.string.do_you_want_to_set))
-                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            progressDialog.setMessage(getString(R.string.setting_wallpaper_));
-                            progressDialog.show();
-                            if (pfssVisible) {
-                                PicassoInstance.getPicasso(activity.getBaseContext()).load(pfssUrl).memoryPolicy(MemoryPolicy.NO_CACHE).into(targetSetWallpaper);
-                            } else {
-                                PicassoInstance.getPicasso(activity.getBaseContext()).load(imageUrl).memoryPolicy(MemoryPolicy.NO_CACHE).into(targetSetWallpaper);
-                            }
+                    .setPositiveButton(R.string.yes, (dialog, whichButton) -> {
+                        progressDialog.setMessage(getString(R.string.setting_wallpaper_));
+                        progressDialog.show();
+                        if (pfssVisible) {
+                            PicassoInstance.getPicasso(activity.getBaseContext()).load(pfssUrl).memoryPolicy(MemoryPolicy.NO_CACHE).into(targetSetWallpaper);
+                        } else {
+                            PicassoInstance.getPicasso(activity.getBaseContext()).load(imageUrl).memoryPolicy(MemoryPolicy.NO_CACHE).into(targetSetWallpaper);
                         }
                     })
                     .setNegativeButton(R.string.no, null).show();
@@ -188,11 +177,8 @@ public class ImageDetailFragment extends Fragment {
                     .setTitle(imageType.toString())
                     .setMessage(Html.fromHtml(description))
                     .setCancelable(true)
-                    .setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                    .setPositiveButton(R.string.close, (dialog, which) -> {
 
-                        }
                     }).create().show();
             return true;
         }
@@ -254,11 +240,7 @@ public class ImageDetailFragment extends Fragment {
                 startActivity(Intent.createChooser(shareIntent, getString(R.string.share_the_image_using_)));
             }
         } catch (final Exception ex) {
-            activity.runOnUiThread(new Runnable() {
-                public void run() {
-                    Toast.makeText(activity, getString(R.string.error_sharing_the_image_) + ex.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
+            activity.runOnUiThread(() -> Toast.makeText(activity, getString(R.string.error_sharing_the_image_) + ex.getMessage(), Toast.LENGTH_SHORT).show());
         } finally {
             progressDialog.dismiss();
         }
@@ -277,17 +259,9 @@ public class ImageDetailFragment extends Fragment {
             float scale = screenHeight * 1f / source.getHeight();
             target = Bitmap.createScaledBitmap(source, (int) (source.getWidth() * scale), (int) (source.getHeight() * scale), true);
             wallpaperManager.setBitmap(target);
-            activity.runOnUiThread(new Runnable() {
-                public void run() {
-                    Toast.makeText(activity, getString(R.string.wallpaper_is_set), Toast.LENGTH_SHORT).show();
-                }
-            });
+            activity.runOnUiThread(() -> Toast.makeText(activity, getString(R.string.wallpaper_is_set), Toast.LENGTH_SHORT).show());
         } catch (final Exception ex) {
-            activity.runOnUiThread(new Runnable() {
-                public void run() {
-                    Toast.makeText(activity, getString(R.string.error_setting_the_wallpaper_) + ex.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
+            activity.runOnUiThread(() -> Toast.makeText(activity, getString(R.string.error_setting_the_wallpaper_) + ex.getMessage(), Toast.LENGTH_SHORT).show());
         } finally {
             progressDialog.dismiss();
         }
