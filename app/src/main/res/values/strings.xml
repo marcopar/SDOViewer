@@ -73,11 +73,11 @@
     <string name="solar_wind">Solar Wind</string>
     <string name="speed_value_error">--- km/s</string>
     <string name="t_magneticfield_value_error">Bt --- nT</string>
-    <string name="z_magneticfield_value_error">Bz --- nT</string>
+    <string name="z_magneticfield_value_error">Bz GSM --- nT</string>
     <string name="flux_value_error">--- sfu</string>
     <string name="speed_value_format">%d km/s</string>
     <string name="t_magneticfield_value_format">Bt %d nT</string>
-    <string name="z_magneticfield_value_format">Bz %d nT</string>
+    <string name="z_magneticfield_value_format">Bz GSM %d nT</string>
     <string name="flux_value_format">%d sfu</string>
     <string name="no_data">No data</string>
     <string name="privacyPolicy"><![CDATA[

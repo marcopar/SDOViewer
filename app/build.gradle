@@ -3,14 +3,14 @@ apply plugin: 'com.google.gms.google-services'
 
 
 android {
-    compileSdk=36
+    compileSdk=37
 
     defaultConfig {
         applicationId "eu.flatworld.android.sdoviewer"
         minSdkVersion 19
         targetSdkVersion 36
-        versionCode 20011
-        versionName "2.0.11"
+        versionCode 20013
+        versionName "2.0.13"
         multiDexEnabled=true
     }
 

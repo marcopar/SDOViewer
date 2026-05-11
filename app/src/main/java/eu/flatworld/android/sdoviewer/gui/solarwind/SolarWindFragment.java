@@ -89,19 +89,19 @@ public class SolarWindFragment extends Fragment implements SwipeRefreshLayout.On
         MagneticField mf = null;
         boolean errors = false;
         try {
-            s = gson.fromJson(Util.getUrl(client, SolarWind.getLatestURL(SolarWind.SPEED)).body().string(), Speed.class);
+            s = gson.fromJson(Util.getUrl(client, SolarWind.getLatestURL(SolarWind.SPEED)).body().string(), Speed[].class)[0];
         } catch (Exception ex) {
             Log.e(GlobalConstants.LOGTAG, "Solar Wind speed error", ex);
             errors = true;
         }
         try {
-            f = gson.fromJson(Util.getUrl(client, SolarWind.getLatestURL(SolarWind.FLUX)).body().string(), Flux.class);
+            f = gson.fromJson(Util.getUrl(client, SolarWind.getLatestURL(SolarWind.FLUX)).body().string(), Flux[].class)[0];
         } catch (Exception ex) {
             Log.e(GlobalConstants.LOGTAG, "Solar Wind flux error", ex);
             errors = true;
         }
         try {
-            mf = gson.fromJson(Util.getUrl(client, SolarWind.getLatestURL(SolarWind.MAGNETIC_FIELD)).body().string(), MagneticField.class);
+            mf = gson.fromJson(Util.getUrl(client, SolarWind.getLatestURL(SolarWind.MAGNETIC_FIELD)).body().string(), MagneticField[].class)[0];
         } catch (Exception ex) {
             Log.e(GlobalConstants.LOGTAG, "Solar Wind magnetic field error", ex);
             errors = true;
