@@ -7,4 +7,4 @@ Current features:
 - Browse historical data
 - Muzei artwork source
 
-[Available on Android][https://play.google.com/store/apps/details?id=eu.flatworld.android.sdoviewer]
+[Available on Android](https://play.google.com/store/apps/details?id=eu.flatworld.android.sdoviewer)
